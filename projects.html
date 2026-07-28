@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,25 +12,75 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
   <link rel="stylesheet" href="Project_Styles/projects.css">
+
+  <script>
+    (function () {
+      var saved = localStorage.getItem('site-theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
 </head>
 <body>
 
   <!-- Navigation and Header -->
-  <header>
+<header class="header">
+
     <nav class="navbar">
-      <a href="index.html" class="logo">A|B</a>
 
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="services.html">Services</a></li>
-        <li><a class="active" href="projects.html">Projects</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
+        <!-- Logo -->
 
-      <a href="contact.html" class="quote-btn">Get a Quote</a>
+        <a href="index.html" class="logo">
+
+            <img src="images/logo-white.png" alt="A|B Logo">
+
+        </a>
+
+        <!-- Navigation -->
+
+        <ul class="nav-links" id="navLinks">
+
+            <li><a href="index.html">Home</a></li>
+
+            <li><a href="about.html">About Us</a></li>
+
+            <li><a href="services.html">Services</a></li>
+
+            <li><a href="projects.html" class="active">Portfolio</a></li>
+
+            <li><a href="testimonials.html">Testimonials</a></li>
+
+            <li><a href="contact.html">Contact</a></li>
+
+        </ul>
+
+        <!-- Right Side -->
+
+        <div class="nav-actions">
+
+            <button id="themeToggle" class="icon-btn" aria-label="Toggle dark and light mode">
+
+                <i class="fa-solid fa-moon"></i>
+
+            </button>
+            <!-- admin -->
+            <a href="#" class="icon-btn"  aria-label="Admin Login">
+                <i class="fa-solid fa-shield-halved"></i>
+            </a>
+            <a href="form.html" class="quote-btn">
+
+                Get a Quote
+
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+
+            <!-- mobile menu -->
+            <button id="menuToggle" class="icon-btn menu-toggle" aria-label="Open menu" aria-expanded="false">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
     </nav>
-  </header>
+</header>
 
   <!--==========================
           Hero
@@ -370,6 +420,7 @@
     </a>
 
 </footer>
+<script src="Projects_Js/theme.js"></script>
 <script src="Projects_Js/projects.js"></script>
 </body>
 </html>
