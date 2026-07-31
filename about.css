@@ -1,22 +1,32 @@
+/* about.css — All the styling for the About Us page.
+   Uses the same colours/fonts as the Services page so both
+   pages feel like part of one website.
+   */
+
 /* ---------- tokens ---------- */
+/* "Tokens" are reusable values (colours, spacing, fonts) stored
+   in one place, so changing a colour here updates it everywhere
+   it's used in this file. */
 :root{
-  --ink:        #17181c;
-  --ink-soft:   #4a4d55;
-  --paper:      #ffffff;
-  --cream:      #f7f4ef;
-  --line:       #e7e3db;
-  --stone:      #d9d7d2;
-  --stone-dark: #8d8b86;
-  --chip:       #eceae5;
-  --radius-lg:  28px;
-  --radius-md:  18px;
-  --radius-sm:  12px;
-  --font-display: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
-  --font-mono:    "JetBrains Mono", ui-monospace, Menlo, monospace;
+  --ink:        #17181c; /* main dark text colour */
+  --ink-soft:   #4a4d55; /* softer grey text colour */
+  --paper:      #ffffff; /* white background */
+  --cream:      #f7f4ef; /* warm off-white background (used on header) */
+  --line:       #e7e3db; /* light border colour */
+  --stone:      #d9d7d2; /* light grey accent */
+  --stone-dark: #8d8b86; /* darker grey accent */
+  --chip:       #eceae5; /* background for small labelled boxes/tags */
+  --radius-lg:  28px;    /* large rounded corners */
+  --radius-md:  18px;    /* medium rounded corners */
+  --radius-sm:  12px;    /* small rounded corners */
+  --font-display: "Space Grotesk", "Helvetica Neue", Arial, sans-serif; /* main font */
+  --font-mono:    "JetBrains Mono", ui-monospace, Menlo, monospace;    /* font for small labels */
 }
 
+/* ---------- basic reset ---------- */
+/* Removes default browser spacing/styles so every browser starts from the same clean slate */
 *{ box-sizing:border-box; }
-html{ scroll-behavior:smooth; }
+html{ scroll-behavior:smooth; } /* smooth scrolling when jumping to an anchor */
 body{
   margin:0;
   font-family:var(--font-display);
@@ -27,22 +37,25 @@ body{
 img{ max-width:100%; display:block; }
 a{ color:inherit; text-decoration:none; }
 ul{ list-style:none; margin:0; padding:0; }
-:focus-visible{ outline:3px solid #17181c; outline-offset:3px; }
+:focus-visible{ outline:3px solid #17181c; outline-offset:3px; } /* visible outline for keyboard users */
 
+/* Respects users who have asked their device to reduce motion/animation */
 @media (prefers-reduced-motion: reduce){
   html{ scroll-behavior:auto; }
   *{ animation-duration:0.001ms !important; transition-duration:0.001ms !important; }
 }
 
 /* ---------- header ---------- */
+/* Styles for the top navigation bar (logo, menu, buttons) — same on every page */
 .site-header{
   background:var(--cream);
   border-bottom:1px solid var(--line);
-  position:sticky;
+  position:sticky; /* keeps the header stuck to the top while scrolling */
   top:0;
   z-index:40;
 }
 
+/* Extra top/bottom spacing specifically for the About page's hero section */
 .about-hero{
     margin-top:29px;
     padding:29px 30px 29px;
@@ -50,13 +63,15 @@ ul{ list-style:none; margin:0; padding:0; }
 
 .header-inner{
   max-width:1320px;
-  margin:0 auto;
+  margin:0 auto; /* centers the header content on wide screens */
   padding:18px 32px;
   display:flex;
   align-items:center;
-  justify-content:space-between;
+  justify-content:space-between; /* logo on the left, menu/buttons on the right */
   gap:24px;
 }
+
+/* The small "A|B" logo box */
 .logo{
   width:46px;
   height:46px;
@@ -72,6 +87,8 @@ ul{ list-style:none; margin:0; padding:0; }
   font-size:15px;
   letter-spacing:0.02em;
 }
+
+/* Navigation menu links */
 .main-nav ul{ display:flex; gap:36px; }
 .main-nav a{
   font-size:15px;
@@ -79,8 +96,9 @@ ul{ list-style:none; margin:0; padding:0; }
   transition:color .15s ease;
 }
 .main-nav a:hover{ color:var(--ink); }
-.main-nav a.active{ color:var(--ink); font-weight:600; }
+.main-nav a.active{ color:var(--ink); font-weight:600; } /* highlights the current page */
 
+/* Icon buttons + "Get a Quote" button on the right of the header */
 .header-actions{ display:flex; align-items:center; gap:10px; }
 .icon-btn{
   width:38px;
@@ -106,17 +124,19 @@ ul{ list-style:none; margin:0; padding:0; }
   font-size:14px;
   font-weight:600;
   padding:11px 20px;
-  border-radius:999px;
+  border-radius:999px; /* fully rounded "pill" shape */
   white-space:nowrap;
   transition:transform .15s ease, opacity .15s ease;
 }
-.btn-quote:hover{ transform:translateY(-1px); opacity:.92; }
+.btn-quote:hover{ transform:translateY(-1px); opacity:.92; } /* small lift effect on hover */
 
+/* Hides the menu links on small/mobile screens */
 @media (max-width:920px){
   .main-nav{ display:none; }
 }
 
 /* ---------- shared card / tag styles ---------- */
+/* The two-column grid used for the Mission and Vision cards */
 .mv-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -131,7 +151,7 @@ ul{ list-style:none; margin:0; padding:0; }
 }
 
 .mv-card:hover{
-  transform:translateY(-5px);
+  transform:translateY(-5px); /* card lifts up slightly on hover */
   box-shadow:0 12px 25px rgba(0,0,0,.08);
 }
 
@@ -150,9 +170,10 @@ ul{ list-style:none; margin:0; padding:0; }
   color:var(--ink);
 }
 
+/* The row of small rounded tags at the bottom of the hero text (e.g. "Bold Thinking") */
 .tag-list{
   display:flex;
-  flex-wrap:wrap;
+  flex-wrap:wrap; /* tags wrap onto a new line if there's not enough space */
   gap:12px;
   margin-top:35px;
 }
@@ -167,12 +188,12 @@ ul{ list-style:none; margin:0; padding:0; }
 }
 
 /* ---------- hero section ---------- */
+/* Not currently used/visible on this page, kept in case a "proof" section is added later */
 .about-proof{
   display:none;
 }
 
-
-
+/* Two-column layout: photo on the left, text on the right */
 .about-hero-inner{
   max-width:1320px;
   margin:0 auto;
@@ -182,20 +203,23 @@ ul{ list-style:none; margin:0; padding:0; }
   align-items:start;
 }
 
+/* The rounded photo box on the left of the hero */
 .stack-photo{
-  position:relative;
+  position:relative; /* lets the badge and stat chip sit on top of the photo */
   margin:0;
   border-radius:var(--radius-lg);
   overflow:hidden;
   aspect-ratio:4/5;
-  background:linear-gradient(160deg,#efece6,#dcd8cf);
+  background:linear-gradient(160deg,#efece6,#dcd8cf); /* placeholder colour while the image loads */
   box-shadow:0 15px 40px rgba(0,0,0,.08);
 }
 .stack-photo img{
   width:100%;
   height:100%;
-  object-fit:cover;
+  object-fit:cover; /* fills the box without stretching the image */
 }
+
+/* Small dark pill badge shown on top of the photo, e.g. "Award-Winning Studio" */
 .badge-pill{
   position:absolute;
   top:24px;
@@ -211,6 +235,7 @@ ul{ list-style:none; margin:0; padding:0; }
   border-radius:999px;
 }
 
+/* Small uppercase label above the heading, e.g. "WHO WE ARE" */
 .eyebrow{
   display:flex;
   align-items:center;
@@ -225,42 +250,47 @@ ul{ list-style:none; margin:0; padding:0; }
 .eyebrow-rule{
   width:26px;
   height:1px;
-  background:var(--stone-dark);
+  background:var(--stone-dark); /* small line next to the label */
 }
 
+/* Main heading text */
 .hero-copy h1{
   margin:0 0 24px;
-  font-size:clamp(2.4rem, 4vw, 3.4rem);
+  font-size:clamp(2.4rem, 4vw, 3.4rem); /* text size adjusts with screen width */
   line-height:1.08;
   font-weight:700;
   letter-spacing:-0.01em;
 }
-.hero-copy h1 span{ color:var(--stone-dark); }
+.hero-copy h1 span{ color:var(--stone-dark); } /* the highlighted word(s), e.g. "Bold Ideas" */
 
+/* Paragraph text under the heading */
 .hero-copy p{
   margin:0 0 18px;
   font-size:16px;
   line-height:1.7;
   color:var(--ink-soft);
-  max-width:56ch;
+  max-width:56ch; /* keeps lines of text from getting too wide to read comfortably */
 }
 
 .hero-copy .mv-grid{ margin-top:28px; }
 
+/* On tablets: stack photo above text instead of side-by-side */
 @media (max-width:900px){
   .about-hero-inner{ grid-template-columns:1fr; gap:36px; }
   .stack-photo{ aspect-ratio:4/3; }
 }
+/* On phones: stack the Mission/Vision cards instead of side-by-side */
 @media (max-width:520px){
   .mv-grid{ grid-template-columns:1fr; }
 }
 
 /* ---------- proof / secondary section ---------- */
+/* Extra spacing rule, currently unused since .about-proof is hidden above */
 .about-proof{
   padding:24px 32px 96px;
 }
 
-
+/* The dark stat box (e.g. "5+ Years of Design Excellence") shown on top of the photo */
 .stat-chip{
   position:absolute;
   right:24px;
@@ -293,14 +323,15 @@ ul{ list-style:none; margin:0; padding:0; }
   .about-proof-inner{ grid-template-columns:1fr; gap:36px; }
 }
 
-/* ---------- back to top ---------- */
+/* ---------- back to top button ---------- */
+/* The round floating button in the bottom-right corner of the page */
 .back-to-top{
-  position:fixed;
+  position:fixed; /* stays in place even while scrolling */
   right:24px;
   bottom:24px;
   width:44px;
   height:44px;
-  border-radius:50%;
+  border-radius:50%; /* makes it a circle */
   border:none;
   background:var(--ink);
   color:#fff;
@@ -312,3 +343,41 @@ ul{ list-style:none; margin:0; padding:0; }
   z-index:30;
 }
 .back-to-top:hover{ opacity:.9; }
+
+/* ---------- dark mode ---------- */
+/* These overrides only apply when the moon button sets data-theme="dark" on <html> */
+[data-theme="dark"]{
+  --ink:        #f5f4f0;
+  --ink-soft:   #c9c7c2;
+  --paper:      #17181c;
+  --cream:      #1e1f24;
+  --line:       #2c2d33;
+  --stone:      #3a3b41;
+  --stone-dark: #9a988f;
+  --chip:       #24252b;
+}
+
+[data-theme="dark"] .stack-photo{
+  background:linear-gradient(160deg,#2a2b30,#1c1d21);
+}
+
+[data-theme="dark"] .stat-chip{
+  background:#0e0f12;
+}
+
+[data-theme="dark"] .badge-pill{
+  background:#0e0f12;
+}
+
+[data-theme="dark"] .back-to-top{
+  background:#0e0f12;
+}
+
+[data-theme="dark"] .btn-quote{
+  background:#f5f4f0;
+  color:#17181c;
+}
+
+body{
+  transition: background .2s ease, color .2s ease;
+}
