@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Team — Andiswa Business Consultation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* Self-contained page*/
+  :root{
+    --espresso:#211712; --espresso-soft:#2e2119; --cream:#f1e7d8;
+    --ink:#2a1c12; --tan:#b5814f; --tan-bright:#d9a866; --stone:#a58d76;
+    --line:rgba(241,231,216,0.14); --line-dark:rgba(42,28,18,0.12);
+    --ease:cubic-bezier(.22,.61,.36,1);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--ink);}
+  h1,h2,h3{font-family:'Space Grotesk',sans-serif;}
+  a{color:inherit;text-decoration:none;}
+  ul{list-style:none;}
+  .wrap{max-width:1280px;margin:0 auto;padding:0 40px;}
+
+  .tri{width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-bottom:12px solid var(--tan);display:inline-block;}
+  .eyebrow{display:flex;align-items:center;gap:10px;font-size:12px;letter-spacing:0.28em;text-transform:uppercase;color:var(--tan-bright);font-weight:600;}
+
+  /* ---- Nav (same look as index.html / contact.html) ---- */
+  header{position:sticky;top:0;left:0;right:0;z-index:100;padding:20px 0;background:var(--espresso);border-bottom:1px solid var(--line);}
+  .navbar{display:flex;align-items:center;justify-content:space-between;}
+  .logo{display:flex;align-items:center;gap:2px;font-family:'Space Grotesk';font-weight:700;font-size:20px;width:44px;height:44px;background:var(--cream);color:var(--espresso);justify-content:center;border-radius:6px;}
+  .navlinks{display:flex;gap:34px;}
+  .navlinks a{font-size:14px;font-weight:500;color:var(--cream);opacity:0.82;transition:opacity .25s;}
+  .navlinks a.active, .navlinks a:hover{opacity:1;}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:100px;font-size:14px;font-weight:600;transition:transform .25s var(--ease), background .25s;}
+  .btn-primary{background:var(--cream);color:var(--ink);}
+  .btn-primary:hover{transform:translateY(-2px);background:var(--tan-bright);}
+  @media(max-width:900px){.navlinks{display:none;}}
+
+  /* ---- Page title band ---- */
+  .page-band{background:var(--espresso);color:var(--cream);padding:70px 0 60px;}
+  .page-band h1{font-size:clamp(32px,5vw,52px);font-weight:700;margin-top:16px;}
+  .page-band p{margin-top:14px;max-width:480px;color:rgba(241,231,216,0.65);font-size:15px;line-height:1.6;}
+
+  /* ---- Team grid ---- */
+  .team-shell{padding:80px 0;}
+  .team-public-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;}
+  .team-public-card{background:#fff8;background:var(--cream);border:1px solid var(--line-dark);border-radius:8px;padding:28px 20px;text-align:center;transition:transform .25s var(--ease), box-shadow .25s;}
+  .team-public-card:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(42,28,18,0.08);}
+  .team-public-avatar{width:64px;height:64px;border-radius:50%;background:var(--espresso);color:var(--cream);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk';font-weight:700;font-size:19px;margin:0 auto 16px;}
+  .team-public-card h4{font-size:16px;font-weight:600;margin-bottom:4px;}
+  .team-public-card .role{font-size:12.5px;color:var(--stone);margin-bottom:10px;}
+  .team-public-card a{font-size:11.5px;color:var(--tan);word-break:break-all;}
+  .team-public-card a:hover{color:var(--tan-bright);}
+  .empty-state{padding:50px 22px;text-align:center;color:var(--stone);font-size:13.5px;grid-column:1/-1;}
+  @media(max-width:960px){.team-public-grid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:640px){.team-public-grid{grid-template-columns:1fr;}}
+
+  footer{background:#160f0b;color:rgba(241,231,216,0.55);padding:40px 0;}
+  .footer-bottom{display:flex;justify-content:space-between;font-size:12px;flex-wrap:wrap;gap:10px;}
+  .footer-bottom a{color:var(--tan-bright);}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap navbar">
+    <a href="index.html" class="logo">A|B</a>
+    <ul class="navlinks">
+      <li><a href="index.html#home">Home</a></li>
+      <li><a href="team.html" class="active">Team</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <a href="contact.html" class="btn btn-primary">Get a Quote ↗</a>
+  </div>
+</header>
+
+<section class="page-band">
+  <div class="wrap">
+    <div class="eyebrow"><span class="tri"></span>Meet the Team</div>
+    <h1>The people behind every brand we build.</h1>
+    <p>Strategy, design and delivery under one roof — here's who you'll be working with.</p>
+  </div>
+</section>
+
+<section class="team-shell">
+  <div class="wrap">
+    <div class="team-public-grid" id="publicTeamGrid">
+      <!-- Populated by JS below, from the same shared `abc-team` storage
+           key the admin panel's Team page writes to -->
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-bottom">
+    <span>© 2026 Andiswa Business Consultation. All rights reserved.</span>
+    <a href="index.html">← Back to Home</a>
+  </div>
+</footer>
+
+<script>
+/* =====================================================================
+   Standalone page, but still synced: this reads the same "abc-team"
+   storage key that index.html's admin panel writes to whenever a team
+   member is added, edited or removed — so this page always reflects
+   the latest roster without needing its own admin UI.
+===================================================================== */
+const STORAGE_KEY = "abc-team";
+
+// Sensible fallback roster shown if nothing has been saved to storage
+// yet (e.g. the very first time the site is opened, before any admin
+// edits have happened).
+const defaultTeam = [
+  { name:"Andiswa Phewa",      role:"Founder & Creative Director", email:"andiswa@andiswaconsultation.co.za" },
+  { name:"Afeziwe Thandani",   role:"Lead Web Developer",          email:"afeziwe@andiswaconsultation.co.za" },
+  { name:"Vuyolwethu Sicwebi", role:"Brand Strategist",            email:"vuyo@andiswaconsultation.co.za" },
+  { name:"Ondela Mvana",       role:"Project Manager",             email:"ondela@andiswaconsultation.co.za" }
+];
+
+function initials(name){ return name.split(" ").map(w => w[0]).join("").slice(0,2).toUpperCase(); }
+
+function renderTeam(list){
+  const grid = document.getElementById('publicTeamGrid');
+  grid.innerHTML = list.length ? list.map(t => `
+    <div class="team-public-card">
+      <div class="team-public-avatar">${initials(t.name)}</div>
+      <h4>${t.name}</h4>
+      <div class="role">${t.role}</div>
+      <a href="mailto:${t.email}">${t.email}</a>
+    </div>
+  `).join("") : `<div class="empty-state">Team details coming soon.</div>`;
+}
+
+async function loadTeam(){
+  try {
+    const result = await window.storage.get(STORAGE_KEY, false);
+    renderTeam(result ? JSON.parse(result.value) : defaultTeam);
+  } catch (err) {
+    // No saved roster yet, or storage isn't available on this page view
+    renderTeam(defaultTeam);
+  }
+}
+
+loadTeam();
+</script>
+
+</body>
+</html>
