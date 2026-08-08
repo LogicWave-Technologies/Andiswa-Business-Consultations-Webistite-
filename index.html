@@ -9,8 +9,7 @@
 <style>
   /* =====================================================================
      DESIGN TOKENS
-     Whole site now runs on a coffee / brown palette (was brass + near-
-     black before). Everything below is derived from these variables so
+     Whole site now runs on a coffee / brown palette . Everything below is derived from these variables so
      changing the palette in one place re-themes the entire site,
      including the admin panel.
   ===================================================================== */
@@ -218,6 +217,19 @@
   .port-overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:22px;background:linear-gradient(0deg,rgba(21,15,11,0.85) 0%,rgba(21,15,11,0) 55%);color:var(--cream);}
   .port-overlay .cat{font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--tan-bright);margin-bottom:6px;}
   .port-overlay h4{font-family:'Space Grotesk';font-size:19px;font-weight:600;}
+
+  /* ================= TEAM (public) ================= */
+  .team-pub{background:var(--cream-dim);}
+  .team-public-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;}
+  .team-public-card{background:var(--cream);border:1px solid var(--line-dark);border-radius:8px;padding:28px 20px;text-align:center;transition:transform .25s var(--ease), box-shadow .25s;}
+  .team-public-card:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(42,28,18,0.08);}
+  .team-public-avatar{width:64px;height:64px;border-radius:50%;background:var(--espresso);color:var(--cream);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk';font-weight:700;font-size:19px;margin:0 auto 16px;}
+  .team-public-card h4{font-family:'Space Grotesk';font-size:16px;font-weight:600;margin-bottom:4px;}
+  .team-public-card .role{font-size:12.5px;color:var(--stone);margin-bottom:10px;}
+  .team-public-card a{font-size:11.5px;color:var(--tan);word-break:break-all;}
+  .team-public-card a:hover{color:var(--tan-bright);}
+  @media(max-width:960px){.team-public-grid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:640px){.team-public-grid{grid-template-columns:1fr;}}
 
   /* ================= TESTIMONIALS ================= */
   .testimonials{background:var(--cream-dim);}
@@ -520,8 +532,9 @@
         <li><a href="#about">About Us</a></li>
         <li><a href="#services">Services</a></li>
         <li><a href="#portfolio">Portfolio</a></li>
+        <li><a href="team.html">Team</a></li>
         <li><a href="#testimonials">Testimonials</a></li>
-        <li><a href="#contact">Contact</a></li>
+        <li><a href="contact.html">Contact</a></li>
       </ul>
       <div class="navtools">
         <!-- Shield icon now doubles as the admin-login trigger -->
@@ -531,7 +544,7 @@
         <button class="icon-btn" id="themeToggle" aria-label="Toggle theme">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"/></svg>
         </button>
-        <a href="#contact" class="btn btn-primary">Get a Quote ↗</a>
+        <a href="contact.html" class="btn btn-primary">Get a Quote ↗</a>
       </div>
     </nav>
   </div>
@@ -551,7 +564,7 @@
     <p>Andiswa Business Consultation crafts bold visual identities and digital experiences that make South African businesses impossible to ignore.</p>
     <div class="hero-ctas">
       <a href="#portfolio" class="btn btn-primary">View Portfolio →</a>
-      <a href="#contact" class="btn btn-outline">Get a Free Quote</a>
+      <a href="contact.html" class="btn btn-outline">Get a Free Quote</a>
     </div>
   </div>
   <div class="scroll-cue"><span class="line"></span>Scroll</div>
@@ -634,46 +647,6 @@
   </div>
 </section>
 
-<section class="contact" id="contact">
-  <div class="wrap contact-grid">
-    <div class="reveal contact-info">
-      <div class="eyebrow"><span class="tri"></span>Get In Touch</div>
-      <h2 style="margin-top:22px;">Let's build something you're proud to put your name on.</h2>
-      <p>Tell us about the project and we'll come back to you within one business day with next steps.</p>
-
-      <div class="contact-detail">
-        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7l9 6 9-6M5 5h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"/></svg></span>
-        <div><div class="lbl">Email</div><div class="val" id="contactEmailVal">hello@andiswaconsultation.co.za</div></div>
-      </div>
-      <div class="contact-detail">
-        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.4 2.1L8 9.9a16 16 0 0 0 6 6l1.4-1.4a2 2 0 0 1 2.1-.4c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.8 2Z"/></svg></span>
-        <div><div class="lbl">Phone</div><div class="val" id="contactPhoneVal">+27 11 234 5678</div></div>
-      </div>
-      <div class="contact-detail">
-        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 6-9 12-9 12S3 16 3 10a9 9 0 0 1 18 0Z"/><circle cx="12" cy="10" r="3"/></svg></span>
-        <div><div class="lbl">Studio</div><div class="val" id="contactAddressVal">44 Fox Street, Johannesburg CBD</div></div>
-      </div>
-    </div>
-
-    <!-- Inquiries submitted here are pushed straight into the admin
-         panel's Inquiries list (see handleContactSubmit in the script). -->
-    <form class="reveal contact-form" id="quoteForm">
-      <div class="form-row">
-        <div class="field"><label for="fname">First name</label><input id="fname" type="text" placeholder="Ayanda" required></div>
-        <div class="field"><label for="lname">Last name</label><input id="lname" type="text" placeholder="Zulu" required></div>
-      </div>
-      <div class="form-row" style="grid-template-columns:1fr;">
-        <div class="field"><label for="email">Email address</label><input id="email" type="email" placeholder="you@company.co.za" required></div>
-      </div>
-      <div class="form-row" style="grid-template-columns:1fr;margin-bottom:20px;">
-        <div class="field"><label for="msg">Tell us about the project</label><textarea id="msg" placeholder="What are you looking to grow?" required></textarea></div>
-      </div>
-      <button type="submit" class="btn btn-primary">Send Message →</button>
-      <p class="form-note">We typically reply within one business day.</p>
-    </form>
-  </div>
-</section>
-
 <footer>
   <div class="wrap">
     <div class="footer-top">
@@ -687,11 +660,12 @@
           <a href="#about">About Us</a>
           <a href="#services">Services</a>
           <a href="#portfolio">Portfolio</a>
+          <a href="team.html">Team</a>
           <a href="#testimonials">Testimonials</a>
         </div>
         <div class="footer-col">
           <h5>Connect</h5>
-          <a href="#contact">Contact</a>
+          <a href="contact.html">Contact</a>
           <a href="#">Instagram</a>
           <a href="#">LinkedIn</a>
           <a href="#" id="footerAdminLink" class="admin-entry">Admin Login</a>
@@ -913,6 +887,7 @@
             <div class="field"><label>Contact email</label><input id="setEmail" value="hello@andiswaconsultation.co.za"></div>
             <div class="field"><label>Phone</label><input id="setPhone" value="+27 11 234 5678"></div>
             <div class="field"><label>Address</label><input id="setAddress" value="44 Fox Street, Johannesburg CBD"></div>
+            <div class="field"><label>Business hours</label><input id="setHours" value="Mon – Fri, 08:00 – 17:00 SAST"></div>
             <div class="field full"><label>About blurb (shown on public site)</label><textarea id="setAbout">We believe great design isn't decoration — it's how a business earns attention.</textarea></div>
             <button type="submit" class="add-btn" style="grid-column:1/-1;justify-content:center;">Save Settings</button>
             <p class="settings-save-note" id="settingsSavedNote">Settings saved for this session ✓</p>
@@ -994,6 +969,7 @@ let settings = {
   email:   "hello@andiswaconsultation.co.za",
   phone:   "+27 11 234 5678",
   address: "44 Fox Street, Johannesburg CBD",
+  hours:   "Mon – Fri, 08:00 – 17:00 SAST",
   about:   "We believe great design isn't decoration — it's how a business earns attention."
 };
 
@@ -1106,32 +1082,10 @@ themeToggle.addEventListener('click', () => {
   root.setProperty('--line-dark', dark ? 'rgba(241,231,216,0.12)' : 'rgba(42,28,18,0.12)');
 });
 
-// Public contact form: creates a real inquiry record so it shows up
-// straight away in the admin panel (this is the "automation" tying the
-// public site to the admin side together).
-document.getElementById('quoteForm').addEventListener('submit', (e) => {
-  e.preventDefault();
-  const btn = e.target.querySelector('button[type="submit"]');
-  const original = btn.textContent;
-
-  const first = document.getElementById('fname').value.trim();
-  const last  = document.getElementById('lname').value.trim();
-  const today = new Date().toISOString().slice(0,10);
-
-  inquiries.unshift({
-    id: nextId(inquiries),
-    name: `${first} ${last}`.trim() || "Website Visitor",
-    service: "General Enquiry",
-    status: "New",
-    date: today
-  });
-  renderInquiries();      // keep the admin panel's numbers in sync immediately
-  persist('inquiries', inquiries); // auto-save so the new inquiry survives a refresh
-  refreshTabBadge();      // updates the browser tab title with the new unread count
-
-  btn.textContent = 'Message sent ✓';
-  setTimeout(() => { btn.textContent = original; e.target.reset(); }, 2200);
-});
+// NOTE: the public contact form and its "create an inquiry" automation
+// now live on contact.html (its own self-contained page). It writes to
+// the same shared storage key as this admin panel reads, so a message
+// submitted there still appears here in Inquiries — see contact.html.
 
 // Render the public Services + Portfolio sections FROM the same arrays
 // the admin panel edits, so changes made in the dashboard are reflected
@@ -1159,14 +1113,15 @@ function renderPublicPortfolio(){
   `).join("");
 }
 
-// Pushes the current `settings` object onto every place it appears on
-// the public site (about blurb, contact card, tab title). Called once
-// on load and again every time Settings is saved in the admin panel.
+// NOTE: the public "Meet the Team" grid now lives on its own page,
+// team.html, which reads the same shared `team` storage key this admin
+// panel writes to — so edits made here still show up there.
+
+// Pushes the current `settings` object onto the parts of THIS page that
+// use it (about blurb + tab title). Email/phone/address/hours are shown
+// on contact.html instead, which reads the same shared settings key.
 function applySettingsToPublicSite(){
   document.getElementById('publicAboutBlurb').textContent = settings.about;
-  document.getElementById('contactEmailVal').textContent = settings.email;
-  document.getElementById('contactPhoneVal').textContent = settings.phone;
-  document.getElementById('contactAddressVal').textContent = settings.address;
   document.title = settings.studio + " — We Design. You Grow.";
 }
 
@@ -1529,6 +1484,7 @@ document.getElementById('settingsForm').addEventListener('submit', (e) => {
     email:   document.getElementById('setEmail').value.trim()   || settings.email,
     phone:   document.getElementById('setPhone').value.trim()   || settings.phone,
     address: document.getElementById('setAddress').value.trim() || settings.address,
+    hours:   document.getElementById('setHours').value.trim()   || settings.hours,
     about:   document.getElementById('setAbout').value.trim()   || settings.about
   };
 
@@ -1556,6 +1512,7 @@ async function init(){
   document.getElementById('setEmail').value   = settings.email;
   document.getElementById('setPhone').value   = settings.phone;
   document.getElementById('setAddress').value = settings.address;
+  document.getElementById('setHours').value   = settings.hours;
   document.getElementById('setAbout').value   = settings.about;
   applySettingsToPublicSite();
 
