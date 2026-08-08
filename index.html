@@ -1,0 +1,1571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Andiswa Business Consultation — We Design. You Grow.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* =====================================================================
+     DESIGN TOKENS
+     Whole site now runs on a coffee / brown palette (was brass + near-
+     black before). Everything below is derived from these variables so
+     changing the palette in one place re-themes the entire site,
+     including the admin panel.
+  ===================================================================== */
+  :root{
+    --espresso:#211712;       /* darkest brown - hero / admin background   */
+    --espresso-soft:#2e2119;  /* slightly lighter brown - cards on dark    */
+    --cocoa:#4a2f20;          /* mid brown - borders / hovers on dark      */
+    --cream:#f1e7d8;          /* warm cream - light section background     */
+    --cream-dim:#e6d8c3;      /* deeper cream - alternating section bg     */
+    --ink:#2a1c12;            /* dark brown "ink" used as text on cream    */
+    --tan:#b5814f;            /* primary accent - buttons, links, icons    */
+    --tan-bright:#d9a866;     /* lighter accent - hovers, highlights       */
+    --stone:#a58d76;          /* muted brown-grey for secondary text       */
+    --line:rgba(241,231,216,0.14);      /* hairline border on dark bg      */
+    --line-dark:rgba(42,28,18,0.12);    /* hairline border on light bg     */
+    --good:#7fae6b;           /* status green (New / success)              */
+    --radius:2px;
+    --ease:cubic-bezier(.22,.61,.36,1);
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Inter',sans-serif;
+    background:var(--cream);
+    color:var(--ink);
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.disp{font-family:'Space Grotesk',sans-serif;}
+  a{color:inherit;text-decoration:none;}
+  ul{list-style:none;}
+  img{max-width:100%;display:block;}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+  input,textarea,select{font-family:inherit;}
+  .wrap{max-width:1280px;margin:0 auto;padding:0 40px;}
+  ::selection{background:var(--tan);color:var(--espresso);}
+
+  /* Small triangle motif — the recurring "signature" shape borrowed from
+     the Andiswa "A" logomark, used as a bullet / divider everywhere. */
+  .tri{
+    width:0;height:0;
+    border-left:7px solid transparent;
+    border-right:7px solid transparent;
+    border-bottom:12px solid var(--tan);
+    display:inline-block;
+  }
+  .eyebrow{
+    display:flex;align-items:center;gap:10px;
+    font-size:12px;letter-spacing:0.28em;text-transform:uppercase;
+    color:var(--tan-bright);font-weight:600;
+  }
+  .eyebrow .tri{transform:scale(0.7);}
+
+  /* ================= PUBLIC SITE — NAV ================= */
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    padding:26px 0 0;
+    transition:padding .4s var(--ease);
+  }
+  header.scrolled{padding:14px 0 0;}
+  header.scrolled .navbar{
+    background:rgba(33,23,18,0.86);
+    backdrop-filter:blur(14px);
+    border-color:var(--line);
+  }
+  .navbar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 24px;
+    border-radius:100px;
+    border:1px solid transparent;
+    transition:all .4s var(--ease);
+  }
+  .logo{
+    display:flex;align-items:center;gap:2px;
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:700;font-size:20px;letter-spacing:0.02em;
+    width:44px;height:44px;background:var(--espresso);color:var(--cream);
+    justify-content:center;border-radius:6px;
+  }
+  .navlinks{display:flex;gap:34px;}
+  .navlinks a{
+    font-size:14px;font-weight:500;color:var(--cream);opacity:0.82;
+    position:relative;padding:4px 0;transition:opacity .25s;
+  }
+  .navlinks a:hover{opacity:1;}
+  .navlinks a::after{
+    content:"";position:absolute;left:0;bottom:0;height:1px;width:0;
+    background:var(--tan-bright);transition:width .25s var(--ease);
+  }
+  .navlinks a:hover::after{width:100%;}
+  .navtools{display:flex;align-items:center;gap:10px;}
+  .icon-btn{
+    width:38px;height:38px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    background:rgba(241,231,216,0.08);color:var(--cream);
+    border:1px solid var(--line);
+    transition:background .2s;
+  }
+  .icon-btn:hover{background:rgba(241,231,216,0.16);}
+  .icon-btn svg{width:16px;height:16px;}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:12px 22px;border-radius:100px;
+    font-size:14px;font-weight:600;
+    transition:transform .25s var(--ease), background .25s, color .25s, border-color .25s;
+  }
+  .btn-primary{background:var(--cream);color:var(--ink);}
+  .btn-primary:hover{transform:translateY(-2px);background:var(--tan-bright);}
+  .btn-outline{border:1px solid rgba(241,231,216,0.35);color:var(--cream);}
+  .btn-outline:hover{border-color:var(--cream);transform:translateY(-2px);}
+  .btn-dark{background:var(--espresso);color:var(--cream);}
+  .btn-dark:hover{transform:translateY(-2px);background:var(--tan);}
+
+  /* ================= HERO ================= */
+  .hero{
+    position:relative;min-height:100vh;
+    display:flex;align-items:center;
+    background:#150f0b;
+    overflow:hidden;
+  }
+  .hero-bg{
+    position:absolute;inset:0;
+    background-image:url('https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=2000&auto=format&fit=crop');
+    background-size:cover;background-position:center 30%;
+    /* sepia + hue-rotate pushes the grayscale photo into the brown family */
+    filter:grayscale(0.4) sepia(0.55) hue-rotate(-8deg) contrast(1.1) brightness(0.5);
+    transform:scale(1.08);
+  }
+  .hero-scrim{
+    position:absolute;inset:0;
+    background:linear-gradient(100deg, rgba(21,15,11,0.94) 18%, rgba(21,15,11,0.74) 42%, rgba(21,15,11,0.35) 65%, rgba(21,15,11,0.55) 100%);
+  }
+  .hero-grain{
+    position:absolute;inset:0;pointer-events:none;opacity:0.05;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .hero-content{position:relative;z-index:2;padding-top:120px;max-width:620px;}
+  .hero .eyebrow{margin-bottom:22px;opacity:0;animation:rise .8s var(--ease) .1s forwards;}
+  .hero h1{color:var(--cream);font-size:clamp(40px,6vw,68px);line-height:1.04;font-weight:700;letter-spacing:-0.02em;}
+  .hero h1 span{display:block;opacity:0;animation:rise .8s var(--ease) forwards;}
+  .hero h1 .l1{animation-delay:.25s;}
+  .hero h1 .l2{color:var(--stone);animation-delay:.4s;}
+  .hero h1 .l3{animation-delay:.55s;}
+  .hero p{margin-top:26px;max-width:460px;color:rgba(241,231,216,0.72);font-size:16px;line-height:1.65;opacity:0;animation:rise .8s var(--ease) .7s forwards;}
+  .hero-ctas{margin-top:36px;display:flex;gap:14px;flex-wrap:wrap;opacity:0;animation:rise .8s var(--ease) .85s forwards;}
+  @keyframes rise{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+
+  .scroll-cue{position:absolute;bottom:34px;left:40px;z-index:2;display:flex;align-items:center;gap:12px;color:rgba(241,231,216,0.5);font-size:12px;letter-spacing:0.18em;text-transform:uppercase;}
+  .scroll-cue .line{width:32px;height:1px;background:rgba(241,231,216,0.4);position:relative;overflow:hidden;}
+  .scroll-cue .line::after{content:"";position:absolute;top:0;left:-100%;width:100%;height:100%;background:var(--tan-bright);animation:scrollline 2.2s ease-in-out infinite;}
+  @keyframes scrollline{0%{left:-100%;}50%{left:0;}100%{left:100%;}}
+
+  .chat-fab{
+    position:fixed;bottom:28px;left:28px;z-index:90;
+    width:56px;height:56px;border-radius:50%;
+    background:var(--espresso-soft);color:var(--cream);
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 8px 24px rgba(0,0,0,0.35);
+    border:1px solid var(--line);
+    transition:transform .25s var(--ease);
+  }
+  .chat-fab:hover{transform:scale(1.08);}
+  .chat-fab svg{width:22px;height:22px;}
+
+  /* ================= SECTION SHELL ================= */
+  section{padding:120px 0;position:relative;}
+  .section-head{display:flex;justify-content:space-between;align-items:flex-end;gap:40px;margin-bottom:64px;flex-wrap:wrap;}
+  .section-head h2{font-size:clamp(30px,4vw,44px);font-weight:700;letter-spacing:-0.01em;line-height:1.1;}
+  .section-head p{max-width:380px;color:var(--stone);font-size:15px;line-height:1.6;}
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s var(--ease), transform .7s var(--ease);}
+  .reveal.in{opacity:1;transform:translateY(0);}
+
+  /* ================= ABOUT ================= */
+  .about{background:var(--cream);}
+  .about-grid{display:grid;grid-template-columns:0.9fr 1.1fr;gap:80px;align-items:center;}
+  .about-visual{position:relative;aspect-ratio:4/5;border-radius:6px;overflow:hidden;background:#241813;}
+  .about-visual img{width:100%;height:100%;object-fit:cover;filter:grayscale(0.3) sepia(0.4) contrast(1.1);}
+  .about-badge{position:absolute;bottom:18px;left:18px;right:18px;background:rgba(33,23,18,0.85);backdrop-filter:blur(8px);color:var(--cream);padding:16px 18px;border-radius:4px;display:flex;align-items:center;gap:14px;border:1px solid var(--line);}
+  .about-badge .num{font-family:'Space Grotesk';font-size:26px;font-weight:700;color:var(--tan-bright);}
+  .about-badge .lbl{font-size:12px;color:rgba(241,231,216,0.7);line-height:1.4;}
+  .about-copy p{color:#5a4531;font-size:16px;line-height:1.75;margin-bottom:18px;}
+  .about-copy p:first-of-type{font-size:19px;color:var(--ink);font-weight:500;}
+  .about-list{margin-top:30px;display:grid;gap:14px;}
+  .about-list li{display:flex;gap:12px;align-items:flex-start;font-size:14px;color:#5a4531;}
+  .about-list .tri{margin-top:6px;flex-shrink:0;}
+
+  /* ================= SERVICES ================= */
+  .services{background:var(--espresso);color:var(--cream);}
+  .services .section-head h2, .services .section-head p{color:var(--cream);}
+  .services .section-head p{color:rgba(241,231,216,0.55);}
+  .svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);}
+  .svc-card{background:var(--espresso);padding:40px 32px;transition:background .3s;}
+  .svc-card:hover{background:var(--espresso-soft);}
+  .svc-index{font-family:'Space Grotesk';font-size:13px;color:var(--tan-bright);letter-spacing:0.1em;}
+  .svc-card h3{font-size:21px;margin:22px 0 12px;font-weight:600;}
+  .svc-card p{font-size:14px;color:rgba(241,231,216,0.55);line-height:1.65;}
+
+  /* ================= PORTFOLIO ================= */
+  .portfolio{background:var(--cream);}
+  .port-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+  .port-item{position:relative;border-radius:6px;overflow:hidden;aspect-ratio:3/3.6;background:#241813;}
+  .port-item:nth-child(2){aspect-ratio:3/2.4;}
+  .port-item img{width:100%;height:100%;object-fit:cover;filter:grayscale(0.3) sepia(0.35);transition:transform .6s var(--ease), filter .6s;}
+  .port-item:hover img{transform:scale(1.06);filter:grayscale(0.05) sepia(0.2);}
+  .port-overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:22px;background:linear-gradient(0deg,rgba(21,15,11,0.85) 0%,rgba(21,15,11,0) 55%);color:var(--cream);}
+  .port-overlay .cat{font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--tan-bright);margin-bottom:6px;}
+  .port-overlay h4{font-family:'Space Grotesk';font-size:19px;font-weight:600;}
+
+  /* ================= TESTIMONIALS ================= */
+  .testimonials{background:var(--cream-dim);}
+  .tst-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
+  .tst-card{background:var(--cream);border:1px solid var(--line-dark);border-radius:6px;padding:32px 28px;display:flex;flex-direction:column;gap:20px;}
+  .stars{color:var(--tan);font-size:14px;letter-spacing:2px;}
+  .tst-card p{font-size:15px;line-height:1.7;color:#4a3623;}
+  .tst-who{display:flex;align-items:center;gap:12px;margin-top:auto;}
+  .tst-avatar{width:42px;height:42px;border-radius:50%;background:var(--espresso);color:var(--cream);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk';font-weight:600;font-size:14px;}
+  .tst-who .name{font-size:14px;font-weight:600;}
+  .tst-who .role{font-size:12px;color:var(--stone);}
+
+  /* ================= CONTACT ================= */
+  .contact{background:var(--espresso);color:var(--cream);}
+  .contact-grid{display:grid;grid-template-columns:0.85fr 1.15fr;gap:70px;}
+  .contact-info h2{font-size:clamp(30px,4vw,42px);font-weight:700;line-height:1.12;margin-bottom:18px;}
+  .contact-info p{color:rgba(241,231,216,0.6);font-size:15px;line-height:1.7;margin-bottom:32px;max-width:380px;}
+  .contact-detail{display:flex;gap:14px;align-items:flex-start;margin-bottom:22px;}
+  .contact-detail .ico{width:38px;height:38px;border-radius:50%;background:rgba(241,231,216,0.08);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--line);}
+  .contact-detail .ico svg{width:16px;height:16px;color:var(--tan-bright);}
+  .contact-detail .lbl{font-size:11px;text-transform:uppercase;letter-spacing:0.12em;color:var(--stone);margin-bottom:3px;}
+  .contact-detail .val{font-size:15px;font-weight:500;}
+  .contact-form{background:var(--espresso-soft);border:1px solid var(--line);border-radius:8px;padding:38px;}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+  .field{display:flex;flex-direction:column;gap:8px;}
+  .field label{font-size:12px;color:rgba(241,231,216,0.55);letter-spacing:0.04em;}
+  .field input, .field textarea{background:rgba(241,231,216,0.05);border:1px solid var(--line);border-radius:4px;padding:12px 14px;color:var(--cream);font-size:14px;transition:border-color .2s, background .2s;}
+  .field input:focus, .field textarea:focus{outline:none;border-color:var(--tan-bright);background:rgba(241,231,216,0.08);}
+  .field textarea{resize:vertical;min-height:100px;}
+  .contact-form .btn-primary{width:100%;justify-content:center;margin-top:6px;padding:14px;}
+  .form-note{font-size:12px;color:rgba(241,231,216,0.4);margin-top:12px;text-align:center;}
+
+  /* ================= FOOTER ================= */
+  footer{background:#160f0b;color:rgba(241,231,216,0.55);padding:60px 0 30px;}
+  .footer-top{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap;padding-bottom:50px;border-bottom:1px solid var(--line);}
+  .footer-brand .logo{margin-bottom:16px;}
+  .footer-brand p{max-width:280px;font-size:14px;line-height:1.6;}
+  .footer-cols{display:flex;gap:70px;flex-wrap:wrap;}
+  .footer-col h5{color:var(--cream);font-size:13px;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:16px;}
+  .footer-col a{display:block;font-size:14px;margin-bottom:11px;color:rgba(241,231,216,0.55);transition:color .2s;}
+  .footer-col a:hover{color:var(--tan-bright);}
+  .footer-bottom{display:flex;justify-content:space-between;padding-top:24px;font-size:12px;flex-wrap:wrap;gap:10px;}
+
+  /* Small "Admin" link tucked into the footer — the real, obvious way
+     into the admin login (in addition to the shield icon in the navbar). */
+  .admin-entry{color:var(--tan-bright)!important;font-weight:600;}
+
+  @media(max-width:960px){
+    .navlinks{display:none;}
+    .about-grid, .contact-grid{grid-template-columns:1fr;}
+    .svc-grid, .port-grid, .tst-grid{grid-template-columns:1fr 1fr;}
+    .form-row{grid-template-columns:1fr;}
+  }
+  @media(max-width:640px){
+    .wrap{padding:0 22px;}
+    .svc-grid, .port-grid, .tst-grid{grid-template-columns:1fr;}
+    .hero-ctas{flex-direction:column;align-items:flex-start;}
+    section{padding:80px 0;}
+  }
+
+  /* =====================================================================
+     ADMIN LOGIN MODAL
+     Sits above a dimmed + blurred copy of the page, matches the second
+     reference screenshot: shield icon, title, username/password, hint.
+  ===================================================================== */
+  .modal-overlay{
+    position:fixed;inset:0;z-index:200;
+    background:rgba(10,7,5,0.55);backdrop-filter:blur(6px);
+    display:none;align-items:center;justify-content:center;padding:20px;
+  }
+  .modal-overlay.open{display:flex;}
+  .login-card{
+    width:100%;max-width:420px;background:var(--espresso-soft);
+    border:1px solid var(--line);border-radius:10px;overflow:hidden;
+    box-shadow:0 30px 60px rgba(0,0,0,0.45);
+    animation:pop .3s var(--ease);
+  }
+  @keyframes pop{from{opacity:0;transform:translateY(10px) scale(.98);}to{opacity:1;transform:translateY(0) scale(1);}}
+  .login-head{display:flex;align-items:center;justify-content:space-between;padding:22px 24px;border-bottom:1px solid var(--line);}
+  .login-head-left{display:flex;align-items:center;gap:14px;}
+  .login-head-left .shield{width:42px;height:42px;border-radius:8px;background:var(--espresso);display:flex;align-items:center;justify-content:center;}
+  .login-head-left .shield svg{width:20px;height:20px;color:var(--tan-bright);}
+  .login-head-left h3{color:var(--cream);font-size:16px;font-weight:700;}
+  .login-head-left span{display:block;font-size:12px;color:var(--stone);margin-top:2px;}
+  .login-close{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--stone);transition:background .2s,color .2s;}
+  .login-close:hover{background:rgba(241,231,216,0.08);color:var(--cream);}
+  .login-body{padding:24px;}
+  .login-field{margin-bottom:18px;}
+  .login-field label{display:block;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--stone);margin-bottom:8px;}
+  .login-input-wrap{position:relative;}
+  .login-field input{
+    width:100%;background:rgba(241,231,216,0.05);border:1px solid var(--line);border-radius:6px;
+    padding:12px 14px;color:var(--cream);font-size:14px;transition:border-color .2s;
+  }
+  .login-field input:focus{outline:none;border-color:var(--tan-bright);}
+  .pw-toggle{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--stone);}
+  .pw-toggle svg{width:17px;height:17px;}
+  .login-error{
+    display:none;font-size:12.5px;color:#e08a6b;background:rgba(224,138,107,0.1);
+    border:1px solid rgba(224,138,107,0.3);padding:9px 12px;border-radius:6px;margin-bottom:16px;
+  }
+  .login-error.show{display:block;}
+  .login-submit{
+    width:100%;padding:13px;border-radius:6px;background:var(--stone);color:var(--espresso);
+    font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;gap:8px;
+    transition:background .2s;
+  }
+  .login-submit:hover{background:var(--tan-bright);}
+  .login-hint{text-align:center;font-size:11.5px;color:var(--stone);margin-top:14px;}
+
+  /* =====================================================================
+     ADMIN PANEL (the dashboard app itself)
+     A full-screen overlay that replaces the public site once logged in.
+     Kept in the same file/DOM but toggled with the .open class so this
+     stays a single self-contained HTML file.
+  ===================================================================== */
+  #adminApp{
+    position:fixed;inset:0;z-index:300;background:var(--espresso);
+    display:none;color:var(--cream);
+  }
+  #adminApp.open{display:flex;}
+
+  /* ---- Sidebar ---- */
+  .admin-sidebar{
+    width:260px;flex-shrink:0;background:#1a120d;border-right:1px solid var(--line);
+    display:flex;flex-direction:column;padding:22px 16px;
+  }
+  .admin-brand{display:flex;align-items:center;gap:12px;padding:6px 8px 26px;}
+  .admin-brand .shield{width:38px;height:38px;border-radius:8px;background:var(--espresso-soft);display:flex;align-items:center;justify-content:center;}
+  .admin-brand .shield svg{width:18px;height:18px;color:var(--tan-bright);}
+  .admin-brand strong{font-size:15px;font-weight:700;}
+  .admin-nav{display:flex;flex-direction:column;gap:4px;flex:1;}
+  .admin-nav button{
+    display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:8px;
+    font-size:14px;color:var(--stone);text-align:left;transition:background .2s,color .2s;
+  }
+  .admin-nav button svg{width:17px;height:17px;flex-shrink:0;}
+  .admin-nav button:hover{color:var(--cream);background:rgba(241,231,216,0.05);}
+  .admin-nav button.active{color:var(--cream);background:rgba(241,231,216,0.09);}
+  .admin-nav .badge{
+    margin-left:auto;background:var(--good);color:#12200e;font-size:11px;font-weight:700;
+    border-radius:20px;padding:1px 7px;
+  }
+  .admin-logout{
+    display:flex;align-items:center;gap:10px;padding:12px;margin-top:14px;border-top:1px solid var(--line);
+    padding-top:18px;color:var(--stone);font-size:14px;transition:color .2s;
+  }
+  .admin-logout:hover{color:#e08a6b;}
+  .admin-logout svg{width:16px;height:16px;}
+
+  /* ---- Main column ---- */
+  .admin-main{flex:1;display:flex;flex-direction:column;overflow-y:auto;}
+  .admin-topbar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:20px 32px;border-bottom:1px solid var(--line);position:sticky;top:0;
+    background:var(--espresso);z-index:5;
+  }
+  .admin-topbar-left{display:flex;align-items:center;gap:16px;}
+  .admin-topbar-left button{color:var(--stone);}
+  .admin-topbar-left button svg{width:20px;height:20px;}
+  .admin-topbar h2{font-size:18px;font-weight:700;}
+  .admin-topbar-right{display:flex;align-items:center;gap:14px;}
+  .admin-date{background:rgba(241,231,216,0.06);border:1px solid var(--line);padding:8px 14px;border-radius:100px;font-size:12.5px;color:var(--stone);}
+  .admin-avatar{width:36px;height:36px;border-radius:50%;background:var(--tan);color:var(--espresso);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;}
+  .admin-content{padding:32px;flex:1;}
+  .admin-welcome{color:var(--stone);font-size:15px;margin-bottom:26px;}
+  .admin-welcome strong{color:var(--cream);}
+
+  /* ---- Stat cards ---- */
+  .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:34px;}
+  .stat-card{background:var(--espresso-soft);border:1px solid var(--line);border-radius:10px;padding:22px;}
+  .stat-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:26px;}
+  .stat-icon{width:36px;height:36px;border-radius:8px;background:rgba(241,231,216,0.06);display:flex;align-items:center;justify-content:center;}
+  .stat-icon svg{width:16px;height:16px;color:var(--cream);}
+  .stat-trend{color:var(--stone);}
+  .stat-trend svg{width:15px;height:15px;}
+  .stat-num{font-family:'Space Grotesk';font-size:30px;font-weight:700;margin-bottom:4px;}
+  .stat-label{font-size:13px;color:var(--stone);}
+
+  /* ---- Panels / tables shared by Inquiries, Portfolio, Team, Services ---- */
+  .admin-panel{background:var(--espresso-soft);border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+  .admin-panel-head{display:flex;align-items:center;justify-content:space-between;padding:20px 22px;border-bottom:1px solid var(--line);}
+  .admin-panel-head h3{font-size:15px;font-weight:700;}
+  .link-btn{font-size:13px;color:var(--tan-bright);font-weight:600;}
+  .add-btn{display:flex;align-items:center;gap:6px;background:var(--tan);color:var(--espresso);font-size:13px;font-weight:700;padding:9px 14px;border-radius:6px;transition:background .2s;}
+  .add-btn:hover{background:var(--tan-bright);}
+  .add-btn svg{width:14px;height:14px;}
+
+  .row-list{display:flex;flex-direction:column;}
+  .list-row{display:flex;align-items:center;gap:14px;padding:16px 22px;border-bottom:1px solid var(--line);}
+  .list-row:last-child{border-bottom:none;}
+  .row-avatar{width:38px;height:38px;border-radius:50%;background:#3a2a1e;color:var(--cream);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;}
+  .row-main{flex:1;min-width:0;}
+  .row-main .t1{font-size:14px;font-weight:600;}
+  .row-main .t2{font-size:12.5px;color:var(--stone);margin-top:2px;}
+  .row-side{display:flex;align-items:center;gap:14px;flex-shrink:0;}
+  .row-date{font-size:12.5px;color:var(--stone);}
+  .status-pill{font-size:11.5px;font-weight:700;padding:4px 11px;border-radius:100px;text-transform:capitalize;}
+  .status-new{background:rgba(127,174,107,0.18);color:var(--good);}
+  .status-read{background:rgba(241,231,216,0.1);color:var(--stone);}
+  .status-replied{background:transparent;border:1px solid var(--line);color:var(--stone);}
+  .row-actions{display:flex;gap:8px;}
+  .row-actions button{width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--stone);transition:background .2s,color .2s;}
+  .row-actions button:hover{background:rgba(241,231,216,0.08);color:var(--cream);}
+  .row-actions button svg{width:14px;height:14px;}
+  .row-actions .danger:hover{color:#e08a6b;}
+
+  /* Card-style grid for Portfolio / Services */
+  .card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;padding:22px;}
+  .admin-card{background:var(--espresso);border:1px solid var(--line);border-radius:8px;overflow:hidden;}
+  .admin-card .thumb{height:110px;background-size:cover;background-position:center;filter:grayscale(0.2) sepia(0.3);}
+  .admin-card .body{padding:14px;}
+  .admin-card .body .t1{font-size:14px;font-weight:600;}
+  .admin-card .body .t2{font-size:12px;color:var(--stone);margin-top:3px;}
+  .admin-card .body p{font-size:12.5px;color:var(--stone);margin-top:8px;line-height:1.5;}
+  .admin-card .card-actions{display:flex;gap:8px;margin-top:12px;}
+  .admin-card .card-actions button{flex:1;padding:6px;border-radius:6px;background:rgba(241,231,216,0.06);font-size:12px;display:flex;align-items:center;justify-content:center;gap:5px;color:var(--stone);}
+  .admin-card .card-actions button:hover{color:var(--cream);}
+  .admin-card .card-actions svg{width:12px;height:12px;}
+
+  .empty-state{padding:50px 22px;text-align:center;color:var(--stone);font-size:13.5px;}
+
+  /* ---- Generic add/edit form modal used across admin sections ---- */
+  .form-modal-overlay{position:fixed;inset:0;z-index:400;background:rgba(10,7,5,0.6);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:20px;}
+  .form-modal-overlay.open{display:flex;}
+  .form-modal{width:100%;max-width:440px;background:var(--espresso-soft);border:1px solid var(--line);border-radius:10px;overflow:hidden;animation:pop .25s var(--ease);}
+  .form-modal-head{display:flex;justify-content:space-between;align-items:center;padding:18px 20px;border-bottom:1px solid var(--line);}
+  .form-modal-head h4{font-size:15px;font-weight:700;}
+  .form-modal-body{padding:20px;display:flex;flex-direction:column;gap:14px;max-height:60vh;overflow-y:auto;}
+  .form-modal-body .field label{color:var(--stone);}
+  .form-modal-body .field input, .form-modal-body .field select, .form-modal-body .field textarea{
+    background:rgba(241,231,216,0.05);border:1px solid var(--line);border-radius:6px;padding:10px 12px;color:var(--cream);font-size:13.5px;
+  }
+  .form-modal-body .field textarea{min-height:70px;resize:vertical;}
+  .form-modal-foot{display:flex;gap:10px;padding:18px 20px;border-top:1px solid var(--line);}
+  .form-modal-foot button{flex:1;padding:11px;border-radius:6px;font-size:13.5px;font-weight:700;}
+  .btn-cancel{background:rgba(241,231,216,0.06);color:var(--stone);}
+  .btn-save{background:var(--tan);color:var(--espresso);}
+  .btn-save:hover{background:var(--tan-bright);}
+
+  /* Settings form (simple key/value fields) */
+  .settings-form{padding:22px;display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:640px;}
+  .settings-form .field{grid-column:span 1;}
+  .settings-form .full{grid-column:1/-1;}
+  .settings-form .field label{color:var(--stone);font-size:12px;}
+  .settings-form .field input, .settings-form .field textarea{width:100%;background:rgba(241,231,216,0.05);border:1px solid var(--line);border-radius:6px;padding:10px 12px;color:var(--cream);margin-top:6px;font-size:13.5px;}
+  .settings-save-note{grid-column:1/-1;font-size:12px;color:var(--good);display:none;}
+  .settings-save-note.show{display:block;}
+
+  @media(max-width:900px){
+    .stat-grid{grid-template-columns:1fr 1fr;}
+    .admin-sidebar{position:fixed;left:0;top:0;bottom:0;transform:translateX(-100%);transition:transform .3s var(--ease);z-index:20;}
+    .admin-sidebar.open{transform:translateX(0);}
+  }
+  @media(max-width:560px){
+    .stat-grid{grid-template-columns:1fr;}
+    .admin-content{padding:18px;}
+    .admin-topbar{padding:16px 18px;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important;animation-iteration-count:1 !important;transition-duration:0.01ms !important;}
+  }
+  :focus-visible{outline:2px solid var(--tan-bright);outline-offset:3px;}
+
+  /* =====================================================================
+     TOAST NOTIFICATIONS
+     Small confirmations used by the automation layer (auto-save,
+     new-inquiry alerts, settings sync) so changes never feel silent.
+  ===================================================================== */
+  #toastStack{
+    position:fixed;bottom:24px;right:24px;z-index:500;
+    display:flex;flex-direction:column;gap:10px;
+    pointer-events:none;
+  }
+  .toast{
+    background:var(--espresso);color:var(--cream);border:1px solid var(--line);
+    border-radius:8px;padding:12px 16px;font-size:13px;display:flex;align-items:center;gap:10px;
+    box-shadow:0 12px 30px rgba(0,0,0,0.35);
+    opacity:0;transform:translateY(8px);
+    animation:toastIn .35s var(--ease) forwards, toastOut .35s var(--ease) forwards 2.6s;
+  }
+  .toast svg{width:15px;height:15px;color:var(--good);flex-shrink:0;}
+  .toast.toast-alert svg{color:var(--tan-bright);}
+  @keyframes toastIn{to{opacity:1;transform:translateY(0);}}
+  @keyframes toastOut{to{opacity:0;transform:translateY(-6px);}}
+</style>
+</head>
+<body>
+
+<!-- =========================================================
+     PUBLIC SITE
+========================================================= -->
+<header id="siteHeader">
+  <div class="wrap">
+    <nav class="navbar">
+      <a href="#home" class="logo">A|B</a>
+      <ul class="navlinks">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#portfolio">Portfolio</a></li>
+        <li><a href="#testimonials">Testimonials</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <div class="navtools">
+        <!-- Shield icon now doubles as the admin-login trigger -->
+        <button class="icon-btn" id="openAdminBtn" aria-label="Admin access">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 5v6c0 5 3.4 9 8 11 4.6-2 8-6 8-11V5l-8-3Z"/></svg>
+        </button>
+        <button class="icon-btn" id="themeToggle" aria-label="Toggle theme">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"/></svg>
+        </button>
+        <a href="#contact" class="btn btn-primary">Get a Quote ↗</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-scrim"></div>
+  <div class="hero-grain"></div>
+  <div class="wrap hero-content">
+    <div class="eyebrow"><span class="tri"></span>We Design. You Grow.</div>
+    <h1>
+      <span class="l1">Bringing Your</span>
+      <span class="l2">Creative</span>
+      <span class="l3">Vision to Life</span>
+    </h1>
+    <p>Andiswa Business Consultation crafts bold visual identities and digital experiences that make South African businesses impossible to ignore.</p>
+    <div class="hero-ctas">
+      <a href="#portfolio" class="btn btn-primary">View Portfolio →</a>
+      <a href="#contact" class="btn btn-outline">Get a Free Quote</a>
+    </div>
+  </div>
+  <div class="scroll-cue"><span class="line"></span>Scroll</div>
+</section>
+
+<button class="chat-fab" aria-label="Open chat">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5 8.4 8.4 0 0 1-3.9-.94L3 20l1.05-4.1A8.4 8.4 0 0 1 3 11.5 8.5 8.5 0 0 1 11.5 3 8.5 8.5 0 0 1 21 11.5Z"/></svg>
+</button>
+
+<section class="about" id="about">
+  <div class="wrap about-grid">
+    <div class="reveal about-visual">
+      <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=900&auto=format&fit=crop" alt="Andiswa Business Consultation team at work">
+      <div class="about-badge">
+        <span class="num">7+</span>
+        <span class="lbl">Years shaping brands across Johannesburg, Cape Town &amp; Durban</span>
+      </div>
+    </div>
+    <div class="reveal about-copy">
+      <div class="eyebrow"><span class="tri"></span>About Us</div>
+      <p style="margin-top:22px;" id="publicAboutBlurb">We believe great design isn't decoration — it's how a business earns attention.</p>
+      <p>Andiswa Business Consultation is a Johannesburg-based studio working at the intersection of brand strategy and design. We partner with founders and marketing teams who are ready to look as sharp as they operate — from the boardroom to the billboard.</p>
+      <ul class="about-list">
+        <li><span class="tri"></span>Strategy-first identities built to scale with the business, not just the launch</li>
+        <li><span class="tri"></span>In-house design, copy and development under one roof</li>
+        <li><span class="tri"></span>Trusted by 60+ South African businesses since 2019</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="services" id="services">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>What We Do</h2>
+      <p>Four disciplines, one studio — everything a growing brand needs to show up consistently, everywhere.</p>
+    </div>
+    <div class="svc-grid reveal" id="publicServicesGrid">
+      <!-- Populated by JS from the same data the admin panel edits, so
+           edits made under Services in the admin app show up here too. -->
+    </div>
+  </div>
+</section>
+
+<section class="portfolio" id="portfolio">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>Selected Work</h2>
+      <p>A few of the identities and platforms we've brought to life recently.</p>
+    </div>
+    <div class="port-grid reveal" id="publicPortfolioGrid">
+      <!-- Populated by JS from the shared portfolio data -->
+    </div>
+  </div>
+</section>
+
+<section class="testimonials" id="testimonials">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>What Clients Say</h2>
+      <p>We measure success in repeat business — most of our clients come back for the next chapter.</p>
+    </div>
+    <div class="tst-grid reveal">
+      <div class="tst-card">
+        <div class="stars">★★★★★</div>
+        <p>"Andiswa rebuilt our identity from the ground up. Bookings were up within the first month of the new site going live."</p>
+        <div class="tst-who"><div class="tst-avatar">NM</div><div><div class="name">Nomsa Mahlangu</div><div class="role">Founder, Kaya Roasters</div></div></div>
+      </div>
+      <div class="tst-card">
+        <div class="stars">★★★★★</div>
+        <p>"They understood our industry faster than agencies twice their size. The brand finally feels like us."</p>
+        <div class="tst-who"><div class="tst-avatar">TD</div><div><div class="name">Thabo Dlamini</div><div class="role">MD, Sizwe Logistics</div></div></div>
+      </div>
+      <div class="tst-card">
+        <div class="stars">★★★★★</div>
+        <p>"Sharp, responsive, and genuinely invested in the outcome — not just the deliverables. Highly recommend."</p>
+        <div class="tst-who"><div class="tst-avatar">LK</div><div><div class="name">Lerato Khumalo</div><div class="role">Owner, Lerato Foods</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap contact-grid">
+    <div class="reveal contact-info">
+      <div class="eyebrow"><span class="tri"></span>Get In Touch</div>
+      <h2 style="margin-top:22px;">Let's build something you're proud to put your name on.</h2>
+      <p>Tell us about the project and we'll come back to you within one business day with next steps.</p>
+
+      <div class="contact-detail">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7l9 6 9-6M5 5h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"/></svg></span>
+        <div><div class="lbl">Email</div><div class="val" id="contactEmailVal">hello@andiswaconsultation.co.za</div></div>
+      </div>
+      <div class="contact-detail">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.4 2.1L8 9.9a16 16 0 0 0 6 6l1.4-1.4a2 2 0 0 1 2.1-.4c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.8 2Z"/></svg></span>
+        <div><div class="lbl">Phone</div><div class="val" id="contactPhoneVal">+27 11 234 5678</div></div>
+      </div>
+      <div class="contact-detail">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 6-9 12-9 12S3 16 3 10a9 9 0 0 1 18 0Z"/><circle cx="12" cy="10" r="3"/></svg></span>
+        <div><div class="lbl">Studio</div><div class="val" id="contactAddressVal">44 Fox Street, Johannesburg CBD</div></div>
+      </div>
+    </div>
+
+    <!-- Inquiries submitted here are pushed straight into the admin
+         panel's Inquiries list (see handleContactSubmit in the script). -->
+    <form class="reveal contact-form" id="quoteForm">
+      <div class="form-row">
+        <div class="field"><label for="fname">First name</label><input id="fname" type="text" placeholder="Ayanda" required></div>
+        <div class="field"><label for="lname">Last name</label><input id="lname" type="text" placeholder="Zulu" required></div>
+      </div>
+      <div class="form-row" style="grid-template-columns:1fr;">
+        <div class="field"><label for="email">Email address</label><input id="email" type="email" placeholder="you@company.co.za" required></div>
+      </div>
+      <div class="form-row" style="grid-template-columns:1fr;margin-bottom:20px;">
+        <div class="field"><label for="msg">Tell us about the project</label><textarea id="msg" placeholder="What are you looking to grow?" required></textarea></div>
+      </div>
+      <button type="submit" class="btn btn-primary">Send Message →</button>
+      <p class="form-note">We typically reply within one business day.</p>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="#home" class="logo">A|B</a>
+        <p>Andiswa Business Consultation — brand identity, web and strategy for South African businesses ready to grow.</p>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h5>Studio</h5>
+          <a href="#about">About Us</a>
+          <a href="#services">Services</a>
+          <a href="#portfolio">Portfolio</a>
+          <a href="#testimonials">Testimonials</a>
+        </div>
+        <div class="footer-col">
+          <h5>Connect</h5>
+          <a href="#contact">Contact</a>
+          <a href="#">Instagram</a>
+          <a href="#">LinkedIn</a>
+          <a href="#" id="footerAdminLink" class="admin-entry">Admin Login</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Andiswa Business Consultation. All rights reserved.</span>
+      <span>Johannesburg, South Africa</span>
+    </div>
+  </div>
+</footer>
+
+<!-- =========================================================
+     ADMIN LOGIN MODAL
+========================================================= -->
+<div class="modal-overlay" id="loginOverlay">
+  <div class="login-card">
+    <div class="login-head">
+      <div class="login-head-left">
+        <span class="shield"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 5v6c0 5 3.4 9 8 11 4.6-2 8-6 8-11V5l-8-3Z"/></svg></span>
+        <div>
+          <h3>Admin Access</h3>
+          <span>Andiswa Business Consultation</span>
+        </div>
+      </div>
+      <button class="login-close" id="closeLoginBtn" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <form class="login-body" id="loginForm">
+      <p class="login-error" id="loginError">Incorrect username or password. Try again.</p>
+      <div class="login-field">
+        <label for="loginUser">Username</label>
+        <input type="text" id="loginUser" autocomplete="username" placeholder="admin" required>
+      </div>
+      <div class="login-field">
+        <label for="loginPass">Password</label>
+        <div class="login-input-wrap">
+          <input type="password" id="loginPass" autocomplete="current-password" placeholder="••••••••" required>
+          <button type="button" class="pw-toggle" id="pwToggle" aria-label="Show password">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+      <button type="submit" class="login-submit">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+        Login to Dashboard
+      </button>
+      <p class="login-hint">Hint: admin / ABC@2026</p>
+    </form>
+  </div>
+</div>
+
+<!-- =========================================================
+     ADMIN PANEL (dashboard app)
+========================================================= -->
+<div id="adminApp">
+  <aside class="admin-sidebar" id="adminSidebar">
+    <div class="admin-brand">
+      <span class="shield"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 5v6c0 5 3.4 9 8 11 4.6-2 8-6 8-11V5l-8-3Z"/></svg></span>
+      <strong>Admin Panel</strong>
+    </div>
+    <nav class="admin-nav" id="adminNav">
+      <button data-section="dashboard" class="active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </button>
+      <button data-section="inquiries">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5 8.4 8.4 0 0 1-3.9-.94L3 20l1.05-4.1A8.4 8.4 0 0 1 3 11.5 8.5 8.5 0 0 1 11.5 3 8.5 8.5 0 0 1 21 11.5Z"/></svg>
+        Inquiries
+        <span class="badge" id="inquiryBadge">0</span>
+      </button>
+      <button data-section="portfolio">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+        Portfolio
+      </button>
+      <button data-section="team">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Team
+      </button>
+      <button data-section="services">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        Services
+      </button>
+      <button data-section="settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
+        Settings
+      </button>
+    </nav>
+    <button class="admin-logout" id="logoutBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg>
+      Log Out
+    </button>
+  </aside>
+
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div class="admin-topbar-left">
+        <button id="sidebarToggle" aria-label="Toggle menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+        </button>
+        <h2 id="adminPageTitle">Dashboard</h2>
+      </div>
+      <div class="admin-topbar-right">
+        <span class="admin-date" id="adminDate">7 August 2026</span>
+        <span class="admin-avatar">A</span>
+      </div>
+    </div>
+
+    <div class="admin-content">
+
+      <!-- ---------- DASHBOARD VIEW ---------- -->
+      <div class="admin-view" id="view-dashboard">
+        <p class="admin-welcome">Welcome back, <strong>Andiswa</strong>. Here's what's happening.</p>
+
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="stat-top">
+              <span class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5 8.4 8.4 0 0 1-3.9-.94L3 20l1.05-4.1A8.4 8.4 0 0 1 3 11.5 8.5 8.5 0 0 1 11.5 3 8.5 8.5 0 0 1 21 11.5Z"/></svg></span>
+              <span class="stat-trend"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M7 7h10v10"/></svg></span>
+            </div>
+            <div class="stat-num" id="statInquiries">0</div>
+            <div class="stat-label">Total Inquiries</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-top">
+              <span class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></span>
+              <span class="stat-trend"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M7 7h10v10"/></svg></span>
+            </div>
+            <div class="stat-num" id="statNew">0</div>
+            <div class="stat-label">New Messages</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-top">
+              <span class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></span>
+              <span class="stat-trend"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M7 7h10v10"/></svg></span>
+            </div>
+            <div class="stat-num" id="statPortfolio">0</div>
+            <div class="stat-label">Portfolio Items</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-top">
+              <span class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+              <span class="stat-trend"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M7 7h10v10"/></svg></span>
+            </div>
+            <div class="stat-num" id="statTeam">0</div>
+            <div class="stat-label">Team Members</div>
+          </div>
+        </div>
+
+        <div class="admin-panel">
+          <div class="admin-panel-head">
+            <h3>Recent Inquiries</h3>
+            <button class="link-btn" id="viewAllInquiries">View All →</button>
+          </div>
+          <div class="row-list" id="recentInquiriesList"></div>
+        </div>
+      </div>
+
+      <!-- ---------- INQUIRIES VIEW ---------- -->
+      <div class="admin-view" id="view-inquiries" style="display:none;">
+        <div class="admin-panel">
+          <div class="admin-panel-head">
+            <h3>All Inquiries</h3>
+          </div>
+          <div class="row-list" id="allInquiriesList"></div>
+        </div>
+      </div>
+
+      <!-- ---------- PORTFOLIO VIEW ---------- -->
+      <div class="admin-view" id="view-portfolio" style="display:none;">
+        <div class="admin-panel">
+          <div class="admin-panel-head">
+            <h3>Portfolio Items</h3>
+            <button class="add-btn" data-add="portfolio">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+              Add Item
+            </button>
+          </div>
+          <div class="card-grid" id="portfolioCardGrid"></div>
+        </div>
+      </div>
+
+      <!-- ---------- TEAM VIEW ---------- -->
+      <div class="admin-view" id="view-team" style="display:none;">
+        <div class="admin-panel">
+          <div class="admin-panel-head">
+            <h3>Team Members</h3>
+            <button class="add-btn" data-add="team">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+              Add Member
+            </button>
+          </div>
+          <div class="row-list" id="teamList"></div>
+        </div>
+      </div>
+
+      <!-- ---------- SERVICES VIEW ---------- -->
+      <div class="admin-view" id="view-services" style="display:none;">
+        <div class="admin-panel">
+          <div class="admin-panel-head">
+            <h3>Services</h3>
+            <button class="add-btn" data-add="services">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+              Add Service
+            </button>
+          </div>
+          <div class="card-grid" id="servicesCardGrid"></div>
+        </div>
+      </div>
+
+      <!-- ---------- SETTINGS VIEW ---------- -->
+      <div class="admin-view" id="view-settings" style="display:none;">
+        <div class="admin-panel">
+          <div class="admin-panel-head"><h3>Studio Settings</h3></div>
+          <form class="settings-form" id="settingsForm">
+            <div class="field"><label>Studio name</label><input id="setStudio" value="Andiswa Business Consultation"></div>
+            <div class="field"><label>Contact email</label><input id="setEmail" value="hello@andiswaconsultation.co.za"></div>
+            <div class="field"><label>Phone</label><input id="setPhone" value="+27 11 234 5678"></div>
+            <div class="field"><label>Address</label><input id="setAddress" value="44 Fox Street, Johannesburg CBD"></div>
+            <div class="field full"><label>About blurb (shown on public site)</label><textarea id="setAbout">We believe great design isn't decoration — it's how a business earns attention.</textarea></div>
+            <button type="submit" class="add-btn" style="grid-column:1/-1;justify-content:center;">Save Settings</button>
+            <p class="settings-save-note" id="settingsSavedNote">Settings saved for this session ✓</p>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     GENERIC ADD/EDIT MODAL (shared by Portfolio, Team, Services)
+========================================================= -->
+<div class="form-modal-overlay" id="formModalOverlay">
+  <div class="form-modal">
+    <div class="form-modal-head">
+      <h4 id="formModalTitle">Add Item</h4>
+      <button class="login-close" id="closeFormModal" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="form-modal-body" id="formModalBody"><!-- fields injected by JS --></div>
+    <div class="form-modal-foot">
+      <button class="btn-cancel" id="cancelFormModal" type="button">Cancel</button>
+      <button class="btn-save" id="saveFormModal" type="button">Save</button>
+    </div>
+  </div>
+</div>
+
+<div id="toastStack" aria-live="polite"></div>
+
+<script>
+/* =====================================================================
+   APP DATA
+   Everything the admin panel manages lives in these in-memory arrays.
+   NOTE: this is a front-end only demo — there is no server, so data
+   resets on page refresh. If you need it to persist for real, this is
+   the layer to swap out for API calls to a backend + database.
+===================================================================== */
+let inquiries = [
+  { id:1, name:"Sipho Nkosi",    service:"Logo Design",        status:"New",     date:"2026-06-20" },
+  { id:2, name:"Naledi Dlamini", service:"Branding & Identity", status:"Read",    date:"2026-06-19" },
+  { id:3, name:"Bongani Moyo",   service:"Flyer Design",       status:"Replied", date:"2026-06-18" },
+  { id:4, name:"Zanele Khumalo", service:"Web Design",         status:"New",     date:"2026-06-17" },
+  { id:5, name:"Mpho Radebe",    service:"Business Consultation", status:"Read", date:"2026-06-15" }
+];
+
+let portfolioItems = [
+  { id:1, title:"Kaya Roasters",       category:"Brand Identity", image:"https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=800&auto=format&fit=crop" },
+  { id:2, title:"Thandeka Legal",      category:"Web Design",     image:"https://images.unsplash.com/photo-1487014679447-9f8336841d58?q=80&w=800&auto=format&fit=crop" },
+  { id:3, title:"Nomvula Skincare",    category:"Print Collateral", image:"https://images.unsplash.com/photo-1586953208448-b95a79798f07?q=80&w=800&auto=format&fit=crop" },
+  { id:4, title:"Sizwe Logistics",     category:"Campaign",       image:"https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop" },
+  { id:5, title:"Lerato Foods",        category:"Packaging",      image:"https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?q=80&w=800&auto=format&fit=crop" },
+  { id:6, title:"Botho Retail Group",  category:"Signage",        image:"https://images.unsplash.com/photo-1522542550221-31fd19575a2d?q=80&w=800&auto=format&fit=crop" }
+];
+
+let team = [
+  { id:1, name:"Andiswa Phewa",       role:"Founder & Creative Director", email:"andiswa@andiswaconsultation.co.za" },
+  { id:2, name:"Afeziwe Thandani",    role:"Lead Web Developer",          email:"afeziwe@andiswaconsultation.co.za" },
+  { id:3, name:"Vuyolwethu Sicwebi",  role:"Brand Strategist",            email:"vuyo@andiswaconsultation.co.za" },
+  { id:4, name:"Ondela Mvana",        role:"Project Manager",             email:"ondela@andiswaconsultation.co.za" }
+];
+
+let services = [
+  { id:1, title:"Brand Identity",     description:"Logo systems, colour, type and voice — the full visual language your business runs on." },
+  { id:2, title:"Web & Digital",      description:"Fast, considered websites and product interfaces that turn visitors into clients." },
+  { id:3, title:"Print & Collateral", description:"Business cards, brochures and signage that hold up in the hand, not just on screen." },
+  { id:4, title:"Marketing Strategy", description:"Positioning and campaign direction that keep every touchpoint pulling the same way." },
+  { id:5, title:"Social Content",     description:"Templated, on-brand content systems so your team can post without starting from scratch." },
+  { id:6, title:"Business Consultation", description:"Practical guidance on growth, operations and go-to-market — grounded in design thinking." }
+];
+
+// Studio-wide settings, editable from Admin > Settings. Anything in here
+// is automatically reflected on the public site the moment it's saved
+// (see applySettingsToPublicSite()).
+let settings = {
+  studio:  "Andiswa Business Consultation",
+  email:   "hello@andiswaconsultation.co.za",
+  phone:   "+27 11 234 5678",
+  address: "44 Fox Street, Johannesburg CBD",
+  about:   "We believe great design isn't decoration — it's how a business earns attention."
+};
+
+// Simple incrementing id helper used whenever a new record is added
+function nextId(arr){ return arr.length ? Math.max(...arr.map(i => i.id)) + 1 : 1; }
+// Turns a full name into initials for avatar bubbles, e.g. "Sipho Nkosi" -> "SN"
+function initials(name){ return name.split(" ").map(w => w[0]).join("").slice(0,2).toUpperCase(); }
+function formatDate(iso){
+  const d = new Date(iso + "T00:00:00");
+  return d.toLocaleDateString("en-ZA", { day:"numeric", month:"short", year:"numeric" });
+}
+
+/* =====================================================================
+   AUTOMATION LAYER 1 — TOAST NOTIFICATIONS
+   showToast() is called by every automated action below so changes are
+   always confirmed on screen instead of happening silently.
+===================================================================== */
+function showToast(message, alert = false){
+  const stack = document.getElementById('toastStack');
+  const el = document.createElement('div');
+  el.className = 'toast' + (alert ? ' toast-alert' : '');
+  el.innerHTML = `
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      ${alert ? '<path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/>'
+               : '<path d="M20 6 9 17l-5-5"/>'}
+    </svg>
+    <span>${message}</span>`;
+  stack.appendChild(el);
+  // matches the CSS toast-out animation timing (3s total) before removal
+  setTimeout(() => el.remove(), 3000);
+}
+
+/* =====================================================================
+   AUTOMATION LAYER 2 — PERSISTENT STORAGE
+   Every data array is auto-saved to window.storage the moment it
+   changes, and auto-loaded back in when the page opens — so refreshing
+   the browser (or coming back tomorrow) no longer wipes out inquiries,
+   portfolio edits, team changes or settings. Falls back gracefully to
+   the in-memory defaults above if storage isn't available.
+===================================================================== */
+const STORAGE_KEYS = {
+  inquiries: "abc-inquiries",
+  portfolioItems: "abc-portfolio",
+  team: "abc-team",
+  services: "abc-services",
+  settings: "abc-settings"
+};
+
+// Saves one named piece of state. Called automatically after every
+// add / edit / delete / status-change throughout the admin panel.
+async function persist(key, value){
+  try {
+    await window.storage.set(STORAGE_KEYS[key], JSON.stringify(value), false);
+  } catch (err) {
+    console.warn("Auto-save skipped (storage unavailable):", key, err);
+  }
+}
+
+// Loads one named piece of state, returning null if nothing was saved yet.
+async function restore(key){
+  try {
+    const result = await window.storage.get(STORAGE_KEYS[key], false);
+    return result ? JSON.parse(result.value) : null;
+  } catch (err) {
+    return null; // key doesn't exist yet — first visit, keep the defaults
+  }
+}
+
+// Runs once on page load: pulls any previously saved data in before the
+// admin panel or public site is used, so everything picks up right
+// where the last session left off.
+async function restoreAllData(){
+  const [savedInquiries, savedPortfolio, savedTeam, savedServices, savedSettings] = await Promise.all([
+    restore('inquiries'), restore('portfolioItems'), restore('team'), restore('services'), restore('settings')
+  ]);
+  if (savedInquiries)  inquiries = savedInquiries;
+  if (savedPortfolio)  portfolioItems = savedPortfolio;
+  if (savedTeam)        team = savedTeam;
+  if (savedServices)    services = savedServices;
+  if (savedSettings)    settings = savedSettings;
+}
+
+/* =====================================================================
+   PUBLIC SITE BEHAVIOUR
+===================================================================== */
+
+// Header condenses into a pill once the user scrolls past the hero top
+const header = document.getElementById('siteHeader');
+window.addEventListener('scroll', () => {
+  header.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// Fade + rise sections into view as they cross into the viewport
+const revealEls = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+}, { threshold: 0.15 });
+revealEls.forEach(el => io.observe(el));
+
+// Light/dark toggle — swaps the cream/espresso pairing for a fully dark
+// reading mode while keeping the same brown accent colours.
+const themeToggle = document.getElementById('themeToggle');
+let dark = false;
+themeToggle.addEventListener('click', () => {
+  dark = !dark;
+  const root = document.documentElement.style;
+  root.setProperty('--cream', dark ? '#241a13' : '#f1e7d8');
+  root.setProperty('--cream-dim', dark ? '#2c2016' : '#e6d8c3');
+  root.setProperty('--ink', dark ? '#f1e7d8' : '#2a1c12');
+  root.setProperty('--line-dark', dark ? 'rgba(241,231,216,0.12)' : 'rgba(42,28,18,0.12)');
+});
+
+// Public contact form: creates a real inquiry record so it shows up
+// straight away in the admin panel (this is the "automation" tying the
+// public site to the admin side together).
+document.getElementById('quoteForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const btn = e.target.querySelector('button[type="submit"]');
+  const original = btn.textContent;
+
+  const first = document.getElementById('fname').value.trim();
+  const last  = document.getElementById('lname').value.trim();
+  const today = new Date().toISOString().slice(0,10);
+
+  inquiries.unshift({
+    id: nextId(inquiries),
+    name: `${first} ${last}`.trim() || "Website Visitor",
+    service: "General Enquiry",
+    status: "New",
+    date: today
+  });
+  renderInquiries();      // keep the admin panel's numbers in sync immediately
+  persist('inquiries', inquiries); // auto-save so the new inquiry survives a refresh
+  refreshTabBadge();      // updates the browser tab title with the new unread count
+
+  btn.textContent = 'Message sent ✓';
+  setTimeout(() => { btn.textContent = original; e.target.reset(); }, 2200);
+});
+
+// Render the public Services + Portfolio sections FROM the same arrays
+// the admin panel edits, so changes made in the dashboard are reflected
+// on the live site without duplicating content in two places.
+function renderPublicServices(){
+  const grid = document.getElementById('publicServicesGrid');
+  grid.innerHTML = services.map((s, i) => `
+    <div class="svc-card">
+      <span class="svc-index">0${i+1}</span>
+      <h3>${s.title}</h3>
+      <p>${s.description}</p>
+    </div>
+  `).join("");
+}
+function renderPublicPortfolio(){
+  const grid = document.getElementById('publicPortfolioGrid');
+  grid.innerHTML = portfolioItems.map(p => `
+    <div class="port-item">
+      <img src="${p.image}" alt="${p.title}">
+      <div class="port-overlay">
+        <div class="cat">${p.category}</div>
+        <h4>${p.title}</h4>
+      </div>
+    </div>
+  `).join("");
+}
+
+// Pushes the current `settings` object onto every place it appears on
+// the public site (about blurb, contact card, tab title). Called once
+// on load and again every time Settings is saved in the admin panel.
+function applySettingsToPublicSite(){
+  document.getElementById('publicAboutBlurb').textContent = settings.about;
+  document.getElementById('contactEmailVal').textContent = settings.email;
+  document.getElementById('contactPhoneVal').textContent = settings.phone;
+  document.getElementById('contactAddressVal').textContent = settings.address;
+  document.title = settings.studio + " — We Design. You Grow.";
+}
+
+/* =====================================================================
+   ADMIN LOGIN
+===================================================================== */
+const loginOverlay = document.getElementById('loginOverlay');
+const loginForm    = document.getElementById('loginForm');
+const loginError   = document.getElementById('loginError');
+const adminApp     = document.getElementById('adminApp');
+
+// Hardcoded demo credentials — matches the "Hint: admin / ABC@2026" shown
+// on the login card. In a real deployment this check must happen on a
+// server; doing it in the browser is only safe for a front-end demo.
+const ADMIN_USER = "admin";
+const ADMIN_PASS = "ABC@2026";
+
+function openLogin(){
+  loginOverlay.classList.add('open');
+  loginError.classList.remove('show');
+  loginForm.reset();
+}
+function closeLogin(){ loginOverlay.classList.remove('open'); }
+
+document.getElementById('openAdminBtn').addEventListener('click', openLogin);
+document.getElementById('footerAdminLink').addEventListener('click', (e) => { e.preventDefault(); openLogin(); });
+document.getElementById('closeLoginBtn').addEventListener('click', closeLogin);
+loginOverlay.addEventListener('click', (e) => { if (e.target === loginOverlay) closeLogin(); });
+
+// show/hide password
+document.getElementById('pwToggle').addEventListener('click', () => {
+  const pw = document.getElementById('loginPass');
+  pw.type = pw.type === 'password' ? 'text' : 'password';
+});
+
+loginForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const user = document.getElementById('loginUser').value.trim();
+  const pass = document.getElementById('loginPass').value;
+
+  if (user === ADMIN_USER && pass === ADMIN_PASS) {
+    closeLogin();
+    enterAdmin();
+  } else {
+    loginError.classList.add('show');
+  }
+});
+
+function enterAdmin(){
+  adminApp.classList.add('open');
+  document.body.style.overflow = 'hidden'; // lock background scroll while in the admin app
+  renderAll();
+  showAdminSection('dashboard');
+}
+function exitAdmin(){
+  adminApp.classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('logoutBtn').addEventListener('click', exitAdmin);
+
+/* =====================================================================
+   ADMIN NAVIGATION (switching between Dashboard / Inquiries / etc.)
+===================================================================== */
+const sectionTitles = {
+  dashboard:"Dashboard", inquiries:"Inquiries", portfolio:"Portfolio",
+  team:"Team", services:"Services", settings:"Settings"
+};
+
+function showAdminSection(section){
+  document.querySelectorAll('.admin-view').forEach(v => v.style.display = 'none');
+  document.getElementById('view-' + section).style.display = 'block';
+  document.getElementById('adminPageTitle').textContent = sectionTitles[section];
+  document.querySelectorAll('#adminNav button').forEach(b => {
+    b.classList.toggle('active', b.dataset.section === section);
+  });
+  // on mobile, close the sidebar after picking a section
+  document.getElementById('adminSidebar').classList.remove('open');
+}
+
+document.getElementById('adminNav').addEventListener('click', (e) => {
+  const btn = e.target.closest('button[data-section]');
+  if (btn) showAdminSection(btn.dataset.section);
+});
+document.getElementById('viewAllInquiries').addEventListener('click', () => showAdminSection('inquiries'));
+document.getElementById('sidebarToggle').addEventListener('click', () => {
+  document.getElementById('adminSidebar').classList.toggle('open');
+});
+
+// Keep the topbar date badge accurate to "today"
+document.getElementById('adminDate').textContent = new Date().toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' });
+
+/* =====================================================================
+   RENDER FUNCTIONS
+   Each of these rebuilds one part of the admin UI from the current data
+   arrays. They're called again after every add / edit / delete so the
+   screen always reflects the latest in-memory state.
+===================================================================== */
+
+function statusClass(status){
+  return { New:"status-new", Read:"status-read", Replied:"status-replied" }[status] || "status-read";
+}
+
+function renderInquiries(){
+  // Dashboard stat cards
+  document.getElementById('statInquiries').textContent = inquiries.length;
+  document.getElementById('statNew').textContent = inquiries.filter(i => i.status === "New").length;
+  document.getElementById('inquiryBadge').textContent = inquiries.filter(i => i.status === "New").length;
+
+  const rowHtml = (i) => `
+    <div class="list-row" data-id="${i.id}">
+      <span class="row-avatar">${initials(i.name)}</span>
+      <div class="row-main">
+        <div class="t1">${i.name}</div>
+        <div class="t2">${i.service}</div>
+      </div>
+      <div class="row-side">
+        <span class="status-pill ${statusClass(i.status)}">${i.status}</span>
+        <span class="row-date">${formatDate(i.date)}</span>
+        <div class="row-actions">
+          <button class="cycle-status" title="Cycle status">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2v6h-6M3 22v-6h6"/><path d="M3.5 9a9 9 0 0 1 15-4L21 8M20.5 15a9 9 0 0 1-15 4L3 16"/></svg>
+          </button>
+          <button class="danger delete-inquiry" title="Delete">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>`;
+
+  // Recent Inquiries on the dashboard — latest 4, newest first
+  const recent = [...inquiries].sort((a,b) => b.date.localeCompare(a.date)).slice(0,4);
+  document.getElementById('recentInquiriesList').innerHTML = recent.length
+    ? recent.map(rowHtml).join("")
+    : `<div class="empty-state">No inquiries yet.</div>`;
+
+  // Full list on the Inquiries page
+  document.getElementById('allInquiriesList').innerHTML = inquiries.length
+    ? [...inquiries].sort((a,b) => b.date.localeCompare(a.date)).map(rowHtml).join("")
+    : `<div class="empty-state">No inquiries yet.</div>`;
+}
+
+// Keeps the browser tab title showing the unread-inquiry count, e.g.
+// "(2) Andiswa Business Consultation" — so new leads are noticeable
+// even when the admin has another tab focused.
+function refreshTabBadge(){
+  const unread = inquiries.filter(i => i.status === "New").length;
+  const base = settings.studio + " — We Design. You Grow.";
+  document.title = unread > 0 ? `(${unread}) ${base}` : base;
+}
+
+// Cycles New -> Read -> Replied -> New, and handles delete, for both
+// the dashboard's "Recent Inquiries" list and the full Inquiries list.
+document.addEventListener('click', (e) => {
+  const cycleBtn = e.target.closest('.cycle-status');
+  const delBtn   = e.target.closest('.delete-inquiry');
+  if (!cycleBtn && !delBtn) return;
+
+  const row = e.target.closest('.list-row');
+  const id = Number(row.dataset.id);
+  const item = inquiries.find(i => i.id === id);
+  if (!item) return;
+
+  if (cycleBtn) {
+    const order = ["New","Read","Replied"];
+    item.status = order[(order.indexOf(item.status) + 1) % order.length];
+    showToast(`${item.name} marked as ${item.status}`);
+  }
+  if (delBtn) {
+    inquiries = inquiries.filter(i => i.id !== id);
+    showToast("Inquiry deleted");
+  }
+  renderInquiries();
+  refreshTabBadge();
+  persist('inquiries', inquiries); // auto-save the status/delete change
+});
+
+function renderPortfolioAdmin(){
+  document.getElementById('statPortfolio').textContent = portfolioItems.length;
+  const grid = document.getElementById('portfolioCardGrid');
+  grid.innerHTML = portfolioItems.length ? portfolioItems.map(p => `
+    <div class="admin-card" data-id="${p.id}">
+      <div class="thumb" style="background-image:url('${p.image}')"></div>
+      <div class="body">
+        <div class="t1">${p.title}</div>
+        <div class="t2">${p.category}</div>
+        <div class="card-actions">
+          <button class="edit-item" data-type="portfolio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>Edit</button>
+          <button class="delete-item" data-type="portfolio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6"/></svg>Delete</button>
+        </div>
+      </div>
+    </div>`).join("") : `<div class="empty-state">No portfolio items yet — add your first one.</div>`;
+}
+
+function renderTeamAdmin(){
+  document.getElementById('statTeam').textContent = team.length;
+  const list = document.getElementById('teamList');
+  list.innerHTML = team.length ? team.map(t => `
+    <div class="list-row" data-id="${t.id}">
+      <span class="row-avatar">${initials(t.name)}</span>
+      <div class="row-main">
+        <div class="t1">${t.name}</div>
+        <div class="t2">${t.role} · ${t.email}</div>
+      </div>
+      <div class="row-side">
+        <div class="row-actions">
+          <button class="edit-item" data-type="team"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button>
+          <button class="danger delete-item" data-type="team"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6"/></svg></button>
+        </div>
+      </div>
+    </div>`).join("") : `<div class="empty-state">No team members yet — add your first one.</div>`;
+}
+
+function renderServicesAdmin(){
+  const grid = document.getElementById('servicesCardGrid');
+  grid.innerHTML = services.length ? services.map(s => `
+    <div class="admin-card" data-id="${s.id}">
+      <div class="body">
+        <div class="t1">${s.title}</div>
+        <p>${s.description}</p>
+        <div class="card-actions">
+          <button class="edit-item" data-type="services"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>Edit</button>
+          <button class="delete-item" data-type="services"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6"/></svg>Delete</button>
+        </div>
+      </div>
+    </div>`).join("") : `<div class="empty-state">No services yet — add your first one.</div>`;
+  renderPublicServices(); // keep public site's Services section synced
+}
+
+function renderAll(){
+  renderInquiries();
+  renderPortfolioAdmin();
+  renderTeamAdmin();
+  renderServicesAdmin();
+  renderPublicPortfolio();
+  renderPublicServices();
+}
+
+/* =====================================================================
+   GENERIC ADD / EDIT MODAL
+   One reusable modal renders the right fields depending on which
+   section triggered it (portfolio / team / services), and knows how to
+   save either a brand-new record or an edit to an existing one.
+===================================================================== */
+const formModalOverlay = document.getElementById('formModalOverlay');
+const formModalTitle   = document.getElementById('formModalTitle');
+const formModalBody    = document.getElementById('formModalBody');
+let formModalState = { type:null, editingId:null };
+
+const fieldTemplates = {
+  portfolio: (item = {}) => `
+    <div class="field"><label>Title</label><input id="f_title" value="${item.title || ''}" placeholder="Client / project name"></div>
+    <div class="field"><label>Category</label><input id="f_category" value="${item.category || ''}" placeholder="e.g. Brand Identity"></div>
+    <div class="field"><label>Image URL</label><input id="f_image" value="${item.image || ''}" placeholder="https://..."></div>
+  `,
+  team: (item = {}) => `
+    <div class="field"><label>Full name</label><input id="f_name" value="${item.name || ''}" placeholder="e.g. Andiswa Phewa"></div>
+    <div class="field"><label>Role</label><input id="f_role" value="${item.role || ''}" placeholder="e.g. Creative Director"></div>
+    <div class="field"><label>Email</label><input id="f_email" value="${item.email || ''}" placeholder="name@andiswaconsultation.co.za"></div>
+  `,
+  services: (item = {}) => `
+    <div class="field"><label>Service title</label><input id="f_title" value="${item.title || ''}" placeholder="e.g. Brand Identity"></div>
+    <div class="field"><label>Description</label><textarea id="f_description">${item.description || ''}</textarea></div>
+  `
+};
+
+function openFormModal(type, editingId = null){
+  formModalState = { type, editingId };
+  const dataArr = { portfolio: portfolioItems, team, services }[type];
+  const editing = editingId ? dataArr.find(x => x.id === editingId) : null;
+
+  formModalTitle.textContent = (editing ? "Edit " : "Add ") + { portfolio:"Portfolio Item", team:"Team Member", services:"Service" }[type];
+  formModalBody.innerHTML = fieldTemplates[type](editing || {});
+  formModalOverlay.classList.add('open');
+}
+function closeFormModal(){ formModalOverlay.classList.remove('open'); }
+
+document.getElementById('closeFormModal').addEventListener('click', closeFormModal);
+document.getElementById('cancelFormModal').addEventListener('click', closeFormModal);
+formModalOverlay.addEventListener('click', (e) => { if (e.target === formModalOverlay) closeFormModal(); });
+
+// "Add X" buttons in each panel header
+document.querySelectorAll('[data-add]').forEach(btn => {
+  btn.addEventListener('click', () => openFormModal(btn.dataset.add));
+});
+
+// Edit / delete buttons inside Portfolio, Team and Services cards
+document.addEventListener('click', (e) => {
+  const editBtn = e.target.closest('.edit-item');
+  const delBtn  = e.target.closest('.delete-item');
+  if (!editBtn && !delBtn) return;
+
+  const type = (editBtn || delBtn).dataset.type;
+  const id = Number(e.target.closest('[data-id]').dataset.id);
+  const dataArr = { portfolio: portfolioItems, team, services }[type];
+
+  if (editBtn) {
+    openFormModal(type, id);
+  } else {
+    // delete, then re-render just that section and auto-save the change
+    const remaining = dataArr.filter(x => x.id !== id);
+    if (type === "portfolio") { portfolioItems = remaining; renderPortfolioAdmin(); renderPublicPortfolio(); persist('portfolioItems', portfolioItems); }
+    if (type === "team")      { team = remaining; renderTeamAdmin(); persist('team', team); }
+    if (type === "services")  { services = remaining; renderServicesAdmin(); persist('services', services); }
+    showToast("Deleted and saved");
+  }
+});
+
+// Save button inside the shared add/edit modal — reads the injected
+// fields, then either pushes a new record or updates the existing one.
+document.getElementById('saveFormModal').addEventListener('click', () => {
+  const { type, editingId } = formModalState;
+
+  const readers = {
+    portfolio: () => ({
+      title: document.getElementById('f_title').value.trim() || "Untitled Project",
+      category: document.getElementById('f_category').value.trim() || "General",
+      image: document.getElementById('f_image').value.trim() || "https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=800&auto=format&fit=crop"
+    }),
+    team: () => ({
+      name: document.getElementById('f_name').value.trim() || "New Team Member",
+      role: document.getElementById('f_role').value.trim() || "Role",
+      email: document.getElementById('f_email').value.trim() || "name@andiswaconsultation.co.za"
+    }),
+    services: () => ({
+      title: document.getElementById('f_title').value.trim() || "New Service",
+      description: document.getElementById('f_description').value.trim() || "Description coming soon."
+    })
+  };
+
+  const values = readers[type]();
+  const dataArr = { portfolio: portfolioItems, team, services }[type];
+
+  if (editingId) {
+    Object.assign(dataArr.find(x => x.id === editingId), values);
+  } else {
+    dataArr.push({ id: nextId(dataArr), ...values });
+  }
+
+  // Re-render the relevant section (admin + public where applicable)
+  // and auto-save immediately — no separate "publish" step needed.
+  if (type === "portfolio") { renderPortfolioAdmin(); renderPublicPortfolio(); persist('portfolioItems', portfolioItems); }
+  if (type === "team")      { renderTeamAdmin(); persist('team', team); }
+  if (type === "services")  { renderServicesAdmin(); persist('services', services); }
+
+  showToast(editingId ? "Changes saved" : "Added and saved");
+  closeFormModal();
+});
+
+/* =====================================================================
+   SETTINGS FORM
+   Purely a session-level demo save (updates the in-memory studio
+   details and flashes a confirmation) — wire this to a real API call
+   when a backend is available.
+===================================================================== */
+document.getElementById('settingsForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  settings = {
+    studio:  document.getElementById('setStudio').value.trim()  || settings.studio,
+    email:   document.getElementById('setEmail').value.trim()   || settings.email,
+    phone:   document.getElementById('setPhone').value.trim()   || settings.phone,
+    address: document.getElementById('setAddress').value.trim() || settings.address,
+    about:   document.getElementById('setAbout').value.trim()   || settings.about
+  };
+
+  applySettingsToPublicSite();  // push the new details onto the live public site
+  refreshTabBadge();            // studio name may have changed, so refresh the title too
+  persist('settings', settings); // auto-save so these details survive a refresh
+
+  const note = document.getElementById('settingsSavedNote');
+  note.classList.add('show');
+  setTimeout(() => note.classList.remove('show'), 2500);
+  showToast("Studio settings saved and published to the live site");
+});
+
+/* =====================================================================
+   INITIAL RENDER
+   Restores any previously auto-saved data first (see AUTOMATION LAYER 2
+   above), then paints the public Services/Portfolio sections and primes
+   the admin panel's numbers — all before anyone logs in.
+===================================================================== */
+async function init(){
+  await restoreAllData();
+
+  // reflect restored settings in the Settings form + on the public site
+  document.getElementById('setStudio').value  = settings.studio;
+  document.getElementById('setEmail').value   = settings.email;
+  document.getElementById('setPhone').value   = settings.phone;
+  document.getElementById('setAddress').value = settings.address;
+  document.getElementById('setAbout').value   = settings.about;
+  applySettingsToPublicSite();
+
+  renderPublicServices();
+  renderPublicPortfolio();
+  renderInquiries();
+  refreshTabBadge();
+}
+init();
+</script>
+
+</body>
+</html>
