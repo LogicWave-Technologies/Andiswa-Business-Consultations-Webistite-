@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Testimonials | Andiswa Business Consultation</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+  <link rel="stylesheet" href="Project_Styles/projects.css">
+  <link rel="stylesheet" href="Project_Styles/Testimonials.css">
+
+  <script>
+    (function () {
+      var saved = localStorage.getItem('site-theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
+</head>
+<body>
+
+  <!-- Navigation and Header -->
+<header class="header">
+
+    <nav class="navbar">
+
+        <!-- Logo -->
+        <a href="index.html" class="logo">
+
+            <img src="Projects_Images/AB_Logo/AB_Logo.jpeg" alt="A|B Logo">
+
+        </a>
+
+        <!-- Navigation -->
+
+        <ul class="nav-links" id="navLinks">
+
+            <li><a href="index.html">Home</a></li>
+
+            <li><a href="about.html">About Us</a></li>
+
+            <li><a href="services.html">Services</a></li>
+
+            <li><a href="projects.html">Portfolio</a></li>
+
+            <li><a href="testimonials.html" class="active">Testimonials</a></li>
+
+            <li><a href="contact.html">Contact</a></li>
+
+        </ul>
+
+        <!-- Right Side -->
+
+        <div class="nav-actions">
+
+            <button id="themeToggle" class="icon-btn" aria-label="Toggle dark and light mode">
+
+                <i class="fa-solid fa-moon"></i>
+
+            </button>
+            <!-- admin -->
+            <a href="#" class="icon-btn"  aria-label="Admin Login">
+                <i class="fa-solid fa-shield-halved"></i>
+            </a>
+            <a href="form.html" class="quote-btn">
+
+                Get a Quote
+
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+
+            <!-- mobile menu -->
+            <button id="menuToggle" class="icon-btn menu-toggle" aria-label="Open menu" aria-expanded="false">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+</header>
+
+  <!--==========================
+        Testimonials Carousel
+  ===========================-->
+  <section class="testimonials-section">
+
+    <span class="testimonials-eyebrow">Client Love</span>
+    <h1 class="testimonials-heading">What Our Clients Say</h1>
+
+    <button id="autoplayToggle" class="autoplay-btn" aria-label="Pause autoplay">
+      <i class="fa-solid fa-pause"></i>
+    </button>
+
+    <div class="testimonial-track">
+
+      <p class="testimonial-quote" id="testimonialQuote"></p>
+
+      <div class="testimonial-rating" id="testimonialRating"></div>
+
+      <div class="testimonial-author">
+        <div class="author-avatar">
+          <img id="testimonialAvatar" src="" alt="">
+        </div>
+        <div class="author-info">
+          <h4 id="testimonialName"></h4>
+          <span id="testimonialRole"></span>
+        </div>
+      </div>
+
+      <div class="carousel-controls">
+        <button class="carousel-arrow" id="testimonialPrev" aria-label="Previous testimonial">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+
+        <div class="carousel-dots" id="testimonialDots"></div>
+
+        <button class="carousel-arrow" id="testimonialNext" aria-label="Next testimonial">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+
+    </div>
+
+  </section>
+
+<!--==========================
+            FOOTER
+===========================-->
+
+<footer class="footer">
+
+    <div class="footer-container">
+        <!-- Company -->
+        <div class="footer-box">
+            <a href="index.html" class="footer-logo">
+                A|B
+            </a>
+
+            <p>
+                Crafting bold brands and creative experiences
+                for South African businesses through professional
+                graphic design, branding and digital solutions.
+            </p>
+
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-x-twitter"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="footer-box">
+            <h3>Quick Links</h3>
+
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="projects.html">Portfolio</a></li>
+                <li><a href="testimonials.html">Testimonials</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+
+        <!-- Services -->
+        <div class="footer-box">
+            <h3>Services</h3>
+            <ul>
+                <li><a href="#">Logo Design</a></li>
+                <li><a href="#">Branding & Identity</a></li>
+                <li><a href="#">Graphic Design</a></li>
+                <li><a href="#">Flyer Design</a></li>
+                <li><a href="#">Poster Design</a></li>
+                <li><a href="#">Social Media Design</a></li>
+                <li><a href="#">Website Design</a></li>
+            </ul>
+        </div>
+
+        <!-- Contact -->
+        <div class="footer-box">
+            <h3>Contact</h3>
+            <ul class="contact-info">
+
+                <li>
+                    <i class="fa-solid fa-phone"></i>
+                    +27 67 790 4428
+                </li>
+
+                <li>
+                    <i class="fa-regular fa-envelope"></i>
+                    andiswasbusinessconsultations@outlook.com
+                </li>
+
+                <li>
+                    <i class="fa-solid fa-location-dot"></i>
+                    2 Belmont Terrace,<br>
+                    Port Elizabeth, 6001
+                </li>
+
+                <li>
+                    <i class="fa-regular fa-clock"></i>
+
+                    Monday – Friday<br>
+
+                    08:00 – 18:00
+                </li>
+            </ul>
+        </div>
+    </div>
+    <hr>
+    <div class="footer-bottom">
+        <p>
+            © 2026 Andiswa Business Consultation. All Rights Reserved.
+        </p>
+
+        <p>
+            Crafted with in South Africa
+        </p>
+    </div>
+    <!-- Back To Top -->
+    <a href="#" class="back-top">
+        <i class="fa-solid fa-arrow-up"></i>
+    </a>
+
+</footer>
+
+<script src="Projects_Js/theme.js"></script>
+<script src="Shared_Js/common.js"></script>
+<script src="Projects_Js/Testimonials.js"></script>
+</body>
+</html>
