@@ -9,7 +9,8 @@
 <style>
   /* =====================================================================
      DESIGN TOKENS
-     Whole site now runs on a coffee / brown palette . Everything below is derived from these variables so
+     Whole site now runs on a coffee / brown palette (was brass + near-
+     black before). Everything below is derived from these variables so
      changing the palette in one place re-themes the entire site,
      including the admin panel.
   ===================================================================== */
@@ -174,6 +175,49 @@
   .chat-fab:hover{transform:scale(1.08);}
   .chat-fab svg{width:22px;height:22px;}
 
+  /* =====================================================================
+     LIVE CHAT WIDGET
+     A small working chat panel that opens from the chat-fab button. It
+     isn't hooked up to a real support inbox (there is no backend), so
+     it replies with a few sensible canned responses and points people
+     to the Contact page for anything that needs a real person.
+  ===================================================================== */
+  .chat-panel{
+    position:fixed;bottom:96px;left:28px;z-index:91;
+    width:320px;max-width:calc(100vw - 40px);
+    background:var(--espresso-soft);border:1px solid var(--line);border-radius:12px;
+    box-shadow:0 20px 50px rgba(0,0,0,0.4);
+    display:flex;flex-direction:column;overflow:hidden;
+    opacity:0;transform:translateY(12px) scale(0.98);pointer-events:none;
+    transition:opacity .25s var(--ease), transform .25s var(--ease);
+  }
+  .chat-panel.open{opacity:1;transform:translateY(0) scale(1);pointer-events:auto;}
+  .chat-panel-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--line);}
+  .chat-panel-head strong{font-size:13.5px;color:var(--cream);}
+  .chat-panel-head span{display:block;font-size:11px;color:var(--stone);margin-top:2px;}
+  .chat-panel-close{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--stone);}
+  .chat-panel-close:hover{background:rgba(241,231,216,0.08);color:var(--cream);}
+  .chat-panel-close svg{width:14px;height:14px;}
+  .chat-messages{padding:14px 16px;display:flex;flex-direction:column;gap:10px;max-height:280px;overflow-y:auto;}
+  .chat-msg{max-width:82%;font-size:13px;line-height:1.5;padding:9px 12px;border-radius:12px;}
+  .chat-msg.bot{align-self:flex-start;background:rgba(241,231,216,0.08);color:var(--cream);border-bottom-left-radius:4px;}
+  .chat-msg.user{align-self:flex-end;background:var(--tan);color:var(--espresso);border-bottom-right-radius:4px;font-weight:500;}
+  .chat-msg a{color:var(--tan-bright);text-decoration:underline;}
+  .chat-msg.user a{color:var(--espresso);}
+  .chat-input-row{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line);}
+  .chat-input-row input{
+    flex:1;background:rgba(241,231,216,0.05);border:1px solid var(--line);border-radius:100px;
+    padding:9px 14px;color:var(--cream);font-size:13px;
+  }
+  .chat-input-row input:focus{outline:none;border-color:var(--tan-bright);}
+  .chat-input-row button{
+    width:36px;height:36px;border-radius:50%;background:var(--tan);color:var(--espresso);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s;
+  }
+  .chat-input-row button:hover{background:var(--tan-bright);}
+  .chat-input-row button svg{width:15px;height:15px;}
+  @media(max-width:480px){.chat-panel{left:16px;right:16px;width:auto;}}
+
   /* ================= SECTION SHELL ================= */
   section{padding:120px 0;position:relative;}
   .section-head{display:flex;justify-content:space-between;align-items:flex-end;gap:40px;margin-bottom:64px;flex-wrap:wrap;}
@@ -181,86 +225,6 @@
   .section-head p{max-width:380px;color:var(--stone);font-size:15px;line-height:1.6;}
   .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s var(--ease), transform .7s var(--ease);}
   .reveal.in{opacity:1;transform:translateY(0);}
-
-  /* ================= ABOUT ================= */
-  .about{background:var(--cream);}
-  .about-grid{display:grid;grid-template-columns:0.9fr 1.1fr;gap:80px;align-items:center;}
-  .about-visual{position:relative;aspect-ratio:4/5;border-radius:6px;overflow:hidden;background:#241813;}
-  .about-visual img{width:100%;height:100%;object-fit:cover;filter:grayscale(0.3) sepia(0.4) contrast(1.1);}
-  .about-badge{position:absolute;bottom:18px;left:18px;right:18px;background:rgba(33,23,18,0.85);backdrop-filter:blur(8px);color:var(--cream);padding:16px 18px;border-radius:4px;display:flex;align-items:center;gap:14px;border:1px solid var(--line);}
-  .about-badge .num{font-family:'Space Grotesk';font-size:26px;font-weight:700;color:var(--tan-bright);}
-  .about-badge .lbl{font-size:12px;color:rgba(241,231,216,0.7);line-height:1.4;}
-  .about-copy p{color:#5a4531;font-size:16px;line-height:1.75;margin-bottom:18px;}
-  .about-copy p:first-of-type{font-size:19px;color:var(--ink);font-weight:500;}
-  .about-list{margin-top:30px;display:grid;gap:14px;}
-  .about-list li{display:flex;gap:12px;align-items:flex-start;font-size:14px;color:#5a4531;}
-  .about-list .tri{margin-top:6px;flex-shrink:0;}
-
-  /* ================= SERVICES ================= */
-  .services{background:var(--espresso);color:var(--cream);}
-  .services .section-head h2, .services .section-head p{color:var(--cream);}
-  .services .section-head p{color:rgba(241,231,216,0.55);}
-  .svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);}
-  .svc-card{background:var(--espresso);padding:40px 32px;transition:background .3s;}
-  .svc-card:hover{background:var(--espresso-soft);}
-  .svc-index{font-family:'Space Grotesk';font-size:13px;color:var(--tan-bright);letter-spacing:0.1em;}
-  .svc-card h3{font-size:21px;margin:22px 0 12px;font-weight:600;}
-  .svc-card p{font-size:14px;color:rgba(241,231,216,0.55);line-height:1.65;}
-
-  /* ================= PORTFOLIO ================= */
-  .portfolio{background:var(--cream);}
-  .port-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
-  .port-item{position:relative;border-radius:6px;overflow:hidden;aspect-ratio:3/3.6;background:#241813;}
-  .port-item:nth-child(2){aspect-ratio:3/2.4;}
-  .port-item img{width:100%;height:100%;object-fit:cover;filter:grayscale(0.3) sepia(0.35);transition:transform .6s var(--ease), filter .6s;}
-  .port-item:hover img{transform:scale(1.06);filter:grayscale(0.05) sepia(0.2);}
-  .port-overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:22px;background:linear-gradient(0deg,rgba(21,15,11,0.85) 0%,rgba(21,15,11,0) 55%);color:var(--cream);}
-  .port-overlay .cat{font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--tan-bright);margin-bottom:6px;}
-  .port-overlay h4{font-family:'Space Grotesk';font-size:19px;font-weight:600;}
-
-  /* ================= TEAM (public) ================= */
-  .team-pub{background:var(--cream-dim);}
-  .team-public-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;}
-  .team-public-card{background:var(--cream);border:1px solid var(--line-dark);border-radius:8px;padding:28px 20px;text-align:center;transition:transform .25s var(--ease), box-shadow .25s;}
-  .team-public-card:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(42,28,18,0.08);}
-  .team-public-avatar{width:64px;height:64px;border-radius:50%;background:var(--espresso);color:var(--cream);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk';font-weight:700;font-size:19px;margin:0 auto 16px;}
-  .team-public-card h4{font-family:'Space Grotesk';font-size:16px;font-weight:600;margin-bottom:4px;}
-  .team-public-card .role{font-size:12.5px;color:var(--stone);margin-bottom:10px;}
-  .team-public-card a{font-size:11.5px;color:var(--tan);word-break:break-all;}
-  .team-public-card a:hover{color:var(--tan-bright);}
-  @media(max-width:960px){.team-public-grid{grid-template-columns:repeat(2,1fr);}}
-  @media(max-width:640px){.team-public-grid{grid-template-columns:1fr;}}
-
-  /* ================= TESTIMONIALS ================= */
-  .testimonials{background:var(--cream-dim);}
-  .tst-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
-  .tst-card{background:var(--cream);border:1px solid var(--line-dark);border-radius:6px;padding:32px 28px;display:flex;flex-direction:column;gap:20px;}
-  .stars{color:var(--tan);font-size:14px;letter-spacing:2px;}
-  .tst-card p{font-size:15px;line-height:1.7;color:#4a3623;}
-  .tst-who{display:flex;align-items:center;gap:12px;margin-top:auto;}
-  .tst-avatar{width:42px;height:42px;border-radius:50%;background:var(--espresso);color:var(--cream);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk';font-weight:600;font-size:14px;}
-  .tst-who .name{font-size:14px;font-weight:600;}
-  .tst-who .role{font-size:12px;color:var(--stone);}
-
-  /* ================= CONTACT ================= */
-  .contact{background:var(--espresso);color:var(--cream);}
-  .contact-grid{display:grid;grid-template-columns:0.85fr 1.15fr;gap:70px;}
-  .contact-info h2{font-size:clamp(30px,4vw,42px);font-weight:700;line-height:1.12;margin-bottom:18px;}
-  .contact-info p{color:rgba(241,231,216,0.6);font-size:15px;line-height:1.7;margin-bottom:32px;max-width:380px;}
-  .contact-detail{display:flex;gap:14px;align-items:flex-start;margin-bottom:22px;}
-  .contact-detail .ico{width:38px;height:38px;border-radius:50%;background:rgba(241,231,216,0.08);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--line);}
-  .contact-detail .ico svg{width:16px;height:16px;color:var(--tan-bright);}
-  .contact-detail .lbl{font-size:11px;text-transform:uppercase;letter-spacing:0.12em;color:var(--stone);margin-bottom:3px;}
-  .contact-detail .val{font-size:15px;font-weight:500;}
-  .contact-form{background:var(--espresso-soft);border:1px solid var(--line);border-radius:8px;padding:38px;}
-  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
-  .field{display:flex;flex-direction:column;gap:8px;}
-  .field label{font-size:12px;color:rgba(241,231,216,0.55);letter-spacing:0.04em;}
-  .field input, .field textarea{background:rgba(241,231,216,0.05);border:1px solid var(--line);border-radius:4px;padding:12px 14px;color:var(--cream);font-size:14px;transition:border-color .2s, background .2s;}
-  .field input:focus, .field textarea:focus{outline:none;border-color:var(--tan-bright);background:rgba(241,231,216,0.08);}
-  .field textarea{resize:vertical;min-height:100px;}
-  .contact-form .btn-primary{width:100%;justify-content:center;margin-top:6px;padding:14px;}
-  .form-note{font-size:12px;color:rgba(241,231,216,0.4);margin-top:12px;text-align:center;}
 
   /* ================= FOOTER ================= */
   footer{background:#160f0b;color:rgba(241,231,216,0.55);padding:60px 0 30px;}
@@ -279,9 +243,8 @@
 
   @media(max-width:960px){
     .navlinks{display:none;}
-    .about-grid, .contact-grid{grid-template-columns:1fr;}
+    .about-grid{grid-template-columns:1fr;}
     .svc-grid, .port-grid, .tst-grid{grid-template-columns:1fr 1fr;}
-    .form-row{grid-template-columns:1fr;}
   }
   @media(max-width:640px){
     .wrap{padding:0 22px;}
@@ -452,6 +415,14 @@
 
   .empty-state{padding:50px 22px;text-align:center;color:var(--stone);font-size:13.5px;}
 
+  /* Generic form-field layout — shared by the admin Settings form and
+     the Add/Edit modal below (both wrap each input in a `.field` div). */
+  .field{display:flex;flex-direction:column;gap:8px;}
+  .field label{font-size:12px;color:var(--stone);letter-spacing:0.04em;}
+  .field input, .field textarea{background:rgba(241,231,216,0.05);border:1px solid var(--line);border-radius:4px;padding:12px 14px;color:var(--cream);font-size:14px;transition:border-color .2s, background .2s;}
+  .field input:focus, .field textarea:focus{outline:none;border-color:var(--tan-bright);background:rgba(241,231,216,0.08);}
+  .field textarea{resize:vertical;min-height:100px;}
+
   /* ---- Generic add/edit form modal used across admin sections ---- */
   .form-modal-overlay{position:fixed;inset:0;z-index:400;background:rgba(10,7,5,0.6);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:20px;}
   .form-modal-overlay.open{display:flex;}
@@ -528,8 +499,12 @@
     <nav class="navbar">
       <a href="#home" class="logo">A|B</a>
       <ul class="navlinks">
-        <li><a href="#home">Home</a></li>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="projects.html">Projects</a></li>
         <li><a href="team.html">Team</a></li>
+        <li><a href="testimonials.html">Testimonials</a></li>
         <li><a href="contact.html">Contact</a></li>
       </ul>
       <div class="navtools">
@@ -559,105 +534,51 @@
     </h1>
     <p>Andiswa Business Consultation crafts bold visual identities and digital experiences that make South African businesses impossible to ignore.</p>
     <div class="hero-ctas">
-      <a href="#portfolio" class="btn btn-primary">View Portfolio →</a>
+      <a href="projects.html" class="btn btn-primary">View Portfolio →</a>
       <a href="contact.html" class="btn btn-outline">Get a Free Quote</a>
     </div>
   </div>
   <div class="scroll-cue"><span class="line"></span>Scroll</div>
 </section>
 
-<button class="chat-fab" aria-label="Open chat">
+<button class="chat-fab" id="chatFabBtn" aria-label="Open chat">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5 8.4 8.4 0 0 1-3.9-.94L3 20l1.05-4.1A8.4 8.4 0 0 1 3 11.5 8.5 8.5 0 0 1 11.5 3 8.5 8.5 0 0 1 21 11.5Z"/></svg>
 </button>
 
-<section class="about" id="about">
-  <div class="wrap about-grid">
-    <div class="reveal about-visual">
-      <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=900&auto=format&fit=crop" alt="Andiswa Business Consultation team at work">
-      <div class="about-badge">
-        <span class="num">7+</span>
-        <span class="lbl">Years shaping brands across Johannesburg, Cape Town &amp; Durban</span>
-      </div>
+<div class="chat-panel" id="chatPanel">
+  <div class="chat-panel-head">
+    <div>
+      <strong>Andiswa Support</strong>
+      <span>Usually replies within a day</span>
     </div>
-    <div class="reveal about-copy">
-      <div class="eyebrow"><span class="tri"></span>About Us</div>
-      <p style="margin-top:22px;" id="publicAboutBlurb">We believe great design isn't decoration — it's how a business earns attention.</p>
-      <p>Andiswa Business Consultation is a Johannesburg-based studio working at the intersection of brand strategy and design. We partner with founders and marketing teams who are ready to look as sharp as they operate — from the boardroom to the billboard.</p>
-      <ul class="about-list">
-        <li><span class="tri"></span>Strategy-first identities built to scale with the business, not just the launch</li>
-        <li><span class="tri"></span>In-house design, copy and development under one roof</li>
-        <li><span class="tri"></span>Trusted by 60+ South African businesses since 2019</li>
-      </ul>
-    </div>
+    <button class="chat-panel-close" id="chatCloseBtn" aria-label="Close chat">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
   </div>
-</section>
-
-<section class="services" id="services">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <h2>What We Do</h2>
-      <p>Four disciplines, one studio — everything a growing brand needs to show up consistently, everywhere.</p>
-    </div>
-    <div class="svc-grid reveal" id="publicServicesGrid">
-      <!-- Populated by JS from the same data the admin panel edits, so
-           edits made under Services in the admin app show up here too. -->
-    </div>
-  </div>
-</section>
-
-<section class="portfolio" id="portfolio">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <h2>Selected Work</h2>
-      <p>A few of the identities and platforms we've brought to life recently.</p>
-    </div>
-    <div class="port-grid reveal" id="publicPortfolioGrid">
-      <!-- Populated by JS from the shared portfolio data -->
-    </div>
-  </div>
-</section>
-
-<section class="testimonials" id="testimonials">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <h2>What Clients Say</h2>
-      <p>We measure success in repeat business — most of our clients come back for the next chapter.</p>
-    </div>
-    <div class="tst-grid reveal">
-      <div class="tst-card">
-        <div class="stars">★★★★★</div>
-        <p>"Andiswa rebuilt our identity from the ground up. Bookings were up within the first month of the new site going live."</p>
-        <div class="tst-who"><div class="tst-avatar">NM</div><div><div class="name">Nomsa Mahlangu</div><div class="role">Founder, Kaya Roasters</div></div></div>
-      </div>
-      <div class="tst-card">
-        <div class="stars">★★★★★</div>
-        <p>"They understood our industry faster than agencies twice their size. The brand finally feels like us."</p>
-        <div class="tst-who"><div class="tst-avatar">TD</div><div><div class="name">Thabo Dlamini</div><div class="role">MD, Sizwe Logistics</div></div></div>
-      </div>
-      <div class="tst-card">
-        <div class="stars">★★★★★</div>
-        <p>"Sharp, responsive, and genuinely invested in the outcome — not just the deliverables. Highly recommend."</p>
-        <div class="tst-who"><div class="tst-avatar">LK</div><div><div class="name">Lerato Khumalo</div><div class="role">Owner, Lerato Foods</div></div></div>
-      </div>
-    </div>
-  </div>
-</section>
+  <div class="chat-messages" id="chatMessages"></div>
+  <form class="chat-input-row" id="chatForm">
+    <input type="text" id="chatInput" placeholder="Type a message…" autocomplete="off" required>
+    <button type="submit" aria-label="Send">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 2-7 20-4-9-9-4 20-7Z"/></svg>
+    </button>
+  </form>
+</div>
 
 <footer>
   <div class="wrap">
     <div class="footer-top">
       <div class="footer-brand">
-        <a href="#home" class="logo">A|B</a>
+        <a href="index.html" class="logo">A|B</a>
         <p>Andiswa Business Consultation — brand identity, web and strategy for South African businesses ready to grow.</p>
       </div>
       <div class="footer-cols">
         <div class="footer-col">
           <h5>Studio</h5>
-          <a href="#about">About Us</a>
-          <a href="#services">Services</a>
-          <a href="#portfolio">Portfolio</a>
+          <a href="about.html">About Us</a>
+          <a href="services.html">Services</a>
+          <a href="projects.html">Projects</a>
           <a href="team.html">Team</a>
-          <a href="#testimonials">Testimonials</a>
+          <a href="testimonials.html">Testimonials</a>
         </div>
         <div class="footer-col">
           <h5>Connect</h5>
@@ -1052,6 +973,77 @@ async function restoreAllData(){
    PUBLIC SITE BEHAVIOUR
 ===================================================================== */
 
+/* =====================================================================
+   LIVE CHAT WIDGET
+   A genuinely working small chat panel (open/close, send a message, get
+   a reply) — not connected to a real support inbox since there's no
+   backend, so it answers with a few sensible canned responses based on
+   keywords and always offers the Contact page as the way to reach a
+   real person.
+===================================================================== */
+const chatFabBtn   = document.getElementById('chatFabBtn');
+const chatPanel     = document.getElementById('chatPanel');
+const chatCloseBtn  = document.getElementById('chatCloseBtn');
+const chatMessages  = document.getElementById('chatMessages');
+const chatForm      = document.getElementById('chatForm');
+const chatInput     = document.getElementById('chatInput');
+let chatOpened = false; // only show the greeting the first time it's opened
+
+function addChatMessage(text, from){
+  const el = document.createElement('div');
+  el.className = 'chat-msg ' + from;
+  el.innerHTML = text;
+  chatMessages.appendChild(el);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function openChat(){
+  chatPanel.classList.add('open');
+  if (!chatOpened) {
+    chatOpened = true;
+    addChatMessage("Hi! 👋 I'm the Andiswa Business Consultation chat assistant. Ask me about our services, pricing, or hours — or leave a message and the team will follow up.", 'bot');
+  }
+  chatInput.focus();
+}
+function closeChat(){ chatPanel.classList.remove('open'); }
+
+chatFabBtn.addEventListener('click', () => {
+  chatPanel.classList.contains('open') ? closeChat() : openChat();
+});
+chatCloseBtn.addEventListener('click', closeChat);
+
+// Very small rule-based reply picker — enough to feel responsive for a
+// front-end demo without pretending to be a full AI backend.
+function pickChatReply(message){
+  const m = message.toLowerCase();
+  if (m.includes('price') || m.includes('cost') || m.includes('quote')) {
+    return 'Pricing depends on the scope of the project. The quickest way to get an accurate quote is our <a href="contact.html">Contact page</a> — someone from the team will follow up within a business day.';
+  }
+  if (m.includes('hour') || m.includes('open') || m.includes('time')) {
+    return "We're generally open Monday to Friday, 08:00 – 17:00 SAST. You can also leave a message any time on the <a href=\"contact.html\">Contact page</a> and we'll reply the next business day.";
+  }
+  if (m.includes('service') || m.includes('design') || m.includes('brand') || m.includes('web')) {
+    return "We work across brand identity, web & digital, print, marketing strategy, social content and business consultation. Let us know what you're working on via the <a href=\"contact.html\">Contact page</a> and we'll point you to the right person.";
+  }
+  if (m.includes('team') || m.includes('who')) {
+    return 'You can meet the people behind the studio on our <a href="team.html">Team page</a>.';
+  }
+  if (m.includes('thank')) {
+    return "You're very welcome! Let us know if there's anything else.";
+  }
+  return "Thanks for the message! For anything specific, the fastest way to reach the team is our <a href=\"contact.html\">Contact page</a> — we typically reply within one business day.";
+}
+
+chatForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const value = chatInput.value.trim();
+  if (!value) return;
+  addChatMessage(value, 'user');
+  chatInput.value = '';
+  // small delay so the reply feels like a real response rather than instant
+  setTimeout(() => addChatMessage(pickChatReply(value), 'bot'), 500);
+});
+
 // Header condenses into a pill once the user scrolls past the hero top
 const header = document.getElementById('siteHeader');
 window.addEventListener('scroll', () => {
@@ -1082,42 +1074,22 @@ themeToggle.addEventListener('click', () => {
 // now live on contact.html (its own self-contained page). It writes to
 // the same shared storage key as this admin panel reads, so a message
 // submitted there still appears here in Inquiries — see contact.html.
+//
+// The Home page (this file) intentionally shows no Services, Portfolio,
+// About or Testimonials content of its own — those live on their own
+// pages (services.html, projects.html, about.html, testimonials.html),
+// left blank for teammates to build out. The admin panel below still
+// manages that data (Portfolio, Services, Settings) so it's ready and
+// waiting the moment those pages are wired up to read it.
 
-// Render the public Services + Portfolio sections FROM the same arrays
-// the admin panel edits, so changes made in the dashboard are reflected
-// on the live site without duplicating content in two places.
-function renderPublicServices(){
-  const grid = document.getElementById('publicServicesGrid');
-  grid.innerHTML = services.map((s, i) => `
-    <div class="svc-card">
-      <span class="svc-index">0${i+1}</span>
-      <h3>${s.title}</h3>
-      <p>${s.description}</p>
-    </div>
-  `).join("");
-}
-function renderPublicPortfolio(){
-  const grid = document.getElementById('publicPortfolioGrid');
-  grid.innerHTML = portfolioItems.map(p => `
-    <div class="port-item">
-      <img src="${p.image}" alt="${p.title}">
-      <div class="port-overlay">
-        <div class="cat">${p.category}</div>
-        <h4>${p.title}</h4>
-      </div>
-    </div>
-  `).join("");
-}
-
-// NOTE: the public "Meet the Team" grid now lives on its own page,
+// NOTE: the public "Meet the Team" grid lives on its own page,
 // team.html, which reads the same shared `team` storage key this admin
 // panel writes to — so edits made here still show up there.
 
-// Pushes the current `settings` object onto the parts of THIS page that
-// use it (about blurb + tab title). Email/phone/address/hours are shown
-// on contact.html instead, which reads the same shared settings key.
+// Updates the browser tab title whenever Settings are saved. Studio
+// contact details (email/phone/address/hours) are shown on contact.html
+// instead, which reads the same shared settings key from storage.
 function applySettingsToPublicSite(){
-  document.getElementById('publicAboutBlurb').textContent = settings.about;
   document.title = settings.studio + " — We Design. You Grow.";
 }
 
@@ -1343,7 +1315,6 @@ function renderServicesAdmin(){
         </div>
       </div>
     </div>`).join("") : `<div class="empty-state">No services yet — add your first one.</div>`;
-  renderPublicServices(); // keep public site's Services section synced
 }
 
 function renderAll(){
@@ -1351,8 +1322,6 @@ function renderAll(){
   renderPortfolioAdmin();
   renderTeamAdmin();
   renderServicesAdmin();
-  renderPublicPortfolio();
-  renderPublicServices();
 }
 
 /* =====================================================================
@@ -1418,7 +1387,7 @@ document.addEventListener('click', (e) => {
   } else {
     // delete, then re-render just that section and auto-save the change
     const remaining = dataArr.filter(x => x.id !== id);
-    if (type === "portfolio") { portfolioItems = remaining; renderPortfolioAdmin(); renderPublicPortfolio(); persist('portfolioItems', portfolioItems); }
+    if (type === "portfolio") { portfolioItems = remaining; renderPortfolioAdmin(); persist('portfolioItems', portfolioItems); }
     if (type === "team")      { team = remaining; renderTeamAdmin(); persist('team', team); }
     if (type === "services")  { services = remaining; renderServicesAdmin(); persist('services', services); }
     showToast("Deleted and saved");
@@ -1458,7 +1427,7 @@ document.getElementById('saveFormModal').addEventListener('click', () => {
 
   // Re-render the relevant section (admin + public where applicable)
   // and auto-save immediately — no separate "publish" step needed.
-  if (type === "portfolio") { renderPortfolioAdmin(); renderPublicPortfolio(); persist('portfolioItems', portfolioItems); }
+  if (type === "portfolio") { renderPortfolioAdmin(); persist('portfolioItems', portfolioItems); }
   if (type === "team")      { renderTeamAdmin(); persist('team', team); }
   if (type === "services")  { renderServicesAdmin(); persist('services', services); }
 
@@ -1497,13 +1466,13 @@ document.getElementById('settingsForm').addEventListener('submit', (e) => {
 /* =====================================================================
    INITIAL RENDER
    Restores any previously auto-saved data first (see AUTOMATION LAYER 2
-   above), then paints the public Services/Portfolio sections and primes
-   the admin panel's numbers — all before anyone logs in.
+   above), pre-fills the Settings form, and primes the admin panel's
+   numbers (inquiries, unread badge) — all before anyone logs in.
 ===================================================================== */
 async function init(){
   await restoreAllData();
 
-  // reflect restored settings in the Settings form + on the public site
+  // reflect restored settings in the Settings form
   document.getElementById('setStudio').value  = settings.studio;
   document.getElementById('setEmail').value   = settings.email;
   document.getElementById('setPhone').value   = settings.phone;
@@ -1512,8 +1481,6 @@ async function init(){
   document.getElementById('setAbout').value   = settings.about;
   applySettingsToPublicSite();
 
-  renderPublicServices();
-  renderPublicPortfolio();
   renderInquiries();
   refreshTabBadge();
 }
