@@ -381,3 +381,342 @@ ul{ list-style:none; margin:0; padding:0; }
 body{
   transition: background .2s ease, color .2s ease;
 }
+
+/* =========================================================
+   ABOUT PAGE - NEWSLETTER
+   ========================================================= */
+
+.newsletter-section {
+    width: 100%;
+    margin: 0;
+    padding: 70px 20px;
+    box-sizing: border-box;
+    background: #666;
+    color: white;
+}
+
+.newsletter-content {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.newsletter-eyebrow {
+    margin: 0 0 25px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: #ddd;
+}
+
+.newsletter-content h2 {
+    margin: 0 0 18px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: #fff;
+}
+
+.newsletter-content > p:not(.newsletter-eyebrow) {
+    max-width: 900px;
+    margin: 0 auto 38px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 18px;
+    line-height: 1.5;
+    color: #ddd;
+}
+
+.newsletter-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin: 0 auto;
+}
+
+.newsletter-form input {
+    width: 370px;
+    height: 57px;
+    padding: 0 25px;
+    box-sizing: border-box;
+
+    border: 1px solid #aaa;
+    border-radius: 5px;
+
+    background: #888;
+    color: white;
+
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 16px;
+    outline: none;
+}
+
+.newsletter-form input::placeholder {
+    color: #ddd;
+}
+
+.newsletter-form input:focus {
+    border-color: white;
+}
+
+.newsletter-form button {
+    height: 57px;
+    padding: 0 30px;
+
+    border: none;
+    border-radius: 5px;
+
+    background: #000;
+    color: white;
+
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.newsletter-form button:hover {
+    background: #222;
+}
+
+
+/* =========================================================
+   ABOUT PAGE - FOOTER
+   ========================================================= */
+
+.site-footer {
+    width: 100%;
+    margin: 0;
+    padding: 70px 0 0;
+    box-sizing: border-box;
+
+    background: #000;
+    color: #888;
+}
+
+.footer-inner {
+    width: 80%;
+    max-width: 1200px;
+    margin: 0 auto;
+
+    display: grid;
+    grid-template-columns: 1.3fr 1fr 1fr 1.4fr;
+    gap: 70px;
+}
+
+.footer-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.footer-brand {
+    max-width: 300px;
+}
+
+.footer-logo {
+    margin-bottom: 30px;
+
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 500;
+    color: #aaa;
+}
+
+.footer-brand > p {
+    margin: 0;
+
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 17px;
+    line-height: 1.7;
+    color: #777;
+}
+
+
+/* Footer headings */
+
+.footer-column h3 {
+    margin: 0 0 28px;
+
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 2px;
+
+    color: #aaa;
+}
+
+
+/* Footer links */
+
+.footer-column a {
+    margin-bottom: 20px;
+
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 17px;
+
+    color: #777;
+    text-decoration: none;
+
+    transition: 0.2s ease;
+}
+
+.footer-column a:hover {
+    color: white;
+}
+
+
+/* Contact information */
+
+.footer-contact p {
+    margin: 0 0 20px;
+
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+
+    color: #777;
+}
+
+
+/* =========================================================
+   SOCIAL MEDIA BUTTONS
+   ========================================================= */
+
+.social-links {
+    display: flex;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+.social-links a {
+    width: 40px;
+    height: 40px;
+    margin: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 5px;
+
+    background: #151515;
+    color: #888;
+
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+
+    text-decoration: none;
+}
+
+.social-links a:hover {
+    background: #252525;
+    color: white;
+}
+
+
+/* =========================================================
+   FOOTER BOTTOM
+   ========================================================= */
+
+.footer-bottom {
+    width: 80%;
+    max-width: 1200px;
+
+    margin: 60px auto 0;
+    padding: 30px 0;
+
+    border-top: 1px solid #222;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.footer-bottom p {
+    margin: 0;
+
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px;
+
+    color: #555;
+}
+
+
+/* =========================================================
+   REMOVE GAP BETWEEN NEWSLETTER AND FOOTER
+   ========================================================= */
+
+.newsletter-section + .site-footer {
+    margin-top: 0;
+}
+
+.newsletter-section {
+    margin-bottom: 0 !important;
+}
+
+.site-footer {
+    margin-top: 0 !important;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .footer-inner {
+        grid-template-columns: 1fr 1fr;
+        gap: 50px;
+    }
+
+    .newsletter-content h2 {
+        font-size: 30px;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .newsletter-section {
+        padding: 55px 20px;
+    }
+
+    .newsletter-content h2 {
+        font-size: 27px;
+    }
+
+    .newsletter-content > p:not(.newsletter-eyebrow) {
+        font-size: 16px;
+    }
+
+    .newsletter-form {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .newsletter-form input,
+    .newsletter-form button {
+        width: 100%;
+    }
+
+    .footer-inner {
+        width: 85%;
+        grid-template-columns: 1fr;
+        gap: 45px;
+    }
+
+    .footer-bottom {
+        width: 85%;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+}
+

@@ -108,9 +108,50 @@ ul{ list-style:none; margin:0; padding:0; }
 }
 .btn-quote:hover{ transform:translateY(-1px); opacity:.92; }
 
+
 @media (max-width:920px){
   .main-nav{ display:none; }
 }
+
+/* ---------- dark mode ---------- */
+/* These overrides apply when JavaScript sets data-theme="dark" on <html> */
+
+[data-theme="dark"] {
+    --ink: #f5f4f0;
+    --ink-soft: #c9c7c2;
+    --paper: #17181c;
+    --cream: #1e1f24;
+    --line: #2c2d33;
+    --stone: #3a3b41;
+    --stone-dark: #9a988f;
+    --chip: #24252b;
+}
+
+[data-theme="dark"] .stack-photo {
+    background: linear-gradient(160deg, #2a2b30, #1c1d21);
+}
+
+[data-theme="dark"] .stat-chip {
+    background: #0e0f12;
+}
+
+[data-theme="dark"] .badge-pill {
+    background: #0e0f12;
+}
+
+[data-theme="dark"] .back-to-top {
+    background: #0e0f12;
+}
+
+[data-theme="dark"] .btn-quote {
+    background: #f5f4f0;
+    color: #17181c;
+}
+
+body {
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
 
 /* ---------- back to top (kept in sync with about.css) ---------- */
 .back-to-top{
@@ -252,4 +293,693 @@ ul{ list-style:none; margin:0; padding:0; }
     border-right:none !important;
     border-bottom:1px solid var(--line) !important;
   }
+}
+
+/* =========================================================
+   WHY CLIENTS CHOOSE US
+   Added below the existing Services section
+   ========================================================= */
+
+.why-choose-section {
+    width: 100%;
+    background: #050505;
+    color: #ffffff;
+    padding: 95px 30px 100px;
+}
+
+
+/* ---------- Section Header ---------- */
+
+.why-choose-header {
+    max-width: 900px;
+    margin: 0 auto 85px;
+    text-align: center;
+}
+
+
+/* Small "WHY CHOOSE US" label */
+
+.why-eyebrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+
+    margin-bottom: 28px;
+
+    font-family: "JetBrains Mono", ui-monospace, Menlo, monospace;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    color: #858585;
+}
+
+
+.why-eyebrow-line {
+    width: 30px;
+    height: 1px;
+    background: #858585;
+}
+
+
+/* Main heading */
+
+.why-choose-header h2 {
+    margin: 0;
+
+    font-family: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
+
+    font-size: clamp(42px, 5vw, 62px);
+    line-height: 1.08;
+
+    font-weight: 700;
+    letter-spacing: -0.035em;
+
+    color: #ffffff;
+}
+
+
+/* Grey part of heading */
+
+.why-choose-header h2 span {
+    display: block;
+    color: #8d8d8d;
+}
+
+
+/* =========================================================
+   CARDS
+   ========================================================= */
+
+.why-choose-grid {
+    width: 100%;
+    max-width: 1320px;
+
+    margin: 0 auto;
+
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 28px;
+}
+
+
+/* Individual card */
+
+.why-card {
+    min-height: 254px;
+
+    padding: 34px 35px;
+
+    background: #111111;
+
+    border: 1px solid #2d2d2d;
+
+    border-radius: 18px;
+
+    display: flex;
+    flex-direction: column;
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        background 0.25s ease;
+}
+
+
+/* Card hover */
+
+.why-card:hover {
+    transform: translateY(-5px);
+
+    background: #151515;
+
+    border-color: #454545;
+}
+
+
+/* =========================================================
+   ICON
+   ========================================================= */
+
+.why-icon {
+    width: 60px;
+    height: 60px;
+
+    margin-bottom: 29px;
+
+    border-radius: 16px;
+
+    background: #292929;
+
+    color: #bdbdbd;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.why-icon svg {
+    width: 28px;
+    height: 28px;
+}
+
+
+/* =========================================================
+   CARD TEXT
+   ========================================================= */
+
+.why-card h3 {
+    margin: 0 0 13px;
+
+    font-family: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
+
+    font-size: 18px;
+    line-height: 1.3;
+
+    font-weight: 600;
+
+    color: #ffffff;
+}
+
+
+.why-card p {
+    margin: 0;
+
+    max-width: 440px;
+
+    font-family: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
+
+    font-size: 16px;
+    line-height: 1.65;
+
+    color: #969696;
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+    .why-choose-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 650px) {
+
+    .why-choose-section {
+        padding: 70px 20px 75px;
+    }
+
+
+    .why-choose-header {
+        margin-bottom: 55px;
+    }
+
+
+    .why-choose-header h2 {
+        font-size: 38px;
+    }
+
+
+    .why-choose-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+
+    .why-card {
+        min-height: auto;
+        padding: 28px;
+    }
+
+
+    .why-icon {
+        width: 56px;
+        height: 56px;
+
+        margin-bottom: 24px;
+    }
+
+
+    .why-card h3 {
+        font-size: 17px;
+    }
+
+
+    .why-card p {
+        font-size: 15px;
+    }
+
+}
+
+.why-choose-section {
+    margin-top: 120px;
+    width: 100%;
+    max-width: none;
+    box-sizing: border-box;
+}
+
+/* =========================================
+   WHY CHOOSE US - BREAK OUT OF CONTAINER
+   ========================================= */
+
+.why-choose-section {
+    margin-top: 140px;
+
+    width: 100vw;
+    max-width: none;
+
+    /* Move it outside the restricted parent container */
+    margin-left: calc(50% - 50vw);
+
+    box-sizing: border-box;
+}
+
+/* =========================================
+   MAKE WHY CHOOSE US CARDS MORE COMPACT
+   ========================================= */
+
+.why-choose-grid {
+    gap: 20px;
+}
+
+.why-card {
+    min-height: 190px;
+    padding: 24px 26px;
+    border-radius: 16px;
+}
+
+.why-icon {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 20px;
+    border-radius: 13px;
+}
+
+.why-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+.why-card h3 {
+    font-size: 17px;
+    margin-bottom: 9px;
+}
+
+.why-card p {
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* =====================================================
+   NEWSLETTER SECTION
+   ===================================================== */
+
+.newsletter-section {
+    width: 100%;
+    background: #666666;
+    padding: 100px 30px;
+    box-sizing: border-box;
+}
+
+.newsletter-content {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.newsletter-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: #d9d9d9;
+    margin: 0 0 25px;
+}
+
+.newsletter-content h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0 0 18px;
+}
+
+.newsletter-description {
+    max-width: 900px;
+    margin: 0 auto 40px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 17px;
+    line-height: 1.5;
+    color: #eeeeee;
+}
+
+.newsletter-form {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 15px;
+}
+
+.newsletter-form input {
+    width: 370px;
+    height: 57px;
+    padding: 0 25px;
+    box-sizing: border-box;
+
+    border: 1px solid #aaaaaa;
+    border-radius: 4px;
+
+    background: #858585;
+    color: #ffffff;
+
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 16px;
+
+    outline: none;
+}
+
+.newsletter-form input::placeholder {
+    color: #dddddd;
+}
+
+.newsletter-form input:focus {
+    border-color: #ffffff;
+}
+
+.newsletter-form button {
+    height: 57px;
+    padding: 0 30px;
+
+    border: none;
+    border-radius: 4px;
+
+    background: #000000;
+    color: #ffffff;
+
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.newsletter-form button:hover {
+    background: #1c1c1c;
+}
+
+
+
+/* =====================================================
+   MAIN FOOTER
+   ===================================================== */
+
+.site-footer {
+    width: 100%;
+    background: #000000;
+    color: #ffffff;
+    box-sizing: border-box;
+}
+
+.footer-container {
+    width: calc(100% - 120px);
+    max-width: 1350px;
+    margin: 0 auto;
+
+    padding: 85px 0 65px;
+
+    display: grid;
+    grid-template-columns: 1.3fr 1fr 1fr 1.4fr;
+    gap: 70px;
+
+    box-sizing: border-box;
+}
+
+
+/* =====================================================
+   FOOTER BRAND
+   ===================================================== */
+
+.footer-logo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 58px;
+    height: 40px;
+
+    margin-bottom: 28px;
+
+    color: #ffffff;
+
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+
+    text-decoration: none;
+}
+
+.footer-brand > p {
+    max-width: 280px;
+
+    margin: 0 0 27px;
+
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 17px;
+    line-height: 1.7;
+
+    color: #777777;
+}
+
+
+/* =====================================================
+   SOCIAL ICONS
+   ===================================================== */
+
+.footer-socials {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
+
+.footer-socials a {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #171717;
+    border-radius: 4px;
+
+    color: #777777;
+
+    text-decoration: none;
+
+    transition: 0.2s ease;
+}
+
+.footer-socials a:hover {
+    background: #252525;
+    color: #ffffff;
+}
+
+
+
+/* =====================================================
+   FOOTER HEADINGS
+   ===================================================== */
+
+.footer-column h3 {
+    margin: 0 0 27px;
+
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 500;
+
+    letter-spacing: 2px;
+
+    color: #aaaaaa;
+}
+
+
+
+/* =====================================================
+   FOOTER LINKS
+   ===================================================== */
+
+.footer-column ul {
+    list-style: none;
+
+    margin: 0;
+    padding: 0;
+}
+
+.footer-column li {
+    margin-bottom: 18px;
+}
+
+.footer-column li a {
+    color: #777777;
+
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 16px;
+
+    text-decoration: none;
+
+    transition: 0.2s ease;
+}
+
+.footer-column li a:hover {
+    color: #ffffff;
+}
+
+
+
+/* =====================================================
+   CONTACT DETAILS
+   ===================================================== */
+
+.footer-contact p {
+    display: flex;
+    align-items: flex-start;
+
+    margin: 0 0 19px;
+
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+
+    color: #777777;
+}
+
+.contact-icon {
+    width: 28px;
+
+    flex-shrink: 0;
+
+    color: #777777;
+}
+
+.footer-contact a {
+    color: #777777;
+    text-decoration: none;
+
+    transition: 0.2s ease;
+}
+
+.footer-contact a:hover {
+    color: #ffffff;
+}
+
+
+
+/* =====================================================
+   FOOTER BOTTOM
+   ===================================================== */
+
+.footer-bottom {
+    width: calc(100% - 120px);
+    max-width: 1350px;
+
+    margin: 0 auto;
+
+    padding: 30px 0;
+
+    border-top: 1px solid #1c1c1c;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    box-sizing: border-box;
+}
+
+.footer-bottom p {
+    margin: 0;
+
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px;
+
+    color: #555555;
+}
+
+
+
+/* =====================================================
+   RESPONSIVE FOOTER
+   ===================================================== */
+
+@media (max-width: 900px) {
+
+    .footer-container {
+        grid-template-columns: 1fr 1fr;
+        gap: 50px;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .newsletter-section {
+        padding: 75px 20px;
+    }
+
+    .newsletter-content h2 {
+        font-size: 28px;
+    }
+
+    .newsletter-description {
+        font-size: 15px;
+    }
+
+    .newsletter-form {
+        flex-direction: column;
+    }
+
+    .newsletter-form input {
+        width: 100%;
+    }
+
+    .newsletter-form button {
+        width: 100%;
+    }
+
+
+    .footer-container {
+        width: calc(100% - 40px);
+
+        grid-template-columns: 1fr;
+
+        padding: 65px 0 45px;
+
+        gap: 45px;
+    }
+
+
+    .footer-bottom {
+        width: calc(100% - 40px);
+    }
+
 }
