@@ -23,9 +23,10 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem('theme', theme);
   }
 
+  // Default to the site's light cream theme (matching every other page)
+  // unless the visitor has explicitly chosen dark mode before.
   const saved = localStorage.getItem('theme');
-  const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  applyTheme(saved || (systemPrefersDark ? 'dark' : 'light'));
+  applyTheme(saved || 'light');
 
   toggleBtn.addEventListener('click', () => {
     const current = document.documentElement.getAttribute('data-theme');

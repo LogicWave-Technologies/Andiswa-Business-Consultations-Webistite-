@@ -60,18 +60,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Check saved theme
         const savedTheme = localStorage.getItem('theme');
 
-        // Check computer/browser preference
-        const systemPrefersDark =
-            window.matchMedia(
-                '(prefers-color-scheme: dark)'
-            ).matches;
-
-
-        // Apply saved theme or system preference
-        applyTheme(
-            savedTheme ||
-            (systemPrefersDark ? 'dark' : 'light')
-        );
+        // Default to the site's light cream theme (matching every other
+        // page) unless the visitor has explicitly chosen dark mode before.
+        applyTheme(savedTheme || 'light');
 
 
         // Toggle when moon/sun button is clicked

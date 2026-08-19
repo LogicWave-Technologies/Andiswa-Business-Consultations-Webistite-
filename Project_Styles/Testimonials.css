@@ -6,15 +6,15 @@
 [data-theme="dark"]{
     --glow-a:rgba(255,255,255,.04);
     --glow-b:rgba(120,130,255,.06);
-    --star-color:#e8e8e8;
-    --star-muted:#3a3a3a;
+    --star-color:#f1e7d8;
+    --star-muted:#6b584a;
 }
 
 [data-theme="light"]{
     --glow-a:rgba(255,185,140,.16);
     --glow-b:rgba(170,150,255,.14);
-    --star-color:#111111;
-    --star-muted:#dcdcdc;
+    --star-color:#2a1c12;
+    --star-muted:#d7c3a5;
 }
 
 

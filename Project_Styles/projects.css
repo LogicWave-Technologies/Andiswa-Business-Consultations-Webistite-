@@ -46,63 +46,63 @@ section{
 [data-theme="dark"]{
 
     /* brand */
-    --primary:#ffffff;
-    --accent:#000000;
+    --primary:#b5814f;
+    --accent:#211712;
 
     /* surfaces */
-    --page-bg:#0a0a0a;
-    --section-bg:#0a0a0a;
-    --card-bg:#141414;
-    --card-bg-alt:#1a1a1a;
-    --footer-bg:#050505;
-    --modal-overlay:rgba(0,0,0,.85);
+    --page-bg:#211712;
+    --section-bg:#211712;
+    --card-bg:#2e2119;
+    --card-bg-alt:#3a2a22;
+    --footer-bg:#160f0b;
+    --modal-overlay:rgba(21,15,11,.85);
 
     /* navbar */
-    --nav-bg:#000000;
-    --nav-text:#ffffff;
+    --nav-bg:#150f0b;
+    --nav-text:#f1e7d8;
 
     /* text */
-    --text:#f5f5f5;
-    --text-muted:#b5b5b5;
-    --text-soft:#8a8a8a;
-    --footer-text:#bdbdbd;
-    --footer-heading:#ffffff;
+    --text:#f1e7d8;
+    --text-muted:#d6c1a3;
+    --text-soft:#a58d76;
+    --footer-text:#e7d8c5;
+    --footer-heading:#f1e7d8;
 
     /* borders / dividers */
-    --border:#262626;
-    --divider:#222222;
+    --border:rgba(241,231,216,0.16);
+    --divider:rgba(241,231,216,0.18);
 
     /* buttons */
-    --btn-bg:#ffffff;
-    --btn-text:#000000;
-    --btn-hover-bg:#e2e2e2;
-    --btn-hover-text:#000000;
+    --btn-bg:#b5814f;
+    --btn-text:#211712;
+    --btn-hover-bg:#d9a866;
+    --btn-hover-text:#211712;
 
     --outline-btn-bg:transparent;
-    --outline-btn-border:#3a3a3a;
+    --outline-btn-border:rgba(241,231,216,0.4);
 
     /* glass / icon buttons (navbar) */
-    --glass-bg:rgba(255,255,255,.1);
-    --glass-border:rgba(255,255,255,.15);
-    --glass-text:#ffffff;
-    --glass-hover-bg:#ffffff;
-    --glass-hover-text:#000000;
+    --glass-bg:rgba(241,231,216,.08);
+    --glass-border:rgba(241,231,216,.14);
+    --glass-text:#f1e7d8;
+    --glass-hover-bg:#d9a866;
+    --glass-hover-text:#211712;
 
     /* form controls */
-    --input-bg:#161616;
-    --input-border:#2c2c2c;
-    --input-text:#f5f5f5;
-    --input-placeholder:#8a8a8a;
+    --input-bg:#2e2119;
+    --input-border:rgba(241,231,216,0.14);
+    --input-text:#f1e7d8;
+    --input-placeholder:#a58d76;
 
     /* search / filter pills (light chips on dark page) */
-    --pill-bg:#141414;
-    --pill-text:#f5f5f5;
-    --pill-active-bg:#ffffff;
-    --pill-active-text:#000000;
+    --pill-bg:#2e2119;
+    --pill-text:#f1e7d8;
+    --pill-active-bg:#b5814f;
+    --pill-active-text:#211712;
 
     /* icons */
-    --icon-color:#ffffff;
-    --icon-muted:#9a9a9a;
+    --icon-color:#f1e7d8;
+    --icon-muted:#d6c1a3;
 
     /* shadow */
     --shadow:0 15px 40px rgba(0,0,0,.45);
@@ -116,67 +116,67 @@ section{
 [data-theme="light"]{
 
     /* brand */
-    --primary:#000000;
-    --accent:#000000;
+    --primary:#b5814f;
+    --accent:#211712;
 
     /* surfaces */
-    --page-bg:#ffffff;
-    --section-bg:#ffffff;
-    --card-bg:#ffffff;
-    --card-bg-alt:#f4f4f4;
-    --footer-bg:#050505;
-    --modal-overlay:rgba(0,0,0,.85);
+    --page-bg:#f1e7d8;
+    --section-bg:#f1e7d8;
+    --card-bg:#f3e5d0;
+    --card-bg-alt:#efe0c6;
+    --footer-bg:#160f0b;
+    --modal-overlay:rgba(33,23,18,.8);
 
     /* navbar */
-    --nav-bg:#ffffff;
-    --nav-text:#111111;
+    --nav-bg:#211712;
+    --nav-text:#f1e7d8;
 
     /* text */
-    --text:#111111;
-    --text-muted:#555555;
-    --text-soft:#777777;
-    --footer-text:#bdbdbd;
-    --footer-heading:#ffffff;
+    --text:#2a1c12;
+    --text-muted:#5d4a3e;
+    --text-soft:#7b6457;
+    --footer-text:#e7d8c5;
+    --footer-heading:#f1e7d8;
 
     /* borders / dividers */
-    --border:#dddddd;
-    --divider:#222222;
+    --border:rgba(42,28,18,0.12);
+    --divider:#cda778;
 
     /* buttons */
-    --btn-bg:#000000;
-    --btn-text:#ffffff;
-    --btn-hover-bg:#333333;
-    --btn-hover-text:#ffffff;
+    --btn-bg:#b5814f;
+    --btn-text:#211712;
+    --btn-hover-bg:#d9a866;
+    --btn-hover-text:#211712;
 
     --outline-btn-bg:transparent;
-    --outline-btn-border:#dddddd;
+    --outline-btn-border:rgba(42,28,18,0.2);
 
     /* glass / icon buttons (navbar) */
-    --glass-bg:#f2f2f2;
-    --glass-border:#dddddd;
-    --glass-text:#111111;
-    --glass-hover-bg:#000000;
-    --glass-hover-text:#ffffff;
+    --glass-bg:rgba(33,23,18,.06);
+    --glass-border:rgba(42,28,18,0.12);
+    --glass-text:#2a1c12;
+    --glass-hover-bg:#b5814f;
+    --glass-hover-text:#211712;
 
     /* form controls */
-    --input-bg:#ffffff;
-    --input-border:#dddddd;
-    --input-text:#111111;
-    --input-placeholder:#777777;
+    --input-bg:#f1e7d8;
+    --input-border:rgba(42,28,18,0.12);
+    --input-text:#2a1c12;
+    --input-placeholder:#7b6457;
 
     /* search / filter pills */
-    --pill-bg:#ffffff;
-    --pill-text:#111111;
-    --pill-active-bg:#000000;
-    --pill-active-text:#ffffff;
+    --pill-bg:#f3e5d0;
+    --pill-text:#2a1c12;
+    --pill-active-bg:#b5814f;
+    --pill-active-text:#211712;
 
     /* icons */
-    --icon-color:#111111;
-    --icon-muted:#777777;
+    --icon-color:#2a1c12;
+    --icon-muted:#7b6457;
 
     /* shadow */
-    --shadow:0 15px 40px rgba(0,0,0,.08);
-    --shadow-soft:0 10px 25px rgba(0,0,0,.06);
+    --shadow:0 15px 40px rgba(42,28,18,.10);
+    --shadow-soft:0 10px 25px rgba(42,28,18,.08);
 
     /* misc */
     --radius:18px;
@@ -410,10 +410,7 @@ section{
     justify-content:center;
     align-items:center;
     text-align:center;
-    background:linear-gradient(rgba(0,0,0,.65), rgba(0,0,0,.65)),
-               url("../images/banner.jpg");
-    background-size:cover;
-    background-position:center;
+    background:var(--page-bg);
 }
 
 .hero-content{
@@ -421,20 +418,20 @@ section{
 }
 
 .hero-content span{
-    color:#ddd;
+    color:var(--text-soft);
     font-size:14px;
     letter-spacing:4px;
     text-transform:uppercase;
 }
 
 .hero-content h1{
-    color:#ffffff;
+    color:var(--text);
     font-size:65px;
     margin:20px 0;
 }
 
 .hero-content p{
-    color:#ddd;
+    color:var(--text-muted);
     font-size:18px;
     line-height:1.8;
 }
@@ -669,8 +666,8 @@ section{
     justify-content:flex-end;
     flex-direction:column;
     padding:30px;
-    background:linear-gradient(transparent, rgba(0,0,0,.93));
-    color:#ffffff;
+    background:linear-gradient(transparent, rgba(21,15,11,.93));
+    color:var(--cream);
     opacity:0;
     transition:.45s;
 }
@@ -682,8 +679,8 @@ section{
 .overlay > span{
     display:inline-block;
     width:max-content;
-    background:#ffffff;
-    color:#000000;
+    background:var(--tan);
+    color:var(--espresso);
     padding:6px 16px;
     border-radius:30px;
     font-size:12px;
@@ -697,7 +694,7 @@ section{
 }
 
 .overlay p{
-    color:#ddd;
+    color:var(--stone);
     line-height:1.7;
     margin-bottom:25px;
 }
@@ -705,8 +702,8 @@ section{
 .view-btn{
     display:inline-block;
     width:max-content;
-    background:#ffffff;
-    color:#000000;
+    background:var(--tan);
+    color:var(--espresso);
     padding:12px 24px;
     border-radius:40px;
     font-weight:600;
@@ -714,8 +711,8 @@ section{
 }
 
 .view-btn:hover{
-    background:#000000;
-    color:#ffffff;
+    background:var(--tan-bright);
+    color:var(--espresso);
 }
 
 
@@ -816,7 +813,7 @@ section{
 
 .footer{
     background:var(--footer-bg);
-    color:#ffffff;
+    color:var(--cream);
     position:relative;
     padding:90px 10% 30px;
 }
@@ -828,7 +825,7 @@ section{
 }
 
 .footer-logo{
-    color:#ffffff;
+    color:var(--cream);
     font-size:40px;
     font-weight:700;
     letter-spacing:2px;
@@ -858,7 +855,7 @@ section{
 }
 
 .footer-box ul li a:hover{
-    color:#ffffff;
+    color:var(--tan-bright);
     padding-left:8px;
 }
 
@@ -871,7 +868,7 @@ section{
 }
 
 .contact-info i{
-    color:#ffffff;
+    color:var(--tan-bright);
     margin-top:5px;
 }
 
@@ -886,15 +883,15 @@ section{
     display:flex;
     justify-content:center;
     align-items:center;
-    background:#1a1a1a;
-    color:#ffffff;
+    background:rgba(241,231,216,0.08);
+    color:var(--cream);
     border-radius:10px;
     transition:.4s;
 }
 
 .social-links a:hover{
-    background:#ffffff;
-    color:#000000;
+    background:var(--tan);
+    color:var(--espresso);
     transform:translateY(-6px);
 }
 
@@ -914,7 +911,7 @@ section{
 }
 
 .footer-bottom p{
-    color:#888888;
+    color:var(--stone);
 }
 
 .back-top{
@@ -926,8 +923,8 @@ section{
     display:flex;
     justify-content:center;
     align-items:center;
-    background:#ffffff;
-    color:#000000;
+    background:var(--tan);
+    color:var(--espresso);
     border-radius:50%;
     font-size:22px;
     transition:.4s;
@@ -935,7 +932,7 @@ section{
 
 .back-top:hover{
     transform:translateY(-8px);
-    background:#d9d9d9;
+    background:var(--tan-bright);
 }
 
 
