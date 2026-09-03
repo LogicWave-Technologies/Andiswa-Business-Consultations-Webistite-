@@ -1,30 +1,18 @@
-/* ============================================================
-   TESTIMONIALS PAGE — page-specific styles only.
-============================================================ */
 
-
-[data-theme="dark"]{
-    --glow-a:rgba(255,255,255,.04);
-    --glow-b:rgba(120,130,255,.06);
-    --star-color:#f1e7d8;
-    --star-muted:#6b584a;
-}
-
-[data-theme="light"]{
+:root{
     --glow-a:rgba(255,185,140,.16);
     --glow-b:rgba(170,150,255,.14);
-    --star-color:#2a1c12;
-    --star-muted:#d7c3a5;
+    --star-color:#232830;
+    --star-muted:#C7D0DC;
 }
-
-
-/* ============================================================
-   SECTION + BACKGROUND
-============================================================ */
+/* 
+TESTIMONIALS PAGE — page-specific styles only. 
+SECTION + BACKGROUND
+ */
 
 .testimonials-section{
     position:relative;
-    margin-top:80px;
+    margin-top:0;
     padding:110px 8% 130px;
     overflow:hidden;
     text-align:center;
@@ -60,9 +48,9 @@
 }
 
 
-/* ============================================================
-   EYEBROW + HEADING
-============================================================ */
+/* 
+EYEBROW + HEADING
+ */
 
 .testimonials-eyebrow{
     display:inline-flex;
@@ -90,10 +78,9 @@
     margin-bottom:50px;
 }
 
-
-/* ============================================================
-   AUTOPLAY TOGGLE
-============================================================ */
+/* 
+AUTOPLAY TOGGLE
+*/
 
 .autoplay-btn{
     width:42px;
@@ -117,9 +104,9 @@
 }
 
 
-/* ============================================================
-   TESTIMONIAL CONTENT
-============================================================ */
+/* 
+TESTIMONIAL CONTENT
+ */
 
 .testimonial-track{
     max-width:760px;
@@ -188,9 +175,9 @@
 }
 
 
-/* ============================================================
+/* 
    CAROUSEL CONTROLS
-============================================================ */
+*/
 
 .carousel-controls{
     display:flex;
@@ -244,9 +231,9 @@
 }
 
 
-/* ============================================================
-   RESPONSIVE
-============================================================ */
+/* 
+RESPONSIVE
+ */
 
 @media(max-width:768px){
 
