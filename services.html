@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 rx=%2718%27 fill=%27%23211712%27/%3E%3Ctext x=%2750%27 y=%2766%27 font-family=%27Arial, sans-serif%27 font-size=%2746%27 font-weight=%27700%27 fill=%27%23f1e7d8%27 text-anchor=%27middle%27%3EAB%3C/text%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 rx=%2718%27 fill=%27%231B2A41%27/%3E%3Ctext x=%2750%27 y=%2766%27 font-family=%27Arial, sans-serif%27 font-size=%2746%27 font-weight=%27700%27 fill=%27%23ffffff%27 text-anchor=%27middle%27%3EAB%3C/text%3E%3C/svg%3E">
 
   <title>Services | Andiswa Business Consultation</title>
 
@@ -17,9 +17,12 @@
     rel="stylesheet"
   >
 
-  <!-- services.css is fully self-contained for this page -->
+  <!-- Page-specific styles; the navbar/footer/token system is shared with the rest of the site -->
   <link rel="stylesheet" href="services.css">
+  <link rel="stylesheet" href="nav-unified.css">
 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  
 </head>
 
 
@@ -29,105 +32,33 @@
   <!-- HEADER -->
   <!-- ============================= -->
 
-  <header class="site-header">
+  <header id="siteHeader" class="header">
+    <nav class="navbar">
 
-    <div class="header-inner">
+        <a href="index.html" class="logo">A|B</a>
 
-      <!-- Logo: clicking it takes the user back to the home page -->
-      <a href="index.html" class="logo">
-        <span class="logo-mark">A|B</span>
-      </a>
-
-
-      <!-- Main navigation menu -->
-      <nav class="main-nav">
-
-        <ul>
-
-          <li>
-            <a href="index.html">Home</a>
-          </li>
-
-          <li>
-            <a href="about.html">About Us</a>
-          </li>
-
-          <!-- Active Services page -->
-          <li>
-            <a href="services.html" class="active">Services</a>
-          </li>
-
-          <li>
-            <a href="projects.html">Projects</a>
-          </li>
-
-          <li>
-            <a href="team.html">Team</a>
-          </li>
-
-          <li>
-            <a href="testimonials.html">Testimonials</a>
-          </li>
-
-          <li>
-            <a href="contact.html">Contact</a>
-          </li>
-
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="services.html" class="active">Services</a></li>
+            <li><a href="projects.html">Projects</a></li>
+            <li><a href="team.html">Team</a></li>
+            <li><a href="testimonials.html">Testimonials</a></li>
+            <li><a href="contact.php">Contact</a></li>
         </ul>
 
-      </nav>
-
-
-      <!-- Icons and Get a Quote button -->
-      <div class="header-actions">
-
-        <!-- Shield icon button -->
-        <button class="icon-btn">
-
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-
-            <path d="M12 2 4 5v6c0 5 3.4 8.7 8 10 4.6-1.3 8-5 8-10V5l-8-3Z"/>
-
-          </svg>
-
-        </button>
-
-
-        <!-- Moon icon button -->
-        <button class="icon-btn">
-
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-
-            <path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"/>
-
-          </svg>
-
-        </button>
-
-
-        <!-- Get a Quote -->
-        <a href="contact.html" class="btn-quote">
-          Get a Quote ↗
-        </a>
-
-      </div>
-
-    </div>
-
+        <div class="nav-actions">
+            <!-- Admin login lives on the Home page -->
+            <a href="admin.php" class="icon-btn" aria-label="Admin Login" title="Admin Login"><i class="fa-solid fa-shield-halved"></i></a><a href="login.php" class="icon-btn" aria-label="Client Login" title="Client Login"><i class="fa-solid fa-user"></i></a>
+            <a href="contact.php" class="quote-btn">
+                Get a Quote
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+            <button id="menuToggle" class="icon-btn menu-toggle" aria-label="Open menu" aria-expanded="false">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </nav>
   </header>
 
 
@@ -189,7 +120,7 @@
         <div class="service-card">
 
           <div class="service-icon">
-            ✒️
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/><path d="M15 5l4 4"/></svg>
           </div>
 
           <h3>
@@ -209,7 +140,7 @@
         <div class="service-card">
 
           <div class="service-icon">
-            🗂️
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
           </div>
 
           <h3>
@@ -229,7 +160,7 @@
         <div class="service-card">
 
           <div class="service-icon">
-            🎨
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22a9 9 0 1 1 0-18c4 0 8 2.5 8 6.5 0 2-1.5 3.5-3.5 3.5H14a1.8 1.8 0 0 0-1.2 3.1c.4.4.6.9.6 1.4 0 1.4-1.1 2.5-2.4 2.5z"/><circle cx="7" cy="12" r="1"/><circle cx="9" cy="8" r="1"/><circle cx="14" cy="7" r="1"/><circle cx="17" cy="11" r="1"/></svg>
           </div>
 
           <h3>
@@ -249,7 +180,7 @@
         <div class="service-card">
 
           <div class="service-icon">
-            📄
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>
           </div>
 
           <h3>
@@ -269,7 +200,7 @@
         <div class="service-card">
 
           <div class="service-icon">
-            🖼️
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
           </div>
 
           <h3>
@@ -295,7 +226,7 @@
         <div class="service-card">
 
           <div class="service-icon">
-            📷
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
           </div>
 
           <h3>
@@ -315,7 +246,7 @@
         <div class="service-card">
 
           <div class="service-icon">
-            🖥️
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
           </div>
 
           <h3>
@@ -335,7 +266,7 @@
         <div class="service-card">
 
           <div class="service-icon">
-            💳
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="5" width="22" height="14" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/><line x1="5" y1="15" x2="9" y2="15"/></svg>
           </div>
 
           <h3>
@@ -355,7 +286,7 @@
         <div class="service-card">
 
           <div class="service-icon">
-            📖
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 4h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
           </div>
 
           <h3>
@@ -375,7 +306,7 @@
         <div class="service-card">
 
           <div class="service-icon">
-            📘
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
           </div>
 
           <h3>
@@ -724,285 +655,66 @@
        FOOTER
        ===================================================== -->
 
-  <footer class="site-footer">
+  <footer class="footer">
 
     <div class="footer-container">
 
-
-      <!-- ============================= -->
-      <!-- COMPANY INFORMATION -->
-      <!-- ============================= -->
-
-      <div class="footer-column footer-brand">
-
-        <a href="index.html" class="footer-logo">
-          A|B
-        </a>
+      <!-- Company -->
+      <div class="footer-box">
+        <a href="index.html" class="footer-logo">A|B</a>
 
         <p>
-          Crafting bold brands and creative
-          experiences for South African
-          businesses since 2019.
+          Crafting bold brands and creative experiences
+          for South African businesses through professional
+          graphic design, branding and digital solutions.
         </p>
 
-
-        <!-- Social Media -->
-        <div class="footer-socials">
-
-          <!-- Facebook -->
-          <a href="#" aria-label="Facebook">
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-            >
-              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
-            </svg>
-          </a>
-
-
-          <!-- Instagram -->
-          <a href="#" aria-label="Instagram">
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-            >
-              <rect x="3" y="3" width="18" height="18" rx="5"/>
-              <circle cx="12" cy="12" r="4"/>
-              <circle cx="17.5" cy="6.5" r="1"/>
-            </svg>
-          </a>
-
-
-          <!-- Twitter / X -->
-          <a href="#" aria-label="Twitter">
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-            >
-              <path d="M4 4l16 16"/>
-              <path d="M20 4L4 20"/>
-            </svg>
-          </a>
-
-
-          <!-- LinkedIn -->
-          <a href="#" aria-label="LinkedIn">
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-            >
-              <rect x="4" y="4" width="16" height="16" rx="2"/>
-              <path d="M8 10v6"/>
-              <path d="M8 7v.01"/>
-              <path d="M12 16v-3a2 2 0 0 1 4 0v3"/>
-              <path d="M12 10v6"/>
-            </svg>
-          </a>
-
-
-          <!-- YouTube -->
-          <a href="#" aria-label="YouTube">
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.8"
-            >
-              <rect x="3" y="6" width="18" height="12" rx="3"/>
-              <path d="M10 9l5 3-5 3V9z"/>
-            </svg>
-          </a>
-
+        <div class="social-links">
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="X (Twitter)"><i class="fab fa-x-twitter"></i></a>
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
         </div>
-
       </div>
 
 
-
-      <!-- ============================= -->
-      <!-- QUICK LINKS -->
-      <!-- ============================= -->
-
-      <div class="footer-column">
-
-        <h3>
-          QUICK LINKS
-        </h3>
-
+      <!-- Quick Links -->
+      <div class="footer-box">
+        <h3>Quick Links</h3>
         <ul>
-
-          <li>
-            <a href="index.html">Home</a>
-          </li>
-
-          <li>
-            <a href="about.html">About Us</a>
-          </li>
-
-          <li>
-            <a href="services.html">Services</a>
-          </li>
-
-          <li>
-            <a href="projects.html">Projects</a>
-          </li>
-
-          <li>
-            <a href="team.html">Team</a>
-          </li>
-
-          <li>
-            <a href="testimonials.html">Testimonials</a>
-          </li>
-
-          <li>
-            <a href="contact.html">Contact</a>
-          </li>
-
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="projects.html">Projects</a></li>
+          <li><a href="team.html">Team</a></li>
+          <li><a href="testimonials.html">Testimonials</a></li>
+          <li><a href="contact.php">Contact</a></li>
         </ul>
-
       </div>
 
 
-
-      <!-- ============================= -->
-      <!-- SERVICES -->
-      <!-- ============================= -->
-
-      <div class="footer-column">
-
-        <h3>
-          SERVICES
-        </h3>
-
-        <ul>
-
-          <li>
-            <a href="services.html">Logo Design</a>
-          </li>
-
-          <li>
-            <a href="services.html">Branding &amp; Identity</a>
-          </li>
-
-          <li>
-            <a href="services.html">Graphic Design</a>
-          </li>
-
-          <li>
-            <a href="services.html">Flyer Design</a>
-          </li>
-
-          <li>
-            <a href="services.html">Poster Design</a>
-          </li>
-
-          <li>
-            <a href="services.html">Social Media Design</a>
-          </li>
-
-          <li>
-            <a href="services.html">Website Design</a>
-          </li>
-
+      <!-- Contact -->
+      <div class="footer-box">
+        <h3>Contact</h3>
+        <ul class="contact-info">
+          <li><i class="fa-solid fa-phone"></i> +27 67 790 4428</li>
+          <li><i class="fa-regular fa-envelope"></i> andiswasbusinessconsultations@outlook.com</li>
+          <li><i class="fa-solid fa-location-dot"></i> 2 Belmont Terrace,<br>Port Elizabeth, 6001</li>
+          <li><i class="fa-regular fa-clock"></i> Monday – Friday<br>08:00 – 18:00</li>
         </ul>
-
       </div>
-
-
-
-      <!-- ============================= -->
-      <!-- CONTACT -->
-      <!-- ============================= -->
-
-      <div class="footer-column footer-contact">
-
-        <h3>
-          CONTACT
-        </h3>
-
-
-        <p>
-
-          <span class="contact-icon">⌕</span>
-
-          <a href="tel:+27677904428">
-            +27 67 790 4428
-          </a>
-
-        </p>
-
-
-        <p>
-
-          <span class="contact-icon">✉</span>
-
-          <a href="mailto:andiswasbusinessconsultations@outlook.com">
-            andiswasbusinessconsultations@outlook.com
-          </a>
-
-        </p>
-
-
-        <p>
-
-          <span class="contact-icon">⌖</span>
-
-          2 Belmont Terrace, Port Elizabeth,<br>
-          6001
-
-        </p>
-
-
-        <p>
-
-          <span class="contact-icon">◷</span>
-
-          Mon–Fri 08:00–18:00
-
-        </p>
-
-      </div>
-
 
     </div>
 
-
-
-    <!-- ============================= -->
-    <!-- FOOTER BOTTOM -->
-    <!-- ============================= -->
+    <hr>
 
     <div class="footer-bottom">
-
-      <p>
-        © 2026 Andiswa Business Consultation.
-        All rights reserved.
-      </p>
-
-      <p>
-        Crafted with care in Johannesburg
-      </p>
-
+      <p>© 2026 Andiswa Business Consultation. All Rights Reserved.</p>
+      <p>Crafted with care in South Africa</p>
     </div>
+
+    <a href="#" class="back-top"><i class="fa-solid fa-arrow-up"></i></a>
 
   </footer>
 
@@ -1031,8 +743,8 @@
     </svg>
 
   </button>
-
   <script src="services.js"></script>
+  <script src="Projects_Js/nav.js"></script>
 
 </body>
 
