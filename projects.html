@@ -1,43 +1,28 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 rx=%2718%27 fill=%27%23211712%27/%3E%3Ctext x=%2750%27 y=%2766%27 font-family=%27Arial, sans-serif%27 font-size=%2746%27 font-weight=%27700%27 fill=%27%23f1e7d8%27 text-anchor=%27middle%27%3EAB%3C/text%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 rx=%2718%27 fill=%27%231B2A41%27/%3E%3Ctext x=%2750%27 y=%2766%27 font-family=%27Arial, sans-serif%27 font-size=%2746%27 font-weight=%27700%27 fill=%27%23ffffff%27 text-anchor=%27middle%27%3EAB%3C/text%3E%3C/svg%3E">
   <title>Projects | Andiswa Business Consultation</title>
 
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
   <link rel="stylesheet" href="Project_Styles/projects.css">
-
-  <script>
-    (function () {
-      var saved = localStorage.getItem('site-theme');
-      // Default to the site's light cream theme (matching every other page)
-      // unless the visitor has explicitly chosen dark mode before.
-      var theme = saved || 'light';
-      document.documentElement.setAttribute('data-theme', theme);
-    })();
-  </script>
+  <link rel="stylesheet" href="nav-unified.css">
 </head>
 <body>
 
   <!-- Navigation and Header -->
-<header class="header">
+<header id="siteHeader" class="header">
 
     <nav class="navbar">
 
-        <!-- Logo -->
-
-        <a href="index.html" class="logo">
-
-            <img src="Projects_Images/AB_Logo/AB_Logo.jpeg" alt="A|B Logo">
-
-        </a>
+        <a href="index.html" class="logo">A|B</a>
 
         <!-- Navigation -->
 
@@ -55,24 +40,16 @@
 
             <li><a href="testimonials.html">Testimonials</a></li>
 
-            <li><a href="contact.html">Contact</a></li>
+            <li><a href="contact.php">Contact</a></li>
 
         </ul>
 
         <!-- Right Side -->
 
         <div class="nav-actions">
-
-            <button id="themeToggle" class="icon-btn" aria-label="Toggle dark and light mode">
-
-                <i class="fa-solid fa-moon"></i>
-
-            </button>
             <!-- admin -->
-            <a href="index.html" class="icon-btn" aria-label="Admin Login (on Home page)" title="Admin login is on the Home page">
-                <i class="fa-solid fa-shield-halved"></i>
-            </a>
-            <a href="contact.html" class="quote-btn">
+            <a href="admin.php" class="icon-btn" aria-label="Admin Login" title="Admin Login"><i class="fa-solid fa-shield-halved"></i></a><a href="login.php" class="icon-btn" aria-label="Client Login" title="Client Login"><i class="fa-solid fa-user"></i></a>
+            <a href="contact.php" class="quote-btn">
 
                 Get a Quote
 
@@ -361,21 +338,7 @@
                 <li><a href="projects.html">Projects</a></li>
                 <li><a href="team.html">Team</a></li>
                 <li><a href="testimonials.html">Testimonials</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-        </div>
-
-        <!-- Services -->
-        <div class="footer-box">
-            <h3>Services</h3>
-            <ul>
-                <li><a href="#">Logo Design</a></li>
-                <li><a href="#">Branding & Identity</a></li>
-                <li><a href="#">Graphic Design</a></li>
-                <li><a href="#">Flyer Design</a></li>
-                <li><a href="#">Poster Design</a></li>
-                <li><a href="#">Social Media Design</a></li>
-                <li><a href="#">Website Design</a></li>
+                <li><a href="contact.php">Contact</a></li>
             </ul>
         </div>
 
@@ -417,7 +380,7 @@
         </p>
 
         <p>
-            Crafted with in South Africa
+            Crafted with care in South Africa
         </p>
     </div>
     <!-- Back To Top -->
@@ -426,7 +389,7 @@
     </a>
 
 </footer>
-<script src="Projects_Js/theme.js"></script>
 <script src="Projects_Js/projects.js"></script>
+<script src="Projects_Js/nav.js"></script>
 </body>
 </html>
