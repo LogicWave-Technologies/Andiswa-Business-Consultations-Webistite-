@@ -8,30 +8,28 @@
    in one place, so changing a colour here updates it everywhere
    it's used in this file. */
 :root{
-  --espresso:    #211712; /* darkest brown - hero / modal background */
-  --espresso-soft:#2e2119; /* slightly lighter brown - cards on dark */
-  --cocoa:      #4a2f20; /* mid brown - hover / accents */
-  --cream:      #f1e7d8; /* warm cream background */
-  --cream-dim:  #e6d8c3; /* deeper cream for alternating surfaces */
-  --ink:        #2a1c12; /* main dark text */
-  --ink-soft:   #5d4a3e; /* softer brown text */
-  --paper:      #f1e7d8; /* warm off-white page base */
-  --line:       rgba(42,28,18,0.12); /* brown border */
-  --stone:      #d6b796; /* warm stone accent */
-  --stone-dark: #8d7a63; /* darker stone */
-  --chip:       #efe3d1; /* small tag / pill background */
-  --tan:        #b5814f; /* primary accent */
-  --tan-bright: #d9a866; /* accent hover */
+  --espresso:    #1B2A41; /* navy - nav, headings, branding */
+  --espresso-soft:#24384F; /* lighter navy - cards on dark */
+  --cocoa:      #3E6690; /* steel blue - buttons and accents */
+  --cream:      #F7F8FA; /* soft off-white - main background */
+  --cream-dim:  #EEF1F4; /* deeper off-white for alternating surfaces */
+  --ink:        #232830; /* dark charcoal - body text */
+  --ink-soft:   #5B6472; /* softer gray text */
+  --paper:      #F7F8FA; /* off-white page base */
+  --line:       rgba(35, 40, 48,0.12); /* charcoal border */
+  --stone:      #5B6472; /* muted gray for secondary text */
+  --stone-dark: #8891A0; /* soft muted gray for highlighted text/accents */
+  --chip:       #ffffff; /* white - small tag / pill background */
+  --tan:        #3E6690; /* steel blue - primary accent */
+  --tan-bright: #5B8DB8; /* light blue - accent hover / highlights */
   --radius-lg:  28px;    /* large rounded corners */
   --radius-md:  18px;    /* medium rounded corners */
   --radius-sm:  12px;    /* small rounded corners */
   --font-display: "Space Grotesk", "Helvetica Neue", Arial, sans-serif; /* main font */
   --font-mono:    "JetBrains Mono", ui-monospace, Menlo, monospace;    /* font for small labels */
-}
 
-/* ---------- basic reset ---------- */
-/* Removes default browser spacing/styles so every browser starts from the same clean slate */
-*{ box-sizing:border-box; }
+  /* --on-dark is intentionally not set here — the shared nav-unified.css
+     supplies its own navbar text color, so this page doesn't need it. */
 html{ scroll-behavior:smooth; } /* smooth scrolling when jumping to an anchor */
 body{
   margin:0;
@@ -51,14 +49,40 @@ ul{ list-style:none; margin:0; padding:0; }
   *{ animation-duration:0.001ms !important; transition-duration:0.001ms !important; }
 }
 
-/* ---------- header ---------- */
-/* Styles for the top navigation bar (logo, menu, buttons) — same on every page */
-.site-header{
+/* ---------- header / navigation (unified across all pages) ---------- */
+.header{
   background:var(--espresso);
-  border-bottom:1px solid rgba(241,231,216,0.14);
-  position:sticky; /* keeps the header stuck to the top while scrolling */
+  border-bottom:1px solid rgba(255, 255, 255,0.14);
+  position:sticky;
   top:0;
-  z-index:40;
+  z-index:999;
+}
+
+.navbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  width:90%;
+  max-width:1320px;
+  margin:auto;
+  height:80px;
+}
+
+.navbar .logo{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:34px;
+  height:34px;
+  background:#0a0a0a;
+  color:#ffffff;
+  font-family:var(--font-mono);
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:0.02em;
+  border-radius:10px;
+  text-decoration:none;
+  flex-shrink:0;
 }
 
 /* Extra top/bottom spacing specifically for the About page's hero section */
@@ -67,78 +91,106 @@ ul{ list-style:none; margin:0; padding:0; }
     padding:29px 30px 29px;
 }
 
-.header-inner{
-  max-width:1320px;
-  margin:0 auto; /* centers the header content on wide screens */
-  padding:18px 32px;
+.nav-links{
   display:flex;
-  align-items:center;
-  justify-content:space-between; /* logo on the left, menu/buttons on the right */
-  gap:24px;
+  gap:35px;
+  list-style:none;
+  margin:0;
+  padding:0;
 }
 
-/* The small "A|B" logo box */
-.logo{
-  width:46px;
-  height:46px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:var(--paper);
-  border:1px solid var(--line);
-  border-radius:10px;
-}
-.logo-mark{
-  font-family:var(--font-mono);
+.nav-links a{
+  position:relative;
+  color:var(--on-dark);
   font-size:15px;
-  letter-spacing:0.02em;
+  font-weight:500;
+  padding:6px 2px;
+  text-decoration:none;
+  transition:opacity .3s ease;
 }
 
-/* Navigation menu links */
-.main-nav ul{ display:flex; gap:36px; }
-.main-nav a{
-  font-size:15px;
-  color:rgba(241,231,216,0.82);
-  transition:color .15s ease;
+.nav-links a::after{
+  content:"";
+  position:absolute;
+  left:0; bottom:-2px;
+  width:0%; height:2px;
+  background:var(--on-dark);
+  transition:width .35s ease;
 }
-.main-nav a:hover{ color:var(--cream); }
-.main-nav a.active{ color:var(--cream); font-weight:600; } /* highlights the current page */
 
-/* Icon buttons + "Get a Quote" button on the right of the header */
-.header-actions{ display:flex; align-items:center; gap:10px; }
-.icon-btn{
-  width:38px;
-  height:38px;
-  border-radius:10px;
-  border:1px solid rgba(241,231,216,0.14);
-  background:rgba(241,231,216,0.08);
-  color:var(--cream);
+.nav-links a:hover{ opacity:.85; }
+.nav-links a:hover::after,
+.nav-links a.active::after{ width:100%; }
+
+.nav-actions{
   display:flex;
   align-items:center;
-  justify-content:center;
+  gap:15px;
+}
+
+.icon-btn, .quote-btn{
+  border:1px solid rgba(255, 255, 255,0.18);
+  background:rgba(255, 255, 255,0.10);
+  color:var(--on-dark);
   cursor:pointer;
-  transition:background .15s ease, color .15s ease;
+  text-decoration:none;
+  transition:background .3s ease, color .3s ease, transform .3s ease;
 }
-.icon-btn:hover{ background:rgba(241,231,216,0.16); color:var(--cream); }
 
-.btn-quote{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  background:var(--cream);
-  color:var(--ink);
-  font-size:14px;
-  font-weight:600;
-  padding:11px 20px;
-  border-radius:999px; /* fully rounded "pill" shape */
-  white-space:nowrap;
-  transition:transform .15s ease, background .15s ease;
+.icon-btn:hover, .quote-btn:hover{
+  background:var(--tan);
+  color:#ffffff;
+  transform:translateY(-3px);
 }
-.btn-quote:hover{ transform:translateY(-1px); background:var(--tan-bright); } /* small lift effect on hover */
 
-/* Hides the menu links on small/mobile screens */
-@media (max-width:920px){
-  .main-nav{ display:none; }
+.icon-btn{
+  width:45px; height:45px;
+  display:flex; justify-content:center; align-items:center;
+  border-radius:12px;
+  font-size:16px;
+}
+
+.quote-btn{
+  display:flex; align-items:center; gap:10px;
+  padding:14px 25px;
+  border-radius:12px;
+  font-size:12px; font-weight:500;
+}
+
+.menu-toggle{ display:none; }
+
+@media (max-width:768px){
+  .navbar{ height:70px; }
+  .menu-toggle{
+    display:flex;
+    width:45px; height:45px;
+    align-items:center; justify-content:center;
+    border:1px solid rgba(255, 255, 255,0.18);
+    background:rgba(255, 255, 255,0.10);
+    color:var(--on-dark);
+    border-radius:12px;
+    font-size:18px;
+    cursor:pointer;
+  }
+  .nav-links{
+    position:fixed;
+    top:70px; left:0; width:100%;
+    flex-direction:column; gap:0;
+    background:var(--espresso);
+    border-top:1px solid rgba(255, 255, 255,0.14);
+    max-height:0;
+    overflow:hidden;
+    transition:max-height .4s ease;
+  }
+  .nav-links.active{ max-height:400px; }
+  .nav-links a{
+    display:block;
+    padding:18px 8%;
+    border-bottom:1px solid rgba(255, 255, 255,0.14);
+  }
+  .nav-links a::after{ display:none; }
+  .quote-btn{ padding:12px 16px; font-size:0; gap:0; }
+  .quote-btn i{ font-size:16px; }
 }
 
 /* ---------- shared card / tag styles ---------- */
@@ -233,7 +285,7 @@ ul{ list-style:none; margin:0; padding:0; }
   display:inline-flex;
   align-items:center;
   gap:8px;
-  background:var(--ink);
+  background:var(--espresso);
   color:#fff;
   font-size:13px;
   font-weight:600;
@@ -301,7 +353,7 @@ ul{ list-style:none; margin:0; padding:0; }
   position:absolute;
   right:24px;
   bottom:24px;
-  background:var(--ink);
+  background:var(--espresso);
   color:#fff;
   border-radius:18px;
   padding:22px 24px;
@@ -320,7 +372,7 @@ ul{ list-style:none; margin:0; padding:0; }
 .stat-label{
   display:block;
   margin-top:8px;
-  font-size:14px;
+  font-size:12px;
   line-height:1.5;
   color:#f3f3f3;
 }
@@ -339,7 +391,7 @@ ul{ list-style:none; margin:0; padding:0; }
   height:44px;
   border-radius:50%; /* makes it a circle */
   border:none;
-  background:var(--ink);
+  background:var(--espresso);
   color:#fff;
   display:flex;
   align-items:center;
@@ -350,44 +402,19 @@ ul{ list-style:none; margin:0; padding:0; }
 }
 .back-to-top:hover{ opacity:.9; }
 
-/* ---------- dark mode ---------- */
-/* These overrides only apply when the moon button sets data-theme="dark" on <html> */
-[data-theme="dark"]{
-  --ink:        #f1e7d8;
-  --ink-soft:   #d6c1a3;
-  --paper:      #211712;
-  --cream:      #2e2119;
-  --line:       rgba(241,231,216,0.14);
-  --stone:      #a58d76;
-  --stone-dark: #d6b796;
-  --chip:       #3a2a22;
-  --espresso:   #211712;
-  --espresso-soft:#2e2119;
-  --cocoa:      #4a2f20;
-  --tan:        #b5814f;
-  --tan-bright: #d9a866;
-}
 
-[data-theme="dark"] .stack-photo{
-  background:linear-gradient(160deg,#2a2b30,#1c1d21);
-}
 
-[data-theme="dark"] .stat-chip{
-  background:#0e0f12;
-}
 
-[data-theme="dark"] .badge-pill{
-  background:#0e0f12;
-}
 
-[data-theme="dark"] .back-to-top{
-  background:#0e0f12;
-}
 
-[data-theme="dark"] .btn-quote{
-  background:#f5f4f0;
-  color:var(--espresso);
-}
+
+
+
+
+
+
+
+
 
 body{
   transition: background .2s ease, color .2s ease;
@@ -453,10 +480,10 @@ body{
     padding: 0 25px;
     box-sizing: border-box;
 
-    border: 1px solid rgba(42,28,18,0.2);
+    border: 1px solid rgba(35, 40, 48,0.2);
     border-radius: 5px;
 
-    background: rgba(241,231,216,0.22);
+    background: rgba(255, 255, 255,0.22);
     color: var(--ink);
 
     font-family: 'Space Grotesk', sans-serif;
@@ -496,100 +523,77 @@ body{
 
 
 /* =========================================================
-   ABOUT PAGE - FOOTER
+   FOOTER (unified across all pages)
    ========================================================= */
 
-.site-footer {
-    width: 100%;
-    margin: 0;
-    padding: 70px 0 0;
-    box-sizing: border-box;
-
-    background: #160f0b;
-    color: var(--stone);
+.footer{
+    background: #101B2B;
+    color: var(--cream);
+    position: relative;
+    padding: 70px 8% 30px;
 }
 
-.footer-inner {
-    width: 80%;
-    max-width: 1200px;
-    margin: 0 auto;
-
+.footer-container{
     display: grid;
-    grid-template-columns: 1.3fr 1fr 1fr 1.4fr;
-    gap: 70px;
+    grid-template-columns: repeat(4,1fr);
+    gap: 50px;
 }
 
-.footer-column {
-    display: flex;
-    flex-direction: column;
-}
-
-.footer-brand {
-    max-width: 300px;
-}
-
-.footer-logo {
-    margin-bottom: 30px;
-
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 22px;
-    font-weight: 500;
-    color: #aaa;
-}
-
-.footer-brand > p {
-    margin: 0;
-
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 17px;
-    line-height: 1.7;
-    color: #777;
-}
-
-
-/* Footer headings */
-
-.footer-column h3 {
-    margin: 0 0 28px;
-
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 14px;
-    font-weight: 500;
+.footer-logo{
+    color: var(--cream);
+    font-size: 36px;
+    font-weight: 700;
     letter-spacing: 2px;
-
-    color: #aaa;
-}
-
-
-/* Footer links */
-
-.footer-column a {
     margin-bottom: 20px;
+    display: inline-block;
+}
 
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 17px;
+.footer-box p{
+    color: rgba(255, 255, 255,0.6);
+    line-height: 1.8;
+    margin-bottom: 24px;
+}
 
-    color: #777;
+.footer-box h3{
+    margin-bottom: 20px;
+    font-size: 18px;
+    color: var(--cream);
+}
+
+.footer-box ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-box ul li{
+    margin: 14px 0;
+}
+
+.footer-box ul li a{
+    color: rgba(255, 255, 255,0.6);
     text-decoration: none;
-
-    transition: 0.2s ease;
+    transition: .3s;
+    font-size: 14px;
 }
 
-.footer-column a:hover {
+.footer-box ul li a:hover{
     color: var(--tan-bright);
+    padding-left: 6px;
 }
 
+.contact-info li{
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    color: rgba(255, 255, 255,0.6);
+    line-height: 1.7;
+    font-size: 14px;
+}
 
-/* Contact information */
-
-.footer-contact p {
-    margin: 0 0 20px;
-
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 16px;
-    line-height: 1.5;
-
-    color: var(--stone);
+.contact-info i{
+    color: var(--tan-bright);
+    margin-top: 4px;
 }
 
 
@@ -600,7 +604,7 @@ body{
 .social-links {
     display: flex;
     gap: 12px;
-    margin-top: 25px;
+    margin-top: 20px;
 }
 
 .social-links a {
@@ -612,20 +616,21 @@ body{
     align-items: center;
     justify-content: center;
 
-    border-radius: 5px;
+    border-radius: 8px;
 
-    background: rgba(241,231,216,0.08);
+    background: rgba(255, 255, 255,0.08);
     color: var(--cream);
 
-    font-family: Arial, sans-serif;
-    font-size: 16px;
+    font-size: 15px;
 
     text-decoration: none;
+    transition: .3s;
 }
 
 .social-links a:hover {
     background: var(--tan);
     color: var(--espresso);
+    transform: translateY(-4px);
 }
 
 
@@ -633,28 +638,47 @@ body{
    FOOTER BOTTOM
    ========================================================= */
 
+.footer hr{
+    border: none;
+    height: 1px;
+    background: rgba(255,255,255,0.12);
+    margin: 50px 0 24px;
+}
+
 .footer-bottom {
-    width: 80%;
-    max-width: 1200px;
-
-    margin: 60px auto 0;
-    padding: 30px 0;
-
-    border-top: 1px solid #222;
-
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 20px;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 12px;
 }
 
 .footer-bottom p {
     margin: 0;
+    color: var(--stone);
+}
 
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 14px;
+.back-top{
+    position: absolute;
+    right: 30px;
+    bottom: 30px;
+    width: 52px;
+    height: 52px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--tan);
+    color: var(--espresso);
+    border-radius: 50%;
+    font-size: 19px;
+    text-decoration: none;
+    transition: .3s;
+}
 
-    color: #555;
+.back-top:hover{
+    transform: translateY(-6px);
+    background: var(--tan-bright);
 }
 
 
@@ -662,7 +686,8 @@ body{
    REMOVE GAP BETWEEN NEWSLETTER AND FOOTER
    ========================================================= */
 
-.newsletter-section + .site-footer {
+.newsletter-section + .footer {
+
     margin-top: 0;
 }
 
@@ -670,7 +695,7 @@ body{
     margin-bottom: 0 !important;
 }
 
-.site-footer {
+.footer {
     margin-top: 0 !important;
 }
 
@@ -681,7 +706,7 @@ body{
 
 @media (max-width: 900px) {
 
-    .footer-inner {
+    .footer-container {
         grid-template-columns: 1fr 1fr;
         gap: 50px;
     }
@@ -717,7 +742,7 @@ body{
         width: 100%;
     }
 
-    .footer-inner {
+    .footer-container {
         width: 85%;
         grid-template-columns: 1fr;
         gap: 45px;
