@@ -20,7 +20,7 @@
   --radius-sm:  12px;
   --font-display: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
   --font-mono:    "JetBrains Mono", ui-monospace, Menlo, monospace;
-}
+
   /* --on-dark is intentionally not set here — the shared nav-unified.css
      supplies its own navbar text color, so this page doesn't need it. */
 html{ scroll-behavior:smooth; overflow-x:hidden; }
@@ -305,21 +305,6 @@ body {
   border-radius:var(--radius-sm);
   margin-bottom:20px;
   font-size:19px;
-  color:var(--espresso);
-  box-shadow:0 1px 2px rgba(35,40,48,0.08);
-}
-
-.service-icon svg{
-  width:22px;
-  height:22px;
-  stroke:currentColor;
-  flex-shrink:0;
-}
-
-.service-card:hover .service-icon{
-  background:var(--espresso);
-  color:var(--cream);
-  transition:background .2s ease, color .2s ease;
 }
 
 .service-card h3{

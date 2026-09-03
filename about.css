@@ -27,7 +27,7 @@
   --radius-sm:  12px;    /* small rounded corners */
   --font-display: "Space Grotesk", "Helvetica Neue", Arial, sans-serif; /* main font */
   --font-mono:    "JetBrains Mono", ui-monospace, Menlo, monospace;    /* font for small labels */
-}
+
   /* --on-dark is intentionally not set here — the shared nav-unified.css
      supplies its own navbar text color, so this page doesn't need it. */
 html{ scroll-behavior:smooth; } /* smooth scrolling when jumping to an anchor */

@@ -5,10 +5,17 @@
     --star-color:#232830;
     --star-muted:#C7D0DC;
 }
-/* 
-TESTIMONIALS PAGE — page-specific styles only. 
-SECTION + BACKGROUND
- */
+/* TESTIMONIALS PAGE — page-specific styles only. */
+
+
+
+
+
+
+
+/* ============================================================
+   SECTION + BACKGROUND
+============================================================ */
 
 .testimonials-section{
     position:relative;
@@ -48,9 +55,9 @@ SECTION + BACKGROUND
 }
 
 
-/* 
-EYEBROW + HEADING
- */
+/* ============================================================
+   EYEBROW + HEADING
+============================================================ */
 
 .testimonials-eyebrow{
     display:inline-flex;
@@ -78,9 +85,10 @@ EYEBROW + HEADING
     margin-bottom:50px;
 }
 
-/* 
-AUTOPLAY TOGGLE
-*/
+
+/* ============================================================
+   AUTOPLAY TOGGLE
+============================================================ */
 
 .autoplay-btn{
     width:42px;
@@ -104,9 +112,9 @@ AUTOPLAY TOGGLE
 }
 
 
-/* 
-TESTIMONIAL CONTENT
- */
+/* ============================================================
+   TESTIMONIAL CONTENT
+============================================================ */
 
 .testimonial-track{
     max-width:760px;
@@ -175,9 +183,9 @@ TESTIMONIAL CONTENT
 }
 
 
-/* 
+/* ============================================================
    CAROUSEL CONTROLS
-*/
+============================================================ */
 
 .carousel-controls{
     display:flex;
@@ -231,9 +239,9 @@ TESTIMONIAL CONTENT
 }
 
 
-/* 
-RESPONSIVE
- */
+/* ============================================================
+   RESPONSIVE
+============================================================ */
 
 @media(max-width:768px){
 
