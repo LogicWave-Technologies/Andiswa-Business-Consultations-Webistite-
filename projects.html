@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 rx=%2718%27 fill=%27%23211712%27/%3E%3Ctext x=%2750%27 y=%2766%27 font-family=%27Arial, sans-serif%27 font-size=%2746%27 font-weight=%27700%27 fill=%27%23f1e7d8%27 text-anchor=%27middle%27%3EAB%3C/text%3E%3C/svg%3E">
+  <title>Projects | Andiswa Business Consultation</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+  <link rel="stylesheet" href="Project_Styles/projects.css">
+
+  <script>
+    (function () {
+      var saved = localStorage.getItem('site-theme');
+      // Default to the site's light cream theme (matching every other page)
+      // unless the visitor has explicitly chosen dark mode before.
+      var theme = saved || 'light';
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
+</head>
+<body>
+
+  <!-- Navigation and Header -->
+<header class="header">
+
+    <nav class="navbar">
+
+        <!-- Logo -->
+
+        <a href="index.html" class="logo">
+
+            <img src="Projects_Images/AB_Logo/AB_Logo.jpeg" alt="A|B Logo">
+
+        </a>
+
+        <!-- Navigation -->
+
+        <ul class="nav-links" id="navLinks">
+
+            <li><a href="index.html">Home</a></li>
+
+            <li><a href="about.html">About Us</a></li>
+
+            <li><a href="services.html">Services</a></li>
+
+            <li><a href="projects.html" class="active">Projects</a></li>
+
+            <li><a href="team.html">Team</a></li>
+
+            <li><a href="testimonials.html">Testimonials</a></li>
+
+            <li><a href="contact.html">Contact</a></li>
+
+        </ul>
+
+        <!-- Right Side -->
+
+        <div class="nav-actions">
+
+            <button id="themeToggle" class="icon-btn" aria-label="Toggle dark and light mode">
+
+                <i class="fa-solid fa-moon"></i>
+
+            </button>
+            <!-- admin -->
+            <a href="index.html" class="icon-btn" aria-label="Admin Login (on Home page)" title="Admin login is on the Home page">
+                <i class="fa-solid fa-shield-halved"></i>
+            </a>
+            <a href="contact.html" class="quote-btn">
+
+                Get a Quote
+
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+
+            <!-- mobile menu -->
+            <button id="menuToggle" class="icon-btn menu-toggle" aria-label="Open menu" aria-expanded="false">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+</header>
+
+  <!--==========================
+          Hero
+  ===========================-->
+  <section class="projects-hero">
+    <div class="hero-content">
+      <span>OUR CREATIVE PORTFOLIO</span>
+      <h1>Selected Projects</h1>
+      <p>
+        Explore our collection of branding, flyers, posters and social
+        media designs created for businesses across different industries.
+      </p>
+    </div>
+  </section>
+
+  <!--==========================
+          Search
+  ===========================-->
+  <section class="search-section">
+    <div class="search-box">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" id="searchInput" placeholder="Search projects...">
+    </div>
+
+    <div class="project-counter">
+      Showing <span id="projectCount">10</span> Projects
+    </div>
+  </section>
+
+  <!--==========================
+          Filters
+  ===========================-->
+  <section class="filter-section">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="branding">Branding</button>
+    <button class="filter-btn" data-filter="flyers">Flyers</button>
+    <button class="filter-btn" data-filter="posters">Posters</button>
+    <button class="filter-btn" data-filter="social">Social Media</button>
+  </section>
+
+  <!--==========================
+          Featured Project
+  ===========================-->
+  <section class="featured-project">
+    <div class="featured-image">
+      <img src="Projects_Images/branding/nacwo-business-card.jpeg" alt="Featured Project">
+    </div>
+
+    <div class="featured-content">
+      <span class="featured-tag">Featured Project</span>
+      <h2>NACWO Business Card</h2>
+      <p>
+        A modern business card created for NACWO featuring a clean
+        layout, professional typography and a memorable brand identity.
+      </p>
+
+      <ul>
+        <li><i class="fa-solid fa-circle-check"></i> Adobe Illustrator</li>
+        <li><i class="fa-solid fa-circle-check"></i> Brand Identity</li>
+        <li><i class="fa-solid fa-circle-check"></i> Print Ready</li>
+      </ul>
+
+      <a href="#" class="primary-btn">View Project</a>
+    </div>
+  </section>
+
+  <!--==========================
+          Projects Gallery
+  ===========================-->
+  <section class="projects">
+    <div class="gallery">
+
+      <!-- Project 1 -->
+      <div class="project-card branding">
+        <img src="Projects_Images/branding/nacwo-business-card.jpeg" alt="NACWO Business Card">
+        <div class="overlay">
+          <span>Branding</span>
+          <h3>NACWO Business Card</h3>
+          <p>Professional corporate identity.</p>
+          <a href="#" class="view-btn">View Project</a>
+        </div>
+      </div>
+
+      <!-- Project 2 -->
+      <div class="project-card flyers">
+        <img src="Projects_Images/flyers/sale-flyer.jpeg" alt="Summer Sale Flyer">
+        <div class="overlay">
+          <span>Flyer</span>
+          <h3>Summer Sale Flyer</h3>
+          <p>Ubuhle bakho pop-up sale flyer.</p>
+          <a href="#" class="view-btn">View Project</a>
+        </div>
+      </div>
+
+      <!-- Project 3 -->
+      <div class="project-card posters">
+        <img src="Projects_Images/posters/dj-poster.jpeg" alt="DJ Event Poster">
+        <div class="overlay">
+          <span>Poster</span>
+          <h3>DJ Event Poster</h3>
+          <p>Music event promotion.</p>
+          <a href="#" class="view-btn">View Project</a>
+        </div>
+      </div>
+
+      <!-- Project 4 -->
+      <div class="project-card social">
+        <img src="Projects_Images/social-media/Hearbalife-distributor.jpeg" alt="Hearbalife Distributor Card">
+        <div class="overlay">
+          <span>Social Media</span>
+          <h3>Hearbalife Card</h3>
+          <p>Hearbalife Distributor Card.</p>
+          <a href="#" class="view-btn">View Project</a>
+        </div>
+      </div>
+
+      <!-- Project 5 -->
+      <div class="project-card branding">
+        <img src="Projects_Images/branding/lerato-molea-author-card.jpeg" alt="Author Card">
+        <div class="overlay">
+          <span>Branding</span>
+          <h3>Author Card</h3>
+          <p>Lerato Molea Author Card.</p>
+          <a href="#" class="view-btn">View Project</a>
+        </div>
+      </div>
+
+      <!-- Project 6 -->
+      <div class="project-card flyers">
+        <img src="Projects_Images/flyers/birthday-flyer.jpeg" alt="Birthday Flyer">
+        <div class="overlay">
+          <span>Flyer</span>
+          <h3>Birthday Flyer</h3>
+          <p>Sphokuhle 21st Birthday Invite.</p>
+          <a href="#" class="view-btn">View Project</a>
+        </div>
+      </div>
+
+      <!-- Project 7 -->
+      <div class="project-card posters">
+        <img src="Projects_Images/posters/vukauzenzele-services-poster.jpeg" alt="Vukauzenzele car wash poster">
+        <div class="overlay">
+          <span>Poster</span>
+          <h3>Vukauzenzele Car Wash</h3>
+          <p>Vukauzenzele Services Poster</p>
+          <a href="#" class="view-btn">View Project</a>
+        </div>
+      </div>
+
+      <!-- Project 8 -->
+      <div class="project-card social">
+        <img src="Projects_Images/flyers/midtown-dream-cctv-flyer.jpeg" alt="CCTV Flyer">
+        <div class="overlay">
+          <span>Flyer</span>
+          <h3>CCTV Flyer</h3>
+          <p>Midtown Dream CCTV Flyer.</p>
+          <a href="#" class="view-btn">View Project</a>
+        </div>
+      </div>
+
+      <!-- Project 9 -->
+      <div class="project-card branding">
+        <img src="Projects_Images/branding/nga-mali-brand-identity-card.jpeg" alt="Nga-Mali Brand Identity Card">
+        <div class="overlay">
+          <span>Branding</span>
+          <h3>Nga-Mali Card</h3>
+          <p>Nga mali Brand Identity Card.</p>
+          <a href="#" class="view-btn">View Project</a>
+        </div>
+      </div>
+
+      <!-- Project 10 -->
+      <div class="project-card flyers">
+        <img src="Projects_Images/branding/vukauzenzele-business-card.jpeg" alt="Vukauzenzele Business Card">
+        <div class="overlay">
+          <span>Branding</span>
+          <h3>Business Card</h3>
+          <p>vukauzenzele Business card.</p>
+          <a href="#" class="view-btn">View Project</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+<!--==========================
+        Load More
+===========================-->
+
+<section class="load-more-section">
+
+    <button id="loadMore" class="load-btn">
+
+        Load More Projects
+
+    </button>
+
+</section>
+
+<!--==========================
+      Project Modal
+===========================-->
+
+<div class="project-modal" id="projectModal">
+
+    <div class="modal-content">
+
+        <span class="close-modal">&times;</span>
+
+        <img id="modalImage" src="" alt="Project Image">
+
+        <div class="modal-info">
+
+            <span id="modalCategory" class="modal-category">
+                Branding
+            </span>
+
+            <h2 id="modalTitle">
+                Project Title
+            </h2>
+
+            <p id="modalDescription">
+                Project description goes here.
+            </p>
+
+            <div class="project-details">
+
+                <p><strong>Client:</strong> Andiswa Business Consultation</p>
+
+                <p><strong>Software:</strong> Adobe Photoshop, Illustrator, Canva</p>
+
+                <p><strong>Category:</strong> Graphic Design</p>
+            </div>
+        </div>
+    </div>
+</div>
+<!--==========================
+            FOOTER
+===========================-->
+
+<footer class="footer">
+
+    <div class="footer-container">
+        <!-- Company -->
+        <div class="footer-box">
+            <a href="index.html" class="footer-logo">
+                A|B
+            </a>
+
+            <p>
+                Crafting bold brands and creative experiences
+                for South African businesses through professional
+                graphic design, branding and digital solutions.
+            </p>
+
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-x-twitter"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="footer-box">
+            <h3>Quick Links</h3>
+
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="projects.html">Projects</a></li>
+                <li><a href="team.html">Team</a></li>
+                <li><a href="testimonials.html">Testimonials</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+
+        <!-- Services -->
+        <div class="footer-box">
+            <h3>Services</h3>
+            <ul>
+                <li><a href="#">Logo Design</a></li>
+                <li><a href="#">Branding & Identity</a></li>
+                <li><a href="#">Graphic Design</a></li>
+                <li><a href="#">Flyer Design</a></li>
+                <li><a href="#">Poster Design</a></li>
+                <li><a href="#">Social Media Design</a></li>
+                <li><a href="#">Website Design</a></li>
+            </ul>
+        </div>
+
+        <!-- Contact -->
+        <div class="footer-box">
+            <h3>Contact</h3>
+            <ul class="contact-info">
+
+                <li>
+                    <i class="fa-solid fa-phone"></i>
+                    +27 67 790 4428
+                </li>
+
+                <li>
+                    <i class="fa-regular fa-envelope"></i>
+                    andiswasbusinessconsultations@outlook.com
+                </li>
+
+                <li>
+                    <i class="fa-solid fa-location-dot"></i>
+                    2 Belmont Terrace,<br>
+                    Port Elizabeth, 6001
+                </li>
+
+                <li>
+                    <i class="fa-regular fa-clock"></i>
+
+                    Monday – Friday<br>
+
+                    08:00 – 18:00
+                </li>
+            </ul>
+        </div>
+    </div>
+    <hr>
+    <div class="footer-bottom">
+        <p>
+            © 2026 Andiswa Business Consultation. All Rights Reserved.
+        </p>
+
+        <p>
+            Crafted with in South Africa
+        </p>
+    </div>
+    <!-- Back To Top -->
+    <a href="#" class="back-top">
+        <i class="fa-solid fa-arrow-up"></i>
+    </a>
+
+</footer>
+<script src="Projects_Js/theme.js"></script>
+<script src="Projects_Js/projects.js"></script>
+</body>
+</html>
