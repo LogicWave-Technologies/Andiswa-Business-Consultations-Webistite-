@@ -6,7 +6,7 @@ function placeholderAvatar(bg, initials){
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120">
         <rect width="100%" height="100%" fill="${bg}"/>
         <text x="50%" y="54%" font-family="Poppins, sans-serif" font-size="42"
-              fill="#f1e7d8" text-anchor="middle" dominant-baseline="middle">${initials}</text>
+              fill="#ffffff" text-anchor="middle" dominant-baseline="middle">${initials}</text>
     </svg>`;
     return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
 }
@@ -17,28 +17,28 @@ const testimonials = [
         rating:5,
         name:"Naledi Khumalo",
         role:"CEO, Bloom Skincare",
-        avatar:placeholderAvatar("#8a6d5c", "NK")
+        avatar:placeholderAvatar("#5B6472", "NK")
     },
     {
         quote:"From our first call to the final handover, the process felt effortless. They understood exactly what our brand needed to say and said it better than we could have imagined.",
         rating:5,
         name:"Thabo Mokoena",
         role:"Founder, Vukauzenzele Services",
-        avatar:placeholderAvatar("#5c6b8a", "TM")
+        avatar:placeholderAvatar("#3E6690", "TM")
     },
     {
         quote:"Professional, fast and genuinely creative. Our flyer designs increased foot traffic to our pop-up within the first week. We keep coming back for every campaign.",
         rating:5,
         name:"Lerato Molea",
         role:"Author & Entrepreneur",
-        avatar:placeholderAvatar("#6b8a5c", "LM")
+        avatar:placeholderAvatar("#8891A0", "LM")
     },
     {
         quote:"A team that actually listens. They took a vague idea and turned it into a business card and identity that gets compliments at every meeting.",
         rating:5,
         name:"Sphokuhle Dlamini",
         role:"Director, NACWO",
-        avatar:placeholderAvatar("#8a5c72", "SD")
+        avatar:placeholderAvatar("#1B2A41", "SD")
     }
 ];
 
