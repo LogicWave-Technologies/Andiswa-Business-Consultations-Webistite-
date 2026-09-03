@@ -3,17 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 rx=%2718%27 fill=%27%23211712%27/%3E%3Ctext x=%2750%27 y=%2766%27 font-family=%27Arial, sans-serif%27 font-size=%2746%27 font-weight=%27700%27 fill=%27%23f1e7d8%27 text-anchor=%27middle%27%3EAB%3C/text%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 rx=%2718%27 fill=%27%231B2A41%27/%3E%3Ctext x=%2750%27 y=%2766%27 font-family=%27Arial, sans-serif%27 font-size=%2746%27 font-weight=%27700%27 fill=%27%23ffffff%27 text-anchor=%27middle%27%3EAB%3C/text%3E%3C/svg%3E">
 <title>Team — Andiswa Business Consultation</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="nav-unified.css">
+
 <style>
-  /* Self-contained page*/
+  /* Nav/footer tokens are shared with the rest of the site */
   :root{
-    --espresso:#211712; --espresso-soft:#2e2119; --cream:#f1e7d8;
-    --ink:#2a1c12; --tan:#b5814f; --tan-bright:#d9a866; --stone:#a58d76;
-    --line:rgba(241,231,216,0.14); --line-dark:rgba(42,28,18,0.12);
+    --espresso:#1B2A41; --espresso-soft:#24384F; --cream:#F7F8FA;
+    --ink:#232830; --tan:#3E6690; --tan-bright:#5B8DB8; --stone:#5B6472;
+    --line:rgba(255, 255, 255,0.14); --line-dark:rgba(35, 40, 48,0.12);
     --ease:cubic-bezier(.22,.61,.36,1);
+    --on-dark:#F7F8FA;
   }
   *{margin:0;padding:0;box-sizing:border-box;}
   html{scroll-behavior:smooth;}
@@ -26,29 +29,46 @@
   .tri{width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-bottom:12px solid var(--tan);display:inline-block;}
   .eyebrow{display:flex;align-items:center;gap:10px;font-size:12px;letter-spacing:0.28em;text-transform:uppercase;color:var(--tan-bright);font-weight:600;}
 
-  /* ---- Nav (same look as index.html / contact.html) ---- */
-  header{position:sticky;top:0;left:0;right:0;z-index:100;padding:20px 0;background:var(--espresso);border-bottom:1px solid var(--line);}
-  .navbar{display:flex;align-items:center;justify-content:space-between;}
-  .logo{display:flex;align-items:center;gap:2px;font-family:'Space Grotesk';font-weight:700;font-size:20px;width:44px;height:44px;background:var(--cream);color:var(--espresso);justify-content:center;border-radius:6px;}
-  .navlinks{display:flex;gap:34px;}
-  .navlinks a{font-size:14px;font-weight:500;color:var(--cream);opacity:0.82;transition:opacity .25s;}
-  .navlinks a.active, .navlinks a:hover{opacity:1;}
-  .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:100px;font-size:14px;font-weight:600;transition:transform .25s var(--ease), background .25s;}
-  .btn-primary{background:var(--cream);color:var(--ink);}
+  /* ---- Nav (unified across all pages) ---- */
+  .header{background:var(--espresso);border-bottom:1px solid rgba(255, 255, 255,0.14);position:sticky;top:0;z-index:999;}
+  .navbar{display:flex;justify-content:space-between;align-items:center;width:90%;max-width:1320px;margin:auto;height:80px;}
+  .logo{display:flex;align-items:center;justify-content:center;width:34px; height:34px;background:#0a0a0a;color:#ffffff;font-family:'Space Grotesk';font-weight:700;font-size:12px;letter-spacing:0.02em;border-radius:10px;text-decoration:none;flex-shrink:0;}
+  .nav-links{display:flex;gap:35px;list-style:none;margin:0;padding:0;}
+  .nav-links a{position:relative;color:var(--on-dark);font-size:15px;font-weight:500;padding:6px 2px;text-decoration:none;transition:opacity .3s ease;}
+  .nav-links a::after{content:"";position:absolute;left:0;bottom:-2px;width:0%;height:2px;background:var(--on-dark);transition:width .35s ease;}
+  .nav-links a:hover{opacity:.85;}
+  .nav-links a:hover::after,.nav-links a.active::after{width:100%;}
+  .nav-actions{display:flex;align-items:center;gap:15px;}
+  .icon-btn,.quote-btn{border:1px solid rgba(255, 255, 255,0.18);background:rgba(255, 255, 255,0.10);color:var(--on-dark);cursor:pointer;text-decoration:none;transition:background .3s ease,color .3s ease,transform .3s ease;}
+  .icon-btn:hover,.quote-btn:hover{background:var(--tan);color:#ffffff;transform:translateY(-3px);}
+  .icon-btn{width:45px;height:45px;display:flex;justify-content:center;align-items:center;border-radius:12px;font-size:16px;}
+  .quote-btn{display:flex;align-items:center;gap:10px;padding:14px 25px;border-radius:12px;font-size:12px;font-weight:500;}
+  .menu-toggle{display:none;}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:100px;font-size:12px;font-weight:600;transition:transform .25s var(--ease), background .25s;}
+  .btn-primary{background:var(--on-dark);color:var(--espresso);}
   .btn-primary:hover{transform:translateY(-2px);background:var(--tan-bright);}
-  @media(max-width:900px){.navlinks{display:none;}}
+  @media (max-width:768px){
+    .navbar{height:70px;}
+    .menu-toggle{display:flex;width:45px;height:45px;align-items:center;justify-content:center;border:1px solid rgba(255, 255, 255,0.18);background:rgba(255, 255, 255,0.10);color:var(--on-dark);border-radius:12px;font-size:18px;cursor:pointer;}
+    .nav-links{position:fixed;top:70px;left:0;width:100%;flex-direction:column;gap:0;background:var(--espresso);border-top:1px solid rgba(255, 255, 255,0.14);max-height:0;overflow:hidden;transition:max-height .4s ease;}
+    .nav-links.active{max-height:400px;}
+    .nav-links a{display:block;padding:18px 8%;border-bottom:1px solid rgba(255, 255, 255,0.14);}
+    .nav-links a::after{display:none;}
+    .quote-btn{padding:12px 16px;font-size:0;gap:0;}
+    .quote-btn i{font-size:16px;}
+  }
 
   /* ---- Page title band ---- */
-  .page-band{background:var(--espresso);color:var(--cream);padding:70px 0 60px;}
+  .page-band{background:var(--espresso);color:var(--on-dark);padding:70px 0 60px;}
   .page-band h1{font-size:clamp(32px,5vw,52px);font-weight:700;margin-top:16px;}
-  .page-band p{margin-top:14px;max-width:480px;color:rgba(241,231,216,0.65);font-size:15px;line-height:1.6;}
+  .page-band p{margin-top:14px;max-width:480px;color:rgba(255, 255, 255,0.65);font-size:15px;line-height:1.6;}
 
   /* ---- Team grid ---- */
   .team-shell{padding:80px 0;}
   .team-public-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;}
   .team-public-card{background:#fff8;background:var(--cream);border:1px solid var(--line-dark);border-radius:8px;padding:28px 20px;text-align:center;transition:transform .25s var(--ease), box-shadow .25s;}
-  .team-public-card:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(42,28,18,0.08);}
-  .team-public-avatar{width:64px;height:64px;border-radius:50%;background:var(--espresso);color:var(--cream);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk';font-weight:700;font-size:19px;margin:0 auto 16px;}
+  .team-public-card:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(35, 40, 48,0.08);}
+  .team-public-avatar{width:64px;height:64px;border-radius:50%;background:var(--espresso);color:var(--on-dark);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk';font-weight:700;font-size:19px;margin:0 auto 16px;}
   .team-public-card h4{font-size:16px;font-weight:600;margin-bottom:4px;}
   .team-public-card .role{font-size:12.5px;color:var(--stone);margin-bottom:10px;}
   .team-public-card a{font-size:11.5px;color:var(--tan);word-break:break-all;}
@@ -57,34 +77,62 @@
   @media(max-width:960px){.team-public-grid{grid-template-columns:repeat(2,1fr);}}
   @media(max-width:640px){.team-public-grid{grid-template-columns:1fr;}}
 
-  footer{background:#160f0b;color:rgba(241,231,216,0.55);padding:60px 0 30px;}
-  .footer-top{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap;padding-bottom:50px;border-bottom:1px solid var(--line);}
-  .footer-brand .logo{margin-bottom:16px;}
-  .footer-brand p{max-width:280px;font-size:14px;line-height:1.6;}
-  .footer-cols{display:flex;gap:70px;flex-wrap:wrap;}
-  .footer-col h5{color:var(--cream);font-size:13px;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:16px;}
-  .footer-col a{display:block;font-size:14px;margin-bottom:11px;color:rgba(241,231,216,0.55);transition:color .2s;}
-  .footer-col a:hover{color:var(--tan-bright);}
-  .footer-bottom{display:flex;justify-content:space-between;padding-top:24px;font-size:12px;flex-wrap:wrap;gap:10px;}
+  /* ================= FOOTER (unified across all pages) ================= */
+  .footer{background:#101B2B;color:var(--on-dark);position:relative;padding:70px 8% 30px;}
+  .footer-container{display:grid;grid-template-columns:repeat(4,1fr);gap:50px;}
+  .footer-logo{color:var(--on-dark);font-size:36px;font-weight:700;letter-spacing:2px;margin-bottom:20px;display:inline-block;}
+  .footer-box p{color:rgba(255, 255, 255,0.6);line-height:1.8;margin-bottom:24px;}
+  .footer-box h3{margin-bottom:20px;font-size:18px;color:var(--on-dark);}
+  .footer-box ul{list-style:none;padding:0;margin:0;}
+  .footer-box ul li{margin:14px 0;}
+  .footer-box ul li a{color:rgba(255, 255, 255,0.6);text-decoration:none;transition:.3s;font-size:12px;}
+  .footer-box ul li a:hover{color:var(--tan-bright);padding-left:6px;}
+  .contact-info li{display:flex;align-items:flex-start;gap:12px;color:rgba(255, 255, 255,0.6);line-height:1.7;font-size:12px;}
+  .contact-info i{color:var(--tan-bright);margin-top:4px;}
+  .social-links{display:flex;gap:12px;margin-top:20px;}
+  .social-links a{width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:rgba(255, 255, 255,0.08);color:var(--on-dark);border-radius:8px;text-decoration:none;font-size:15px;transition:.3s;}
+  .social-links a:hover{background:var(--tan);color:var(--espresso);transform:translateY(-4px);}
+  .footer hr{border:none;height:1px;background:rgba(255,255,255,0.12);margin:50px 0 24px;}
+  .footer-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;font-size:12px;}
+  .footer-bottom p{color:var(--stone);margin:0;}
   .footer-bottom a{color:var(--tan-bright);}
+  .back-top{position:absolute;right:30px;bottom:30px;width:52px;height:52px;display:flex;justify-content:center;align-items:center;background:var(--tan);color:var(--espresso);border-radius:50%;font-size:19px;text-decoration:none;transition:.3s;}
+  .back-top:hover{transform:translateY(-6px);background:var(--tan-bright);}
+  @media (max-width:900px){ .footer-container{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:560px){ .footer-container{grid-template-columns:1fr;} .footer-bottom{flex-direction:column;align-items:flex-start;} .back-top{right:16px;bottom:16px;} }
 </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <!-- Shared data-access layer (Backend/API abstraction) — loaded early
+       so its functions (getTeamMembers, etc.) are ready before this
+       page's own script uses them below. -->
+  <script src="Projects_Js/api.js"></script>
 </head>
 <body>
 
-<header>
-  <div class="wrap navbar">
+<header id="siteHeader" class="header">
+  <nav class="navbar">
     <a href="index.html" class="logo">A|B</a>
-    <ul class="navlinks">
+    <ul class="nav-links" id="navLinks">
       <li><a href="index.html">Home</a></li>
       <li><a href="about.html">About Us</a></li>
       <li><a href="services.html">Services</a></li>
       <li><a href="projects.html">Projects</a></li>
       <li><a href="team.html" class="active">Team</a></li>
       <li><a href="testimonials.html">Testimonials</a></li>
-      <li><a href="contact.html">Contact</a></li>
+      <li><a href="contact.php">Contact</a></li>
     </ul>
-    <a href="contact.html" class="btn btn-primary">Get a Quote ↗</a>
-  </div>
+    <div class="nav-actions">
+      <!-- Admin login lives on the Home page -->
+      <a href="admin.php" class="icon-btn" aria-label="Admin Login" title="Admin Login"><i class="fa-solid fa-shield-halved"></i></a><a href="login.php" class="icon-btn" aria-label="Client Login" title="Client Login"><i class="fa-solid fa-user"></i></a>
+      <a href="contact.php" class="quote-btn">
+        Get a Quote
+        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+      </a>
+      <button id="menuToggle" class="icon-btn menu-toggle" aria-label="Open menu" aria-expanded="false">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+  </nav>
 </header>
 
 <section class="page-band">
@@ -104,49 +152,85 @@
   </div>
 </section>
 
-<footer>
-  <div class="wrap">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <a href="index.html" class="logo">A|B</a>
-        <p>Andiswa Business Consultation — brand identity, web and strategy for South African businesses ready to grow.</p>
-      </div>
-      <div class="footer-cols">
-        <div class="footer-col">
-          <h5>Studio</h5>
-          <a href="about.html">About Us</a>
-          <a href="services.html">Services</a>
-          <a href="projects.html">Projects</a>
-          <a href="team.html">Team</a>
-          <a href="testimonials.html">Testimonials</a>
-        </div>
-        <div class="footer-col">
-          <h5>Connect</h5>
-          <a href="contact.html">Contact</a>
-          <a href="#">Instagram</a>
-          <a href="#">LinkedIn</a>
-        </div>
+<footer class="footer">
+
+  <div class="footer-container">
+    <!-- Company -->
+    <div class="footer-box">
+      <a href="index.html" class="footer-logo">A|B</a>
+
+      <p>
+        Crafting bold brands and creative experiences
+        for South African businesses through professional
+        graphic design, branding and digital solutions.
+      </p>
+
+      <div class="social-links">
+        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" aria-label="X (Twitter)"><i class="fab fa-x-twitter"></i></a>
+        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
       </div>
     </div>
-    <div class="footer-bottom">
-      <span>© 2026 Andiswa Business Consultation. All rights reserved.</span>
-      <span>Johannesburg, South Africa</span>
+
+    <!-- Quick Links -->
+    <div class="footer-box">
+      <h3>Quick Links</h3>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="team.html">Team</a></li>
+        <li><a href="testimonials.html">Testimonials</a></li>
+        <li><a href="contact.php">Contact</a></li>
+      </ul>
+    </div>
+
+    <!-- Contact -->
+    <div class="footer-box">
+      <h3>Contact</h3>
+      <ul class="contact-info">
+        <li><i class="fa-solid fa-phone"></i> +27 67 790 4428</li>
+        <li><i class="fa-regular fa-envelope"></i> andiswasbusinessconsultations@outlook.com</li>
+        <li><i class="fa-solid fa-location-dot"></i> 2 Belmont Terrace,<br>Port Elizabeth, 6001</li>
+        <li><i class="fa-regular fa-clock"></i> Monday – Friday<br>08:00 – 18:00</li>
+      </ul>
     </div>
   </div>
+
+  <hr>
+
+  <div class="footer-bottom">
+    <p>© 2026 Andiswa Business Consultation. All Rights Reserved.</p>
+    <p>Crafted with care in South Africa</p>
+  </div>
+
+  <a href="#" class="back-top"><i class="fa-solid fa-arrow-up"></i></a>
+
 </footer>
 
 <script>
 /* =====================================================================
-   Standalone page, but still synced: this reads the same "abc-team"
-   storage key that index.html's admin panel writes to whenever a team
-   member is added, edited or removed — so this page always reflects
-   the latest roster without needing its own admin UI.
-===================================================================== */
-const STORAGE_KEY = "abc-team";
+   TEAM PAGE — displays the current roster
+   -----------------------------------------------------------------------
+   Fetches the team list through Projects_Js/api.js instead of reading
+   storage directly, so this page follows the same 3-tier flow as the
+   rest of the site:
 
-// Sensible fallback roster shown if nothing has been saved to storage
-// yet (e.g. the very first time the site is opened, before any admin
-// edits have happened).
+     HTML + CSS + JavaScript  →  Backend / API  →  Azure SQL Database
+     (this page, this file)      (api.js's            (TeamMembers
+                                   getTeamMembers())     table)
+
+   Whatever the admin panel on the Home page last saved is what shows
+   up here — see api.js for the full explanation of how that call would
+   reach Azure SQL Database through a real backend, and why there's a
+   local-storage fallback while no backend is deployed.
+===================================================================== */
+
+// Sensible fallback roster shown if nothing has been saved yet (e.g.
+// the very first time the site is opened, before any admin edits).
 const defaultTeam = [
   { name:"Andiswa Phewa",      role:"Founder & Creative Director", email:"andiswa@andiswaconsultation.co.za" },
 ];
@@ -167,16 +251,18 @@ function renderTeam(list){
 
 async function loadTeam(){
   try {
-    const result = await window.storage.get(STORAGE_KEY, false);
-    renderTeam(result ? JSON.parse(result.value) : defaultTeam);
+    const team = await getTeamMembers(); // from api.js
+    renderTeam(team && team.length ? team : defaultTeam);
   } catch (err) {
-    // No saved roster yet, or storage isn't available on this page view
+    // No saved roster yet, or the data layer is unreachable on this view
     renderTeam(defaultTeam);
   }
 }
 
 loadTeam();
 </script>
+<script src="Projects_Js/chatbot.js"></script>
+<script src="Projects_Js/nav.js"></script>
 
 </body>
 </html>
