@@ -14,6 +14,12 @@ XAMPP lets you develop and test the full website locally without deploying it to
 |---|---|
 | ![Andiswa Business Consultation home page](./assets/screenshots/home.png) | ![Andiswa Business Consultation contact page](./assets/screenshots/contact.png) |
 
+## GitHub Actions screenshot
+
+The workflow automatically checks PHP 8.1 and PHP 8.4. This screenshot shows a successful run with both matrix jobs passing:
+
+![Successful GitHub Actions PHP checks for PHP 8.1 and PHP 8.4](./assets/screenshots/github-actions-php-checks.png)
+
 ## Features
 
 - PHP session-based admin and client login, with password hashing and CSRF protection.
