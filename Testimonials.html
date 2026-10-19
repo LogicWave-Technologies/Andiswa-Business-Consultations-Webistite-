@@ -129,11 +129,11 @@
             </p>
 
             <div class="social-links">
-                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-x-twitter"></i></a>
-                <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                <a href="#"><i class="fab fa-youtube"></i></a>
+                <a href="#" data-setting-href="facebook_url"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" data-setting-href="instagram_url"><i class="fab fa-instagram"></i></a>
+                <a href="#" data-setting-href="twitter_url"><i class="fab fa-x-twitter"></i></a>
+                <a href="#" data-setting-href="linkedin_url"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" data-setting-href="youtube_url"><i class="fab fa-youtube"></i></a>
             </div>
         </div>
 
@@ -159,26 +159,26 @@
 
                 <li>
                     <i class="fa-solid fa-phone"></i>
-                    +27 67 790 4428
+                    <span data-setting="phone">+27 67 790 4428</span>
                 </li>
 
                 <li>
                     <i class="fa-regular fa-envelope"></i>
-                    andiswasbusinessconsultations@outlook.com
+                    <span data-setting="email">andiswasbusinessconsultations@outlook.com</span>
                 </li>
 
                 <li>
                     <i class="fa-solid fa-location-dot"></i>
-                    2 Belmont Terrace,<br>
-                    Port Elizabeth, 6001
+                    <span data-setting="address" data-setting-format="lines">2 Belmont Terrace,<br>
+                    Port Elizabeth, 6001</span>
                 </li>
 
                 <li>
                     <i class="fa-regular fa-clock"></i>
 
-                    Monday – Friday<br>
+                    <span data-setting="hours" data-setting-format="lines">Monday – Friday<br>
 
-                    08:00 – 18:00
+                    08:00 – 18:00</span>
                 </li>
             </ul>
         </div>
@@ -201,5 +201,6 @@
 </footer>
 <script src="Projects_Js/Testimonials.js"></script>
 <script src="Projects_Js/nav.js"></script>
+<script src="Projects_Js/site-settings.js"></script>
 </body>
 </html>

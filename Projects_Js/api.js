@@ -40,6 +40,18 @@
         ID), and this file resolves the Promise so the calling page can
         show a success message.
 
+   UPDATE - SHARED DATABASE (website + mobile app)
+   ------------------------------------------------
+   The website and the mobile app now share ONE MySQL database
+   (andiswa_business, on XAMPP or on Azure Database for MySQL):
+     * getStudioSettings() -> site_settings.php -> "settings" table
+       (the same rows the app's API sends from GET /api/studio)
+     * saveChatMessage()   -> chat_log.php      -> "chat_messages" table
+     * the Contact form posts straight to submit_quote.php -> "quotes"
+       (the app's API writes to the same table with POST /api/quotes)
+   These PHP files live next to the pages, so they are called with a
+   relative address (PHP_BASE_URL below), not the old placeholder API.
+
    WHY THERE'S A "DEMO FALLBACK" IN EVERY FUNCTION
    --------------------------------------------------
    This project doesn't currently have that backend deployed — there is
@@ -49,7 +61,7 @@
          work against a live API, and
      (b) if that call fails (because, right now, there's nothing running
          at API_BASE_URL) it falls back to the browser's own storage
-         (`window.storage`, provided by the Claude Artifacts runtime)
+         (`localStorage`)
          so the site still works end-to-end for demos and grading.
    Every fallback is clearly labelled "DEMO FALLBACK" below. Swapping in
    a real backend later only means changing API_BASE_URL and deleting
@@ -76,6 +88,10 @@ const API_BASE_URL = "https://abc-consulting-api.azurewebsites.net/api";
 // falling back to local storage. Keeps the site feeling responsive even
 // if a real backend is slow to respond or unreachable.
 const API_TIMEOUT_MS = 4000;
+
+// The PHP files that talk to the shared database sit in the same folder as
+// the pages, so an empty base address means "this website".
+const PHP_BASE_URL = "";
 
 // Local storage keys — kept identical to the keys the admin panel on
 // index.html already uses, so contact form submissions and team-page
@@ -111,12 +127,12 @@ const API_STORAGE_KEYS = {
  * @throws  if the network request fails or times out — callers are
  *          expected to catch this and fall back to local storage.
  */
-async function apiRequest(path, options = {}) {
+async function apiRequest(path, options = {}, baseUrl = API_BASE_URL) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), API_TIMEOUT_MS);
 
   try {
-    const response = await fetch(API_BASE_URL + path, {
+    const response = await fetch(baseUrl + path, {
       headers: { "Content-Type": "application/json" },
       signal: controller.signal,
       ...options
@@ -142,8 +158,8 @@ async function apiRequest(path, options = {}) {
  */
 async function readLocal(storageKey) {
   try {
-    const result = await window.storage.get(storageKey, false);
-    return result ? JSON.parse(result.value) : null;
+    const value = window.localStorage.getItem(storageKey);
+    return value ? JSON.parse(value) : null;
   } catch (err) {
     return null; // nothing saved yet — first visit
   }
@@ -155,7 +171,7 @@ async function readLocal(storageKey) {
  */
 async function writeLocal(storageKey, value) {
   try {
-    await window.storage.set(storageKey, JSON.stringify(value), false);
+    window.localStorage.setItem(storageKey, JSON.stringify(value));
   } catch (err) {
     console.warn("Local demo storage unavailable — data will not persist:", err);
   }
@@ -237,7 +253,8 @@ async function getTeamMembers() {
  */
 async function getStudioSettings() {
   try {
-    return await apiRequest("/settings", { method: "GET" });
+    // Real path: the shared "settings" table, through site_settings.php
+    return await apiRequest("site_settings.php", { method: "GET" }, PHP_BASE_URL);
   } catch (err) {
     console.warn("No live backend — reading settings from local demo storage:", err);
     return await readLocal(API_STORAGE_KEYS.settings);
@@ -266,10 +283,11 @@ async function saveChatMessage(entry) {
   try {
     // Real path: log the message against the current chat session in
     // Azure SQL Database, so a staff member could review it later.
-    return await apiRequest("/chat-leads", {
+    // Real path: the shared "chat_messages" table, through chat_log.php
+    return await apiRequest("chat_log.php", {
       method: "POST",
-      body: JSON.stringify(record)
-    });
+      body: JSON.stringify({ message: entry.message, sender: entry.sender, sessionId: entry.sessionId })
+    }, PHP_BASE_URL);
   } catch (err) {
     // DEMO FALLBACK: keep a running transcript in local storage instead.
     const list = (await readLocal(API_STORAGE_KEYS.chatLeads)) || [];

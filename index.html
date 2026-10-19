@@ -516,13 +516,13 @@
   <div class="hero-scrim"></div>
   <div class="hero-grain"></div>
   <div class="wrap hero-content">
-    <div class="eyebrow"><span class="tri"></span>We Design. You Grow.</div>
+    <div class="eyebrow"><span class="tri"></span><span data-setting="tagline">We Design. You Grow.</span></div>
     <h1>
       <span class="l1">Bringing Your</span>
       <span class="l2">Creative</span>
       <span class="l3">Vision to Life</span>
     </h1>
-    <p>Andiswa Business Consultation crafts bold visual identities and digital experiences that make South African businesses impossible to ignore.</p>
+    <p data-setting="hero_text">Andiswa Business Consultation crafts bold visual identities and digital experiences that make South African businesses impossible to ignore.</p>
     <div class="hero-ctas">
       <a href="projects.html" class="btn btn-primary">View Portfolio →</a>
       <a href="contact.php" class="btn btn-outline">Get a Free Quote</a>
@@ -550,11 +550,11 @@
       </p>
 
       <div class="social-links">
-        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-        <a href="#" aria-label="X (Twitter)"><i class="fab fa-x-twitter"></i></a>
-        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+        <a href="#" data-setting-href="facebook_url" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" data-setting-href="instagram_url" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" data-setting-href="twitter_url" aria-label="X (Twitter)"><i class="fab fa-x-twitter"></i></a>
+        <a href="#" data-setting-href="linkedin_url" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#" data-setting-href="youtube_url" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
       </div>
     </div>
 
@@ -576,10 +576,10 @@
     <div class="footer-box">
       <h3>Contact</h3>
       <ul class="contact-info">
-        <li><i class="fa-solid fa-phone"></i> +27 67 790 4428</li>
-        <li><i class="fa-regular fa-envelope"></i> andiswasbusinessconsultations@outlook.com</li>
-        <li><i class="fa-solid fa-location-dot"></i> 2 Belmont Terrace,<br>Port Elizabeth, 6001</li>
-        <li><i class="fa-regular fa-clock"></i> Monday – Friday<br>08:00 – 18:00</li>
+        <li><i class="fa-solid fa-phone"></i> <span data-setting="phone">+27 67 790 4428</span></li>
+        <li><i class="fa-regular fa-envelope"></i> <span data-setting="email">andiswasbusinessconsultations@outlook.com</span></li>
+        <li><i class="fa-solid fa-location-dot"></i> <span data-setting="address" data-setting-format="lines">2 Belmont Terrace,<br>Port Elizabeth, 6001</span></li>
+        <li><i class="fa-regular fa-clock"></i> <span data-setting="hours" data-setting-format="lines">Monday – Friday<br>08:00 – 18:00</span></li>
       </ul>
     </div>
   </div>
@@ -603,5 +603,6 @@
 const revealEls=document.querySelectorAll(".reveal");
 if(window.IntersectionObserver){const io=new IntersectionObserver((entries)=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{threshold:.15});revealEls.forEach(el=>io.observe(el));}else{revealEls.forEach(el=>el.classList.add("in"));}
 </script>
+<script src="Projects_Js/site-settings.js"></script>
 </body>
 </html>
