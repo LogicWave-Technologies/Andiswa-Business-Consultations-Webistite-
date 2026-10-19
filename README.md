@@ -34,6 +34,12 @@ XAMPP lets you develop and test the full website locally without deploying it to
 
 By default, the site connects to local MySQL as `root` with no password. For custom local settings or Azure, see the configuration section below.
 
+## Automated checks on GitHub
+
+GitHub Actions runs the PHP checks in `.github/workflows/php.yml` on every push and pull request, and can also be started manually from the repository's **Actions** tab. It checks PHP 8.1 and 8.4, validates the Composer files, installs the locked dependencies, and checks the syntax of project PHP files.
+
+These are automated build and syntax checks, not a full end-to-end test suite: they do not connect to MySQL, send email, or exercise browser flows. SMTP secrets are not needed by the workflow. Add application-level tests separately as the project gains test coverage.
+
 ## PHPMailer email guide
 
 ### What PHPMailer does in this project
