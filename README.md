@@ -87,6 +87,13 @@ Composer creates the ignored `vendor/` directory when you run `composer install`
 
 By default, the site connects to local MySQL as `root` with no password. For custom local settings or Azure, see the configuration section below.
 
+### Admin login
+
+- **Username:** `admin`
+- **Password:** Set the admin password in the setup form when the admin account is first created. There is no fixed default password in the application.
+
+The setup form requires at least 10 characters. If an `admin` account already exists, running setup again does not change its password. Do not publish admin passwords in this README or commit them to Git. If you have used a shared or exposed password, change it to a unique password before deploying the site publicly.
+
 ## Automated checks on GitHub
 
 GitHub Actions runs the PHP checks in `.github/workflows/php.yml` on every push and pull request, and can also be started manually from the repository's **Actions** tab. It checks PHP 8.1 and 8.4, validates the Composer files, installs the locked dependencies, and checks the syntax of project PHP files.
