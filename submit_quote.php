@@ -26,5 +26,9 @@ $service = mb_substr($service, 0, 150);
 $st = db()->prepare("INSERT INTO quotes(name, email, service, message, source) VALUES(?, ?, ?, ?, 'website')");
 $st->execute([$name, $email, $service, $message]);
 
-flash('success', 'Your quote request was sent successfully. Thank you! Our team will review it and contact you with the next steps.');
+if (send_contact_email($name, $email, $service, $message)) {
+    flash('success', 'Your quote request was sent successfully. Thank you! Our team will review it and contact you with the next steps.');
+} else {
+    flash('error', 'Your quote request was saved, but we could not email the team. Please contact us directly at ' . setting('email') . '.');
+}
 redirect('contact.php');

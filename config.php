@@ -93,62 +93,135 @@ function require_login(?string $role = null): void {
 }
 function current_user(): ?array { return $_SESSION['user'] ?? null; }
 
+function smtp_settings(): ?array {
+    $localConfigPath = __DIR__ . '/config.smtp.local.php';
+    $localConfig = [];
+    if (is_file($localConfigPath)) {
+        $loadedConfig = require $localConfigPath;
+        if (!is_array($loadedConfig)) {
+            error_log('SMTP email could not be sent: config.smtp.local.php must return an array.');
+            return null;
+        }
+        $localConfig = $loadedConfig;
+    }
+
+    $value = static function (string $key, string $environmentVariable, $default = '') use ($localConfig) {
+        $environmentValue = getenv($environmentVariable);
+        if ($environmentValue !== false && $environmentValue !== '') {
+            return $environmentValue;
+        }
+        return $localConfig[$key] ?? $default;
+    };
+
+    $smtpHost = trim((string) $value('host', 'SMTP_HOST'));
+    if ($smtpHost === '') {
+        error_log('SMTP email could not be sent: SMTP_HOST is not configured.');
+        return null;
+    }
+
+    $smtpUsername = trim((string) $value('username', 'SMTP_USERNAME'));
+    $smtpPassword = (string) $value('password', 'SMTP_PASSWORD');
+    if ($smtpUsername === '' || $smtpPassword === '') {
+        error_log('SMTP email could not be sent: set the Gmail address and app password in config.smtp.local.php or SMTP_USERNAME and SMTP_PASSWORD.');
+        return null;
+    }
+
+    $encryption = strtolower((string) $value('encryption', 'SMTP_ENCRYPTION', 'tls'));
+    if (!in_array($encryption, ['tls', 'ssl'], true)) {
+        error_log('SMTP email could not be sent: SMTP_ENCRYPTION must be tls or ssl.');
+        return null;
+    }
+
+    $smtpPort = $value('port', 'SMTP_PORT', '587');
+    $port = filter_var($smtpPort === false || $smtpPort === '' ? '587' : $smtpPort, FILTER_VALIDATE_INT, [
+        'options' => ['min_range' => 1, 'max_range' => 65535],
+    ]);
+    if ($port === false) {
+        error_log('SMTP email could not be sent: SMTP_PORT must be between 1 and 65535.');
+        return null;
+    }
+
+    $fromEmail = (string) $value('from_email', 'SMTP_FROM_EMAIL', $smtpUsername);
+    if (!filter_var($fromEmail, FILTER_VALIDATE_EMAIL)) {
+        error_log('SMTP email could not be sent: set SMTP_FROM_EMAIL to a valid sender address or use a valid SMTP_USERNAME.');
+        return null;
+    }
+
+    return [
+        'host' => $smtpHost,
+        'port' => $port,
+        'username' => $smtpUsername,
+        'password' => $smtpPassword,
+        'encryption' => $encryption,
+        'from_email' => $fromEmail,
+        'from_name' => (string) $value('from_name', 'SMTP_FROM_NAME', 'Andiswa Business Consultation'),
+    ];
+}
+
+function send_smtp_email(string $email, string $name, string $subject, string $body, ?string $replyTo = null, ?string $replyToName = null): bool {
+    $settings = smtp_settings();
+    if ($settings === null) {
+        return false;
+    }
+
+    $autoload = __DIR__ . '/vendor/autoload.php';
+    if (!is_file($autoload)) {
+        error_log('SMTP email could not be sent: Composer dependencies are missing. Run composer install.');
+        return false;
+    }
+
+    require_once $autoload;
+
+    try {
+        $mailer = new PHPMailer\PHPMailer\PHPMailer(true);
+        $mailer->isSMTP();
+        $mailer->Host = $settings['host'];
+        $mailer->Port = $settings['port'];
+        $mailer->SMTPAuth = true;
+        $mailer->Username = $settings['username'];
+        $mailer->Password = $settings['password'];
+        $mailer->SMTPSecure = $settings['encryption'] === 'ssl'
+            ? PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_SMTPS
+            : PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
+        $mailer->Timeout = 15;
+        $mailer->Timelimit = 20;
+        $mailer->CharSet = PHPMailer\PHPMailer\PHPMailer::CHARSET_UTF8;
+        $mailer->setFrom($settings['from_email'], $settings['from_name']);
+        $mailer->addAddress($email, $name);
+        if ($replyTo !== null) {
+            $mailer->addReplyTo($replyTo, $replyToName ?? '');
+        }
+        $mailer->Subject = $subject;
+        $mailer->Body = $body;
+        $mailer->send();
+        return true;
+    } catch (PHPMailer\PHPMailer\Exception $exception) {
+        error_log('SMTP email could not be sent: ' . $exception->getMessage());
+        return false;
+    }
+}
+
+function send_contact_email(string $name, string $email, string $service, string $message): bool {
+    $body = "A new contact request was submitted on the website.\n\n"
+        . "Name: {$name}\n"
+        . "Email: {$email}\n"
+        . "Service: {$service}\n\n"
+        . "Project details:\n{$message}\n";
+
+    return send_smtp_email(
+        setting('email'),
+        setting('owner_name'),
+        'New website enquiry: ' . $service,
+        $body,
+        $email,
+        $name
+    );
+}
+
 function send_credentials_email(string $email, string $name, string $username, string $password): bool {
     $subject = 'Your Andiswa Business Consultation login details';
     $body = "Hello {$name},\n\nYour quote has been accepted. Your client account has been created.\n\nLogin: " . BASE_URL . "/login.php\nUsername: {$username}\nTemporary password: {$password}\n\nPlease change your password after logging in.\n\nRegards,\nAndiswa Business Consultation";
-    $smtpHost = getenv('SMTP_HOST') ?: '';
-
-    if ($smtpHost !== '') {
-        $autoload = __DIR__ . '/vendor/autoload.php';
-        if (!is_file($autoload)) {
-            error_log('SMTP email could not be sent: Composer dependencies are missing. Run composer install.');
-            return false;
-        }
-
-        require_once $autoload;
-
-        $smtpUsername = getenv('SMTP_USERNAME') ?: '';
-        $smtpPassword = getenv('SMTP_PASSWORD') ?: '';
-        if (($smtpUsername === '') !== ($smtpPassword === '')) {
-            error_log('SMTP email could not be sent: SMTP_USERNAME and SMTP_PASSWORD must both be set or both be empty.');
-            return false;
-        }
-
-        $encryption = strtolower(getenv('SMTP_ENCRYPTION') ?: 'tls');
-        if (!in_array($encryption, ['tls', 'ssl'], true)) {
-            error_log('SMTP email could not be sent: SMTP_ENCRYPTION must be tls or ssl.');
-            return false;
-        }
-
-        try {
-            $mailer = new PHPMailer\PHPMailer\PHPMailer(true);
-            $mailer->isSMTP();
-            $mailer->Host = $smtpHost;
-            $mailer->Port = (int) (getenv('SMTP_PORT') ?: 587);
-            $mailer->SMTPAuth = $smtpUsername !== '';
-            $mailer->Username = $smtpUsername;
-            $mailer->Password = $smtpPassword;
-            $mailer->SMTPSecure = $encryption === 'ssl'
-                ? PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_SMTPS
-                : PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
-            $mailer->CharSet = PHPMailer\PHPMailer\PHPMailer::CHARSET_UTF8;
-            $mailer->setFrom(
-                getenv('SMTP_FROM_EMAIL') ?: 'no-reply@andiswa.local',
-                getenv('SMTP_FROM_NAME') ?: 'Andiswa Business Consultation'
-            );
-            $mailer->addAddress($email, $name);
-            $mailer->Subject = $subject;
-            $mailer->Body = $body;
-            $mailer->send();
-            return true;
-        } catch (PHPMailer\PHPMailer\Exception $exception) {
-            error_log('SMTP email could not be sent: ' . $exception->getMessage());
-            return false;
-        }
-    }
-
-    $headers = "From: no-reply@andiswa.local\r\nContent-Type: text/plain; charset=UTF-8\r\n";
-    return @mail($email, $subject, $body, $headers);
+    return send_smtp_email($email, $name, $subject, $body);
 }
 
 // ---------------------------------------------------------------------

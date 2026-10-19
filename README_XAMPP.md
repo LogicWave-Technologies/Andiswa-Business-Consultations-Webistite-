@@ -9,7 +9,7 @@ The website and mobile app API share the `andiswa_business` MySQL database. Admi
 - Client accounts and temporary passwords generated when quotes are accepted.
 - Shared business details and social links for the website and mobile app.
 - Chatbot message logging and an upgrade-safe database setup.
-- SMTP credential email through PHPMailer, with PHP `mail()` as the fallback when SMTP is not configured.
+- Contact enquiries and client login credentials are sent through PHPMailer over SMTP.
 
 ## Run locally with XAMPP
 
@@ -24,15 +24,11 @@ By default, the site connects to local MySQL as `root` with no password. For cus
 
 ## Configure email
 
-Set these environment variables in the Apache/PHP environment to send account credentials through SMTP:
+For Gmail, use the ignored local file `config.smtp.local.php` (already created locally; it is not committed). Turn on 2-Step Verification for the sending Google account and create a Google App Password. Put the Gmail address in `username` and `from_email`, and the 16-character App Password in `password`. Do not use your normal Google password. Port `465` with `ssl` is configured because port `587` is filtered on some networks. Contact enquiries go to the business email configured in **Admin → Website & App**, with the visitor's address set as Reply-To.
 
-- `SMTP_HOST`: SMTP server hostname.
-- `SMTP_PORT`: SMTP port; defaults to `587`.
-- `SMTP_USERNAME` and `SMTP_PASSWORD`: both set for authenticated SMTP, or both left empty.
-- `SMTP_ENCRYPTION`: `tls` (default) or `ssl`.
-- `SMTP_FROM_EMAIL` and `SMTP_FROM_NAME`: sender address and display name (optional).
+Alternatively, configure `SMTP_HOST`, `SMTP_PORT`, `SMTP_USERNAME`, `SMTP_PASSWORD`, `SMTP_ENCRYPTION`, `SMTP_FROM_EMAIL`, and `SMTP_FROM_NAME` in the Apache/PHP environment. Environment values override entries in the local file.
 
-Restart Apache after changing its environment. If `SMTP_HOST` is not set, the site uses PHP `mail()`. If email delivery fails, the admin dashboard displays generated credentials once so they can be provided to the client.
+SMTP must be configured for emails to be delivered; there is no `mail()` fallback. If sending client credentials fails after accepting a quote, the admin dashboard displays them once so they can be provided to the client. Check the PHP error log for the SMTP failure reason.
 
 ## Run with Azure
 
@@ -41,7 +37,7 @@ Restart Apache after changing its environment. If `SMTP_HOST` is not set, the si
 3. Place the Azure CA certificate `DigiCertGlobalRootG2.crt.pem` in the project folder, as described in the guide.
 4. Upgrade/import the database before running the updated mobile app API.
 
-`config.local.php` and `*.pem` files are excluded from Git. The site also supports database settings supplied through environment variables.
+`config.local.php`, `config.smtp.local.php`, and `*.pem` files are excluded from Git. The site also supports database and SMTP settings supplied through environment variables.
 
 ## Quote and client workflow
 

@@ -48,7 +48,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
   if($action==='quote_status'){
    $id=(int)$_POST['quote_id']; $status=$_POST['status']??''; if(!in_array($status,$quoteStatuses,true)) throw new Exception('Invalid status.');
    $st=$pdo->prepare('SELECT * FROM quotes WHERE id=?');$st->execute([$id]);$quote=$st->fetch(); if(!$quote) throw new Exception('Quote not found.');
-   if($status==='Accepted' && empty($quote['client_id'])){
+   if($status==='Accepted'){
     $pdo->beginTransaction();
     $st=$pdo->prepare('SELECT * FROM users WHERE email=? LIMIT 1');$st->execute([$quote['email']]);$client=$st->fetch();
     $plain='AB!'.strtoupper(bin2hex(random_bytes(4))).'#'.random_int(10,99);
@@ -59,7 +59,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
     $pdo->commit();
     $sent=send_credentials_email($quote['email'],$quote['name'],$username,$plain);
     $_SESSION['credentials']=['name'=>$quote['name'],'email'=>$quote['email'],'username'=>$username,'password'=>$plain,'email_sent'=>$sent];
-    flash('success',$sent?'Quote accepted and credentials emailed to the client.':'Quote accepted and credentials generated. Email was not sent; use the credentials shown below to contact the client.');
+    flash('success',$sent?'Quote accepted and credentials emailed to the client.':'Quote accepted and credentials generated, but email was not sent. Configure SMTP and use the credentials shown below to contact the client.');
    } else {$s=$pdo->prepare('UPDATE quotes SET status=?,admin_note=? WHERE id=?');$s->execute([$status,trim($_POST['admin_note']??''),$id]);flash('success','Quote status updated.');}
   } elseif($action==='create_project'){
    $client=(int)$_POST['client_id'];$title=trim($_POST['title']??'');$desc=trim($_POST['description']??'');$status=$_POST['project_status']??''; if($title==='') throw new Exception('Please enter a project title.'); if(!in_array($status,$projectStatuses,true)) throw new Exception('Invalid project status.');$progress=max(0,min(100,(int)$_POST['progress']));$start=$_POST['start_date']?:null;$due=$_POST['due_date']?:null;
@@ -393,7 +393,7 @@ th{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--ston
         <h2>Client Login Credentials</h2>
         <p>These credentials were generated for <strong><?=e($credentials['name'])?></strong>.</p>
         <p>Username: <code><?=e($credentials['username'])?></code><br>Password: <code><?=e($credentials['password'])?></code></p>
-        <p class="small">Email delivery: <?= $credentials['email_sent']?'sent successfully':'not configured on this XAMPP installation' ?>. The password is shown once so you can securely provide it to the client if local email is not configured.</p>
+        <p class="small">Email delivery: <?= $credentials['email_sent']?'sent successfully':'failed; check SMTP settings and the PHP error log' ?>. The password is shown once so you can securely provide it to the client if email delivery fails.</p>
       </div>
       <?php endif;?>
 
