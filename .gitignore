@@ -1,2 +1,4 @@
+/vendor/
 config.local.php
+config.smtp.local.php
 *.pem

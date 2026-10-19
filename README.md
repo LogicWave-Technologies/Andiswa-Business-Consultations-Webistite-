@@ -1,72 +1,217 @@
 # Andiswa Business Consultation website (XAMPP + MySQL, Azure-ready)
 
-## What is new in this version – one shared database for the website and the app
+The website and mobile app API share the `andiswa_business` MySQL database. Admins can manage website/app settings and quotes, and clients can track projects and updates.
 
-The website and the mobile app (through its API) now use **one** MySQL database, `andiswa_business`, on XAMPP or on Azure.
+## Why XAMPP?
 
-- **Admin → Website & App (new tab).** Edit the phone, email, address, hours, tagline, Home page text, the four numbers and the social links. The website and the app both read these from the `settings` table, so one save updates both.
-- **Quotes show where they came from.** A new `quotes.source` column holds `website` or `app`. The admin shows a **Website** or **Mobile app** label on each quote, and the dashboard counts app quotes.
-- **The Contact page shows the real details.** It used to show placeholder text (44 Fox Street, Johannesburg). Now it reads them from the database. The footers and the Home page tagline do the same, through `site_settings.php` + `Projects_Js/site-settings.js`.
-- **The chatbot log works.** `chat_log.php` saves chatbot messages in the `chat_messages` table. Before this, it tried to post to an API address that did not exist.
-- **`database.sql` matches the real database.** It now has all 10 tables (it was missing `invoices`, `notifications`, `services`, `chat_messages` and `cancellation_requests`) and the "Cancelled" statuses. Keys are written inside each table, so it works on Azure.
-- **`setup.php` can upgrade an existing database** (with `db_upgrade.php`) without deleting data. Running it twice is safe.
-- **Azure-ready.** `andiswa_business_azure.sql` is your current data, ready to import into Azure. `config.php` switches on encryption for Azure servers by itself, and it can read its settings from environment variables when the site itself is hosted on Azure.
-- **Full instructions:** `AZURE_SETUP_GUIDE.md`.
+This project includes PHP pages and a MySQL database, so it needs a web server that can execute PHP and connect to MySQL. XAMPP bundles Apache, PHP, MySQL/MariaDB, and phpMyAdmin into one local setup. Apache runs pages such as `contact.php` and `admin.php`, while MySQL stores quote requests, accounts, projects, and shared site settings. phpMyAdmin makes it easier to import and inspect the database.
 
-| File | Status |
+XAMPP lets you develop and test the full website locally without deploying it to a public server. Opening the files directly or using a static-only preview will not run the PHP features. XAMPP is intended here for local development; production hosting should use a properly secured web server and database.
+
+## Website screenshots
+
+| Home page | Contact page |
 |---|---|
-| `admin.php` | Updated: Website & App tab, Website/Mobile app labels, "Cancelled" status, status checks |
-| `config.php` | Updated: environment variables, automatic Azure encryption, `setting()` helpers |
-| `contact.php` | Updated: real contact details and social links from the database |
-| `submit_quote.php` | Updated: saves `source = website`, same checks as the app's API |
-| `database.sql` | Updated: full schema (10 tables), Azure-safe |
-| `setup.php` | Updated: also upgrades older databases |
-| `db_upgrade.php` | New: adds missing columns to an older database |
-| `site_settings.php` | New: studio details as JSON for the .html pages |
-| `Projects_Js/site-settings.js` | New: fills the details into the .html pages |
-| `chat_log.php` | New: saves chatbot messages |
-| `Projects_Js/api.js` | Updated: uses `site_settings.php` and `chat_log.php`; uses `localStorage` as the fallback |
-| `contact.html` | Now just forwards to `contact.php` |
-| `andiswa_business_azure.sql` | New: your data, ready for Azure |
-| `AZURE_SETUP_GUIDE.md` | New: step by step guide for Azure |
-| all .html pages | Footer details and social links come from the database (the old text stays as a fallback) |
+| ![Andiswa Business Consultation home page](./assets/screenshots/home.png) | ![Andiswa Business Consultation contact page](./assets/screenshots/contact.png) |
 
-**The API changed a little too** (in the app project): `QuoteEntity` has a `Source` property and `StudioDto` sends `FacebookUrl` and `YouTubeUrl`.
-Upgrade the database (run `setup.php` once, or import `andiswa_business_azure.sql`) **before** you run the new API. Otherwise saving a quote from the app fails with "Unknown column 'source'".
+## GitHub Actions screenshot
 
-## Run it on your PC (XAMPP)
+The workflow automatically checks PHP 8.1 and PHP 8.4. This screenshot shows a successful run with both matrix jobs passing:
+
+![Successful GitHub Actions PHP checks for PHP 8.1 and PHP 8.4](./assets/screenshots/github-actions-php-checks.png)
+
+## Features
+
+- PHP session-based admin and client login, with password hashing and CSRF protection.
+- Quote requests from the website and mobile app, labelled by source in the admin dashboard.
+- Client accounts and temporary passwords generated when quotes are accepted.
+- Shared business details and social links for the website and mobile app.
+- Chatbot message logging and an upgrade-safe database setup.
+- Contact enquiries and client login credentials are sent through PHPMailer over SMTP.
+
+## Project structure
+
+```text
+.
+|-- .github/
+|   `-- workflows/
+|       `-- php.yml                 # GitHub Actions PHP checks
+|-- assets/
+|   |-- screenshots/                # Website and workflow screenshots
+|   `-- andiswa-branding.jpg
+|-- Projects_Images/
+|   |-- AB_Logo/
+|   |-- branding/
+|   |-- flyers/
+|   |-- posters/
+|   `-- social-media/
+|-- Projects_Js/                     # JavaScript for portfolio and shared UI
+|-- Project_Styles/                  # Portfolio stylesheets
+|-- about.html
+|-- about.css
+|-- about.js
+|-- admin.php                        # Admin dashboard and quote acceptance
+|-- contact.html
+|-- contact.php                      # Contact page backend
+|-- config.php                       # Database and SMTP helpers
+|-- config.local.example.php         # Example local database settings
+|-- config.smtp.local.example.php    # Example SMTP settings
+|-- dashboard.php                    # Client dashboard
+|-- database.sql                     # Base MySQL schema
+|-- db_upgrade.php                   # Database upgrade helper
+|-- index.html                       # Website home page
+|-- login.php
+|-- logout.php
+|-- composer.json                    # PHP dependency requirements
+|-- composer.lock                    # Locked dependency versions
+|-- README.md
+|-- README_XAMPP.md
+|-- setup.php                        # Initial database/admin setup
+|-- site_settings.php                # Shared website settings endpoint
+|-- submit_quote.php                 # Quote/contact form handler
+|-- andiswa_business_azure.sql       # Azure database schema
+|-- azure_additions.sql              # Azure database updates
+`-- AZURE_SETUP_GUIDE.md
+```
+
+Composer creates the ignored `vendor/` directory when you run `composer install`. Local secret files such as `config.local.php` and `config.smtp.local.php` are intentionally not tracked; create them from their corresponding `.example.php` templates when needed. The `Projects_Images/`, `Projects_Js/`, and `Project_Styles/` directories contain the portfolio project media, scripts, and styles.
+
+## Run locally with XAMPP
+
+1. Install XAMPP and Composer. Start Apache and MySQL.
+2. Copy this project folder into `C:\xampp\htdocs\`.
+3. In a terminal opened in the project folder, run `composer install` to install the locked PHPMailer dependency.
+4. Open `http://localhost/phpmyadmin` and import `database.sql`, or open `setup.php` to create/upgrade the database and initialize the admin account.
+5. Delete `setup.php` after setup.
+6. Open the website at `http://localhost/<project-folder>/index.html`.
+
+By default, the site connects to local MySQL as `root` with no password. For custom local settings or Azure, see the configuration section below.
+
+### Admin login
+
+- **Username:** `admin`
+- **Password:** Set the admin password in the setup form when the admin account is first created. There is no fixed default password in the application.
+
+The setup form requires at least 10 characters. If an `admin` account already exists, running setup again does not change its password. Do not publish admin passwords in this README or commit them to Git. If you have used a shared or exposed password, change it to a unique password before deploying the site publicly.
+
+## Automated checks on GitHub
+
+GitHub Actions runs the PHP checks in `.github/workflows/php.yml` on every push and pull request, and can also be started manually from the repository's **Actions** tab. It checks PHP 8.1 and 8.4, validates the Composer files, installs the locked dependencies, and checks the syntax of project PHP files.
+
+These are automated build and syntax checks, not a full end-to-end test suite: they do not connect to MySQL, send email, or exercise browser flows. SMTP secrets are not needed by the workflow. Add application-level tests separately as the project gains test coverage.
+
+## PHPMailer email guide
+
+### What PHPMailer does in this project
+
+[PHPMailer](https://github.com/PHPMailer/PHPMailer) is the PHP library this website uses to compose and send email. The website connects directly to the configured SMTP provider, authenticates with its mail account, negotiates an encrypted connection, and submits the message for delivery. This project uses Gmail SMTP; it does not use PHP's built-in `mail()` function or the Gmail API.
+
+There are two email flows:
+
+1. **Contact enquiries:** `submit_quote.php` validates the form and saves the enquiry to MySQL. It then emails the business address configured in **Admin → Website & App**. The visitor is set as Reply-To, so the team can reply to the enquiry.
+2. **Client login details:** when an admin accepts a quote in `admin.php`, the application creates or refreshes the client's temporary password and commits the account to MySQL. It then emails the username, temporary password, and login URL to the client's quote email address. The client must change the temporary password after logging in.
+
+Email is sent after the database update. If sending fails, the quote/account remains saved; the admin page reports the failure and displays the generated credentials once so they can be provided to the client. There is no fallback to PHP `mail()`.
+
+### Requirements
+
+- PHP 8.1 or later with the OpenSSL extension enabled.
+- Composer and the project's PHPMailer dependency installed.
+- An SMTP account authorized to send email. For Gmail, use a Google App Password, not the account's normal password.
+- The running web server must be able to make an outbound connection to the SMTP host and port.
+
+### Install PHPMailer
+
+Open a terminal in the same project directory that your web server serves and run:
+
+```powershell
+composer install
+```
+
+Composer reads `composer.lock` and installs the pinned version under `vendor/`. The application loads it from `vendor/autoload.php`. If that file is missing, email sending cannot work. Do not add the `vendor/` directory to Git; another machine or deployment should run `composer install`.
+
+### Set up a Gmail App Password
+
+1. Sign in to the Google account that should send the messages.
+2. Enable **2-Step Verification** for that account if it is not already enabled.
+3. Open the Google Account's **Security** settings and create an **App Password**. Google may require you to sign in again.
+4. Copy the generated App Password. It is a separate credential from your normal Gmail password. Do not share it, paste it into source code, or commit it to Git.
+
+App Password availability depends on Google's account and security policies. If Google does not offer this option for the account, use an SMTP provider that supports authenticated SMTP or configure an organization-approved email service.
+
+### Configure the local secret file
+
+The application looks for `config.smtp.local.php` beside `config.php`. A safe template is provided as `config.smtp.local.example.php`. If the local file does not exist, create it from the template:
+
+```powershell
+Copy-Item config.smtp.local.example.php config.smtp.local.php
+```
+
+Edit `config.smtp.local.php` and fill in these values:
+
+```php
+<?php
+
+return [
+    'host' => 'smtp.gmail.com',
+    'port' => 465,
+    'username' => 'your-address@gmail.com',
+    'password' => 'your-google-app-password',
+    'encryption' => 'ssl',
+    'from_email' => 'your-address@gmail.com',
+    'from_name' => 'Andiswa Business Consultation',
+];
+```
+
+- `host`: Gmail's SMTP server, `smtp.gmail.com`.
+- `port` and `encryption`: this setup uses port `465` with implicit SSL. Port `587` with `tls` is also supported if your network allows it.
+- `username`: the full Gmail address used to authenticate.
+- `password`: the Google App Password. Do not use the normal Gmail password.
+- `from_email`: a sender address authorized by the provider. For Gmail, use the authenticated Gmail address.
+- `from_name`: the sender name recipients see.
+
+The real `config.smtp.local.php` file is excluded from Git. Keep it beside the `config.php` used by the active web server, and never replace it with a version containing real credentials in a tracked/example file. Apache/PHP environment variables named `SMTP_HOST`, `SMTP_PORT`, `SMTP_USERNAME`, `SMTP_PASSWORD`, `SMTP_ENCRYPTION`, `SMTP_FROM_EMAIL`, and `SMTP_FROM_NAME` override the corresponding local-file values.
+
+### Run and test with XAMPP
 
 1. Start **Apache** and **MySQL** in the XAMPP Control Panel.
-2. Copy this whole folder into `C:\xampp\htdocs\`.
-3. Open `http://localhost/Andiswa-Business-Consultations-Website/setup.php`.
-4. Choose an admin password (at least 10 characters) and click **Create tables and admin account**.
-   This creates the `andiswa_business` database, all tables, the app settings and the admin account.
-   If the database already exists, it only adds what is missing (for example the new `source` column). Your data and the admin password stay as they are.
-5. **Delete `setup.php`** afterwards.
-6. Open the website: `http://localhost/Andiswa-Business-Consultations-Website/index.html`
-7. Admin login: `http://localhost/Andiswa-Business-Consultations-Website/login.php` with username `admin` and the password you chose.
+2. Confirm the browser URL points to the intended project copy under `C:\xampp\htdocs\`.
+3. In that exact project directory, run `composer install` and create/fill `config.smtp.local.php`. The web-served directory must contain `config.php`, `vendor\autoload.php`, and `config.smtp.local.php` together.
+4. Open the contact page, submit a real test enquiry using an email address you can access, and check that it arrives at the business email configured in **Admin → Website & App**. Reply to the message to verify the visitor address is used as Reply-To.
+5. To test client credentials, submit a test quote using an inbox you control, sign in as an admin, and accept the quote. Verify that the login-details email arrives and that the client can sign in and change the temporary password.
+6. Check the recipient's spam/junk folder as well as the inbox. A successful SMTP submission means the provider accepted the message; it cannot guarantee the recipient's provider places it in the inbox.
 
-No `config.local.php` file = the website uses the normal XAMPP database (`root`, no password).
+### Troubleshooting
 
-## Run it with Azure
+- **The admin says “Email was not sent”:** confirm the active project copy has all three files (`config.php`, `vendor\autoload.php`, and `config.smtp.local.php`). A second or older copy under `htdocs` will not automatically use files from the repository workspace.
+- **Authentication is rejected:** create a new Google App Password, check that `username` is the full Gmail address, and use the App Password rather than the normal account password. If an App Password has been exposed, revoke it and create a replacement.
+- **Connection times out or has no SMTP response:** check outbound firewall/network access to `smtp.gmail.com:465`. Some networks block SMTP or port 587; this project’s local Gmail settings use 465/SSL.
+- **Sender is rejected:** set `from_email` to the authenticated Gmail address. Gmail may reject unauthorized From addresses.
+- **PHPMailer is missing:** run `composer install` in the active web-served project directory and confirm `vendor\autoload.php` exists there.
+- **Find the server-side error:** inspect `C:\xampp\php\logs\php_error_log` for entries starting with `SMTP email could not be sent`. Do not enable public SMTP debug output or put passwords into logs.
 
-1. Follow `AZURE_SETUP_GUIDE.md` (in this folder). Parts 1–3 create the database and copy your data.
-2. Copy `config.local.example.php`, rename the copy to `config.local.php`, and fill in your Azure server name, username and password.
-3. Save the certificate `DigiCertGlobalRootG2.crt.pem` in this folder (download link in the Azure guide).
-4. Log in with your usual admin password. Your data, including the admin account, was copied in Part 3.
+For production, store SMTP credentials in the hosting platform's secret/environment configuration rather than a file deployed with the application. Rotate an App Password immediately if it may have been shared or committed.
 
-## Quote → account workflow (unchanged)
+## Run with Azure
 
-1. A visitor sends a quote request from the website **or the mobile app**.
-2. It is saved in the `quotes` table with status **New**.
-3. The admin logs in to `admin.php` and changes the status to **Accepted**.
-4. PHP creates the client account and a temporary password, and tries to email it. If XAMPP email is not set up, the admin page shows the details once.
-5. The client logs in at `login.php`, changes the temporary password and sees their projects in `dashboard.php`.
-6. The admin creates a project and updates its progress. The client sees the updates.
+1. Follow [AZURE_SETUP_GUIDE.md](./AZURE_SETUP_GUIDE.md).
+2. Copy `config.local.example.php` to `config.local.php` and enter the Azure database settings.
+3. Place the Azure CA certificate `DigiCertGlobalRootG2.crt.pem` in the project folder, as described in the guide.
+4. Upgrade/import the database before running the updated mobile app API.
 
-## Security notes
+`config.local.php`, `config.smtp.local.php`, and `*.pem` files are excluded from Git. The site also supports database and SMTP settings supplied through environment variables.
+
+## Quote and client workflow
+
+1. A visitor submits a quote request from the website or mobile app.
+2. An admin reviews and accepts the quote.
+3. The site creates or updates the client account and emails temporary login credentials.
+4. The client logs in, changes the temporary password, and views projects and progress updates.
+5. The admin creates projects and posts updates for the client.
+
+## Security and setup notes
 
 - Passwords are stored with `password_hash()` and checked with `password_verify()`.
-- Forms use CSRF tokens. Database queries use prepared statements.
-- **Never upload `config.local.php` to GitHub.** It holds your database password.
-- Delete `setup.php` after the first setup.
+- Forms use CSRF tokens and database queries use prepared statements.
+- Never upload `config.local.php` or database credentials to GitHub.
+- Delete `setup.php` after initial setup.
