@@ -24,11 +24,7 @@ By default, the site connects to local MySQL as `root` with no password. For cus
 
 ## Configure email
 
-For Gmail, use the ignored local file `config.smtp.local.php` (already created locally; it is not committed). Turn on 2-Step Verification for the sending Google account and create a Google App Password. Put the Gmail address in `username` and `from_email`, and the 16-character App Password in `password`. Do not use your normal Google password. Port `465` with `ssl` is configured because port `587` is filtered on some networks. Contact enquiries go to the business email configured in **Admin → Website & App**, with the visitor's address set as Reply-To.
-
-Alternatively, configure `SMTP_HOST`, `SMTP_PORT`, `SMTP_USERNAME`, `SMTP_PASSWORD`, `SMTP_ENCRYPTION`, `SMTP_FROM_EMAIL`, and `SMTP_FROM_NAME` in the Apache/PHP environment. Environment values override entries in the local file.
-
-SMTP must be configured for emails to be delivered; there is no `mail()` fallback. If sending client credentials fails after accepting a quote, the admin dashboard displays them once so they can be provided to the client. Check the PHP error log for the SMTP failure reason.
+Follow the [PHPMailer email guide](./README.md#phpmailer-email-guide) for Gmail App Password setup, the ignored `config.smtp.local.php` file, SMTP environment-variable overrides, testing, and troubleshooting. Configure the file in the project directory actually served by Apache; it is not committed and must not contain credentials in the tracked example. The application uses PHPMailer over SMTP and has no `mail()` fallback.
 
 ## Run with Azure
 

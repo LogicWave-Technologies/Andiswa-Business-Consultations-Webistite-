@@ -34,13 +34,97 @@ XAMPP lets you develop and test the full website locally without deploying it to
 
 By default, the site connects to local MySQL as `root` with no password. For custom local settings or Azure, see the configuration section below.
 
-## Configure email
+## PHPMailer email guide
 
-For Gmail, use the ignored local file `config.smtp.local.php` (already created locally; it is not committed). Turn on 2-Step Verification for the sending Google account and create a Google App Password. Put the Gmail address in `username` and `from_email`, and the 16-character App Password in `password`. Do not use your normal Google password. Port `465` with `ssl` is configured because port `587` is filtered on some networks. Contact enquiries go to the business email configured in **Admin → Website & App**, with the visitor's address set as Reply-To.
+### What PHPMailer does in this project
 
-Alternatively, configure `SMTP_HOST`, `SMTP_PORT`, `SMTP_USERNAME`, `SMTP_PASSWORD`, `SMTP_ENCRYPTION`, `SMTP_FROM_EMAIL`, and `SMTP_FROM_NAME` in the Apache/PHP environment. Environment values override entries in the local file.
+[PHPMailer](https://github.com/PHPMailer/PHPMailer) is the PHP library this website uses to compose and send email. The website connects directly to the configured SMTP provider, authenticates with its mail account, negotiates an encrypted connection, and submits the message for delivery. This project uses Gmail SMTP; it does not use PHP's built-in `mail()` function or the Gmail API.
 
-SMTP must be configured for emails to be delivered; there is no `mail()` fallback. If sending client credentials fails after accepting a quote, the admin dashboard displays them once so they can be provided to the client. Check the PHP error log for the SMTP failure reason.
+There are two email flows:
+
+1. **Contact enquiries:** `submit_quote.php` validates the form and saves the enquiry to MySQL. It then emails the business address configured in **Admin → Website & App**. The visitor is set as Reply-To, so the team can reply to the enquiry.
+2. **Client login details:** when an admin accepts a quote in `admin.php`, the application creates or refreshes the client's temporary password and commits the account to MySQL. It then emails the username, temporary password, and login URL to the client's quote email address. The client must change the temporary password after logging in.
+
+Email is sent after the database update. If sending fails, the quote/account remains saved; the admin page reports the failure and displays the generated credentials once so they can be provided to the client. There is no fallback to PHP `mail()`.
+
+### Requirements
+
+- PHP 8.1 or later with the OpenSSL extension enabled.
+- Composer and the project's PHPMailer dependency installed.
+- An SMTP account authorized to send email. For Gmail, use a Google App Password, not the account's normal password.
+- The running web server must be able to make an outbound connection to the SMTP host and port.
+
+### Install PHPMailer
+
+Open a terminal in the same project directory that your web server serves and run:
+
+```powershell
+composer install
+```
+
+Composer reads `composer.lock` and installs the pinned version under `vendor/`. The application loads it from `vendor/autoload.php`. If that file is missing, email sending cannot work. Do not add the `vendor/` directory to Git; another machine or deployment should run `composer install`.
+
+### Set up a Gmail App Password
+
+1. Sign in to the Google account that should send the messages.
+2. Enable **2-Step Verification** for that account if it is not already enabled.
+3. Open the Google Account's **Security** settings and create an **App Password**. Google may require you to sign in again.
+4. Copy the generated App Password. It is a separate credential from your normal Gmail password. Do not share it, paste it into source code, or commit it to Git.
+
+App Password availability depends on Google's account and security policies. If Google does not offer this option for the account, use an SMTP provider that supports authenticated SMTP or configure an organization-approved email service.
+
+### Configure the local secret file
+
+The application looks for `config.smtp.local.php` beside `config.php`. A safe template is provided as `config.smtp.local.example.php`. If the local file does not exist, create it from the template:
+
+```powershell
+Copy-Item config.smtp.local.example.php config.smtp.local.php
+```
+
+Edit `config.smtp.local.php` and fill in these values:
+
+```php
+<?php
+
+return [
+    'host' => 'smtp.gmail.com',
+    'port' => 465,
+    'username' => 'your-address@gmail.com',
+    'password' => 'your-google-app-password',
+    'encryption' => 'ssl',
+    'from_email' => 'your-address@gmail.com',
+    'from_name' => 'Andiswa Business Consultation',
+];
+```
+
+- `host`: Gmail's SMTP server, `smtp.gmail.com`.
+- `port` and `encryption`: this setup uses port `465` with implicit SSL. Port `587` with `tls` is also supported if your network allows it.
+- `username`: the full Gmail address used to authenticate.
+- `password`: the Google App Password. Do not use the normal Gmail password.
+- `from_email`: a sender address authorized by the provider. For Gmail, use the authenticated Gmail address.
+- `from_name`: the sender name recipients see.
+
+The real `config.smtp.local.php` file is excluded from Git. Keep it beside the `config.php` used by the active web server, and never replace it with a version containing real credentials in a tracked/example file. Apache/PHP environment variables named `SMTP_HOST`, `SMTP_PORT`, `SMTP_USERNAME`, `SMTP_PASSWORD`, `SMTP_ENCRYPTION`, `SMTP_FROM_EMAIL`, and `SMTP_FROM_NAME` override the corresponding local-file values.
+
+### Run and test with XAMPP
+
+1. Start **Apache** and **MySQL** in the XAMPP Control Panel.
+2. Confirm the browser URL points to the intended project copy under `C:\xampp\htdocs\`.
+3. In that exact project directory, run `composer install` and create/fill `config.smtp.local.php`. The web-served directory must contain `config.php`, `vendor\autoload.php`, and `config.smtp.local.php` together.
+4. Open the contact page, submit a real test enquiry using an email address you can access, and check that it arrives at the business email configured in **Admin → Website & App**. Reply to the message to verify the visitor address is used as Reply-To.
+5. To test client credentials, submit a test quote using an inbox you control, sign in as an admin, and accept the quote. Verify that the login-details email arrives and that the client can sign in and change the temporary password.
+6. Check the recipient's spam/junk folder as well as the inbox. A successful SMTP submission means the provider accepted the message; it cannot guarantee the recipient's provider places it in the inbox.
+
+### Troubleshooting
+
+- **The admin says “Email was not sent”:** confirm the active project copy has all three files (`config.php`, `vendor\autoload.php`, and `config.smtp.local.php`). A second or older copy under `htdocs` will not automatically use files from the repository workspace.
+- **Authentication is rejected:** create a new Google App Password, check that `username` is the full Gmail address, and use the App Password rather than the normal account password. If an App Password has been exposed, revoke it and create a replacement.
+- **Connection times out or has no SMTP response:** check outbound firewall/network access to `smtp.gmail.com:465`. Some networks block SMTP or port 587; this project’s local Gmail settings use 465/SSL.
+- **Sender is rejected:** set `from_email` to the authenticated Gmail address. Gmail may reject unauthorized From addresses.
+- **PHPMailer is missing:** run `composer install` in the active web-served project directory and confirm `vendor\autoload.php` exists there.
+- **Find the server-side error:** inspect `C:\xampp\php\logs\php_error_log` for entries starting with `SMTP email could not be sent`. Do not enable public SMTP debug output or put passwords into logs.
+
+For production, store SMTP credentials in the hosting platform's secret/environment configuration rather than a file deployed with the application. Rotate an App Password immediately if it may have been shared or committed.
 
 ## Run with Azure
 
