@@ -1,0 +1,33 @@
+
+function showToast(message){
+  const stack = document.getElementById('toastStack');
+  const el = document.createElement('div');
+  el.className = 'toast';
+  el.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><span>${message}</span>`;
+  stack.appendChild(el);
+  setTimeout(() => el.remove(), 3000);
+}
+
+document.getElementById('quoteForm').addEventListener('submit', function(){
+  const first=document.getElementById('fname').value.trim();
+  const last=document.getElementById('lname').value.trim();
+  document.getElementById('quoteName').value=(first+' '+last).trim();
+});
+
+</script>
+<script src="Projects_Js/chatbot.js"></script>
+<script src="Projects_Js/nav.js"></script>
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- The Contact page needs PHP (it reads the shared database and saves quote requests),
+     so the real page is contact.php. This file only forwards old links and bookmarks. -->
+<meta http-equiv="refresh" content="0; url=contact.php">
+<title>Contact — Andiswa Business Consultation</title>
+</head>
+<body>
+<p>The Contact page has moved. <a href="contact.php">Open the Contact page</a>.</p>
+</body>
+</html>

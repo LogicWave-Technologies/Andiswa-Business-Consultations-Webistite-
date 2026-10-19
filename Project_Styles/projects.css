@@ -38,145 +38,78 @@ section{
 
 
 /* ============================================================
-   3. THEME VARIABLES
+   3. SITE VARIABLES
 
 ============================================================ */
 
-:root,
-[data-theme="dark"]{
+
+
+:root{
 
     /* brand */
-    --primary:#ffffff;
-    --accent:#000000;
+    --primary:#3E6690;
+    --accent:#1B2A41;
 
     /* surfaces */
-    --page-bg:#0a0a0a;
-    --section-bg:#0a0a0a;
-    --card-bg:#141414;
-    --card-bg-alt:#1a1a1a;
-    --footer-bg:#050505;
-    --modal-overlay:rgba(0,0,0,.85);
+    --page-bg:#F7F8FA;
+    --section-bg:#F7F8FA;
+    --card-bg:#ffffff;
+    --card-bg-alt:#EEF1F4;
+    --footer-bg:#101B2B;
+    --modal-overlay:rgba(35, 40, 48,.8);
 
     /* navbar */
-    --nav-bg:#000000;
+    --nav-bg:#1B2A41;
     --nav-text:#ffffff;
 
     /* text */
-    --text:#f5f5f5;
-    --text-muted:#b5b5b5;
-    --text-soft:#8a8a8a;
-    --footer-text:#bdbdbd;
+    --text:#232830;
+    --text-muted:#5B6472;
+    --text-soft:#8891A0;
+    --footer-text:#EEF1F4;
     --footer-heading:#ffffff;
+    --cream:#F7F8FA;
+    --stone:#5B6472;
 
     /* borders / dividers */
-    --border:#262626;
-    --divider:#222222;
+    --border:rgba(35, 40, 48,0.12);
+    --divider:#C7D0DC;
 
     /* buttons */
-    --btn-bg:#ffffff;
-    --btn-text:#000000;
-    --btn-hover-bg:#e2e2e2;
-    --btn-hover-text:#000000;
-
-    --outline-btn-bg:transparent;
-    --outline-btn-border:#3a3a3a;
-
-    /* glass / icon buttons (navbar) */
-    --glass-bg:rgba(255,255,255,.1);
-    --glass-border:rgba(255,255,255,.15);
-    --glass-text:#ffffff;
-    --glass-hover-bg:#ffffff;
-    --glass-hover-text:#000000;
-
-    /* form controls */
-    --input-bg:#161616;
-    --input-border:#2c2c2c;
-    --input-text:#f5f5f5;
-    --input-placeholder:#8a8a8a;
-
-    /* search / filter pills (light chips on dark page) */
-    --pill-bg:#141414;
-    --pill-text:#f5f5f5;
-    --pill-active-bg:#ffffff;
-    --pill-active-text:#000000;
-
-    /* icons */
-    --icon-color:#ffffff;
-    --icon-muted:#9a9a9a;
-
-    /* shadow */
-    --shadow:0 15px 40px rgba(0,0,0,.45);
-    --shadow-soft:0 10px 25px rgba(0,0,0,.3);
-
-    /* misc */
-    --radius:18px;
-    --transition:.4s ease;
-}
-
-[data-theme="light"]{
-
-    /* brand */
-    --primary:#000000;
-    --accent:#000000;
-
-    /* surfaces */
-    --page-bg:#ffffff;
-    --section-bg:#ffffff;
-    --card-bg:#ffffff;
-    --card-bg-alt:#f4f4f4;
-    --footer-bg:#050505;
-    --modal-overlay:rgba(0,0,0,.85);
-
-    /* navbar */
-    --nav-bg:#ffffff;
-    --nav-text:#111111;
-
-    /* text */
-    --text:#111111;
-    --text-muted:#555555;
-    --text-soft:#777777;
-    --footer-text:#bdbdbd;
-    --footer-heading:#ffffff;
-
-    /* borders / dividers */
-    --border:#dddddd;
-    --divider:#222222;
-
-    /* buttons */
-    --btn-bg:#000000;
+    --btn-bg:#3E6690;
     --btn-text:#ffffff;
-    --btn-hover-bg:#333333;
-    --btn-hover-text:#ffffff;
+    --btn-hover-bg:#5B8DB8;
+    --btn-hover-text:#232830;
 
     --outline-btn-bg:transparent;
-    --outline-btn-border:#dddddd;
+    --outline-btn-border:rgba(35, 40, 48,0.2);
 
     /* glass / icon buttons (navbar) */
-    --glass-bg:#f2f2f2;
-    --glass-border:#dddddd;
-    --glass-text:#111111;
-    --glass-hover-bg:#000000;
+    --glass-bg:rgba(35, 40, 48,.06);
+    --glass-border:rgba(35, 40, 48,0.12);
+    --glass-text:#232830;
+    --glass-hover-bg:#3E6690;
     --glass-hover-text:#ffffff;
 
     /* form controls */
     --input-bg:#ffffff;
-    --input-border:#dddddd;
-    --input-text:#111111;
-    --input-placeholder:#777777;
+    --input-border:rgba(35, 40, 48,0.12);
+    --input-text:#232830;
+    --input-placeholder:#8891A0;
 
     /* search / filter pills */
     --pill-bg:#ffffff;
-    --pill-text:#111111;
-    --pill-active-bg:#000000;
+    --pill-text:#232830;
+    --pill-active-bg:#3E6690;
     --pill-active-text:#ffffff;
 
     /* icons */
-    --icon-color:#111111;
-    --icon-muted:#777777;
+    --icon-color:#232830;
+    --icon-muted:#8891A0;
 
     /* shadow */
-    --shadow:0 15px 40px rgba(0,0,0,.08);
-    --shadow-soft:0 10px 25px rgba(0,0,0,.06);
+    --shadow:0 15px 40px rgba(35, 40, 48,.10);
+    --shadow-soft:0 10px 25px rgba(35, 40, 48,.08);
 
     /* misc */
     --radius:18px;
@@ -228,8 +161,21 @@ section{
     height:80px;
 }
 
-.logo img{
-    width:60px;
+.logo{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:34px;
+    height:34px;
+    background:#0a0a0a;
+    color:#ffffff;
+    font-family:'Poppins', sans-serif;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:0.02em;
+    border-radius:10px;
+    text-decoration:none;
+    flex-shrink:0;
 }
 
 .logo-text{
@@ -339,7 +285,7 @@ section{
     gap:10px;
     padding:14px 25px;
     border-radius:12px;
-    font-size:14px;
+    font-size:12px;
     font-weight:500;
 }
 
@@ -404,16 +350,13 @@ section{
 ============================================================ */
 
 .projects-hero{
-    margin-top:80px;
+    margin-top:0;
     min-height:55vh;
     display:flex;
     justify-content:center;
     align-items:center;
     text-align:center;
-    background:linear-gradient(rgba(0,0,0,.65), rgba(0,0,0,.65)),
-               url("../images/banner.jpg");
-    background-size:cover;
-    background-position:center;
+    background:var(--page-bg);
 }
 
 .hero-content{
@@ -421,20 +364,20 @@ section{
 }
 
 .hero-content span{
-    color:#ddd;
-    font-size:14px;
+    color:var(--text-soft);
+    font-size:12px;
     letter-spacing:4px;
     text-transform:uppercase;
 }
 
 .hero-content h1{
-    color:#ffffff;
+    color:var(--text);
     font-size:65px;
     margin:20px 0;
 }
 
 .hero-content p{
-    color:#ddd;
+    color:var(--text-muted);
     font-size:18px;
     line-height:1.8;
 }
@@ -591,7 +534,7 @@ section{
     background:var(--btn-bg);
     color:var(--btn-text);
     border-radius:40px;
-    font-size:14px;
+    font-size:12px;
     margin-bottom:20px;
 }
 
@@ -669,8 +612,8 @@ section{
     justify-content:flex-end;
     flex-direction:column;
     padding:30px;
-    background:linear-gradient(transparent, rgba(0,0,0,.93));
-    color:#ffffff;
+    background:linear-gradient(transparent, rgba(16, 27, 43,.93));
+    color:var(--cream);
     opacity:0;
     transition:.45s;
 }
@@ -682,8 +625,8 @@ section{
 .overlay > span{
     display:inline-block;
     width:max-content;
-    background:#ffffff;
-    color:#000000;
+    background:var(--tan);
+    color:var(--espresso);
     padding:6px 16px;
     border-radius:30px;
     font-size:12px;
@@ -697,7 +640,7 @@ section{
 }
 
 .overlay p{
-    color:#ddd;
+    color:var(--stone);
     line-height:1.7;
     margin-bottom:25px;
 }
@@ -705,8 +648,8 @@ section{
 .view-btn{
     display:inline-block;
     width:max-content;
-    background:#ffffff;
-    color:#000000;
+    background:var(--tan);
+    color:var(--espresso);
     padding:12px 24px;
     border-radius:40px;
     font-weight:600;
@@ -714,8 +657,8 @@ section{
 }
 
 .view-btn:hover{
-    background:#000000;
-    color:#ffffff;
+    background:var(--tan-bright);
+    color:var(--espresso);
 }
 
 
@@ -816,7 +759,7 @@ section{
 
 .footer{
     background:var(--footer-bg);
-    color:#ffffff;
+    color:var(--cream);
     position:relative;
     padding:90px 10% 30px;
 }
@@ -828,7 +771,7 @@ section{
 }
 
 .footer-logo{
-    color:#ffffff;
+    color:var(--cream);
     font-size:40px;
     font-weight:700;
     letter-spacing:2px;
@@ -858,7 +801,7 @@ section{
 }
 
 .footer-box ul li a:hover{
-    color:#ffffff;
+    color:var(--tan-bright);
     padding-left:8px;
 }
 
@@ -871,7 +814,7 @@ section{
 }
 
 .contact-info i{
-    color:#ffffff;
+    color:var(--tan-bright);
     margin-top:5px;
 }
 
@@ -886,15 +829,15 @@ section{
     display:flex;
     justify-content:center;
     align-items:center;
-    background:#1a1a1a;
-    color:#ffffff;
+    background:rgba(255, 255, 255,0.08);
+    color:var(--cream);
     border-radius:10px;
     transition:.4s;
 }
 
 .social-links a:hover{
-    background:#ffffff;
-    color:#000000;
+    background:var(--tan);
+    color:var(--espresso);
     transform:translateY(-6px);
 }
 
@@ -914,7 +857,7 @@ section{
 }
 
 .footer-bottom p{
-    color:#888888;
+    color:var(--stone);
 }
 
 .back-top{
@@ -926,8 +869,8 @@ section{
     display:flex;
     justify-content:center;
     align-items:center;
-    background:#ffffff;
-    color:#000000;
+    background:var(--tan);
+    color:var(--espresso);
     border-radius:50%;
     font-size:22px;
     transition:.4s;
@@ -935,7 +878,7 @@ section{
 
 .back-top:hover{
     transform:translateY(-8px);
-    background:#d9d9d9;
+    background:var(--tan-bright);
 }
 
 

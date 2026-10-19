@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 rx=%2718%27 fill=%27%231B2A41%27/%3E%3Ctext x=%2750%27 y=%2766%27 font-family=%27Arial, sans-serif%27 font-size=%2746%27 font-weight=%27700%27 fill=%27%23ffffff%27 text-anchor=%27middle%27%3EAB%3C/text%3E%3C/svg%3E">
+<title>About Us | Andiswa Business Consultation</title>
+
+<!-- Connecting to Google Fonts so the page can load our custom fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<!-- The two fonts used on this site: Space Grotesk (headings/body) and JetBrains Mono (small labels) -->
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<!-- Our own stylesheet with all the design rules for this page -->
+<link rel="stylesheet" href="about.css">
+<link rel="stylesheet" href="nav-unified.css">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+</head>
+<body>
+
+<!-- ============================= -->
+<!-- HEADER: logo, menu and buttons that appear at the top of every page -->
+<!-- ============================= -->
+<header id="siteHeader" class="header">
+    <nav class="navbar">
+
+        <a href="index.html" class="logo">A|B</a>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html" class="active">About Us</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="projects.html">Projects</a></li>
+            <li><a href="team.html">Team</a></li>
+            <li><a href="testimonials.html">Testimonials</a></li>
+            <li><a href="contact.php">Contact</a></li>
+        </ul>
+
+        <div class="nav-actions">
+            <!-- Admin login lives on the Home page -->
+            <a href="admin.php" class="icon-btn" aria-label="Admin Login" title="Admin Login"><i class="fa-solid fa-shield-halved"></i></a><a href="login.php" class="icon-btn" aria-label="Client Login" title="Client Login"><i class="fa-solid fa-user"></i></a>
+            <a href="contact.php" class="quote-btn">
+                Get a Quote
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+            <button id="menuToggle" class="icon-btn menu-toggle" aria-label="Open menu" aria-expanded="false">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+</header>
+
+<!-- ============================= -->
+<!-- MAIN CONTENT of the About Us page -->
+<!-- ============================= -->
+<main>
+
+  <!-- Hero section: the first big block visitors see on this page -->
+  <section class="about-hero">
+
+    <div class="about-hero-inner">
+
+      <!-- Left side: the studio photo with a badge and a stat overlay -->
+      <div class="hero-media">
+
+        <figure class="stack-photo">
+
+          <img src="assets/andiswa-branding.jpg"
+          alt="Andiswa Business Consultation">
+
+          <!-- Small pill badge shown on top of the photo -->
+          <span class="badge-pill">
+
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+
+              <path d="M12 2 9.2 8.4 2 9.3l5.5 4.7L5.8 21 12 17.3 18.2 21l-1.7-7 5.5-4.7-7.2-.9Z"/>
+
+            </svg>
+
+            Award-Winning Studio
+
+          </span>
+
+          <!-- Stat box shown on top of the photo, e.g. years in business -->
+          <div class="stat-chip">
+
+            <span class="stat-number">5+</span>
+
+            <span class="stat-label">
+
+              Years of Design Excellence
+
+            </span>
+
+          </div>
+
+        </figure>
+
+      </div>
+
+      <!-- Right side: the text describing who the studio is -->
+      <div class="hero-copy">
+
+        <!-- Small label above the main heading -->
+        <p class="eyebrow">
+
+          <span class="eyebrow-rule"></span>
+
+          Who We Are
+
+        </p>
+
+        <!-- Main page heading -->
+        <h1>
+
+          A Creative Studio Built on
+
+          <span>Bold Ideas</span>
+
+        </h1>
+
+        <!-- First paragraph: introduces the studio -->
+        <p>
+
+          Andiswa Business Consultation is a Port-Elizabeth-based creative agency founded on the belief that exceptional design is the single most powerful investment any business can make. We blend strategic thinking with visual craft to build brands that resonate, differentiate and endure.
+
+        </p>
+
+        <!-- Second paragraph: explains who the studio works with -->
+        <p>
+
+           From early-stage startups defining their first identity to established businesses evolving for new markets, we bring the same level of care and creative ambition to every brief.
+
+        </p>
+
+        <!-- Two-card grid: Mission and Vision statements -->
+        <div class="mv-grid">
+
+          <div class="mv-card">
+
+            <p class="mv-label">
+
+              Our Mission
+
+            </p>
+
+            <p class="mv-text">
+
+              Create design that gives businesses an unfair competitive advantage.
+
+            </p>
+
+          </div>
+
+          <div class="mv-card">
+
+            <p class="mv-label">
+
+              Our Vision
+
+            </p>
+
+            <p class="mv-text">
+
+              Become the most recognised creative studio across the African continent.
+
+            </p>
+
+          </div>
+
+        </div>
+
+        <!-- List of small tags/keywords describing the studio's values -->
+        <ul class="tag-list">
+
+          <li>Bold Thinking</li>
+
+          <li>Pixel Perfect</li>
+
+          <li>On-Brand Always</li>
+
+          <li>South African</li>
+
+          <li>Client-First</li>
+
+        </ul>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+
+<!-- ================================
+     NEWSLETTER
+     ================================ -->
+<section class="newsletter-section">
+
+  <div class="newsletter-content">
+
+    <p class="newsletter-eyebrow">NEWSLETTER</p>
+
+    <h2>Design Inspiration, Delivered Weekly</h2>
+
+    <p>
+      Join 4,000+ creatives and business owners who get our weekly roundup
+      of design trends, tips, and studio work.
+    </p>
+
+    <form class="newsletter-form">
+
+      <input
+        type="email"
+        placeholder="your@email.com"
+        required
+      >
+
+      <button type="submit">
+        Subscribe Free
+      </button>
+
+    </form>
+
+  </div>
+
+</section>
+
+<!-- ================================
+     FOOTER
+     ================================ -->
+<footer class="footer">
+
+  <div class="footer-container">
+
+    <!-- Company -->
+    <div class="footer-box">
+      <a href="index.html" class="footer-logo">A|B</a>
+
+      <p>
+        Crafting bold brands and creative experiences
+        for South African businesses through professional
+        graphic design, branding and digital solutions.
+      </p>
+
+      <div class="social-links">
+        <a href="#" data-setting-href="facebook_url" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" data-setting-href="instagram_url" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" data-setting-href="twitter_url" aria-label="X (Twitter)"><i class="fab fa-x-twitter"></i></a>
+        <a href="#" data-setting-href="linkedin_url" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#" data-setting-href="youtube_url" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+      </div>
+    </div>
+
+
+    <!-- Quick Links -->
+    <div class="footer-box">
+      <h3>Quick Links</h3>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="team.html">Team</a></li>
+        <li><a href="testimonials.html">Testimonials</a></li>
+        <li><a href="contact.php">Contact</a></li>
+      </ul>
+    </div>
+
+
+    <!-- Contact -->
+    <div class="footer-box">
+      <h3>Contact</h3>
+      <ul class="contact-info">
+        <li><i class="fa-solid fa-phone"></i> <span data-setting="phone">+27 67 790 4428</span></li>
+        <li><i class="fa-regular fa-envelope"></i> <span data-setting="email">andiswasbusinessconsultations@outlook.com</span></li>
+        <li><i class="fa-solid fa-location-dot"></i> <span data-setting="address" data-setting-format="lines">2 Belmont Terrace,<br>Port Elizabeth, 6001</span></li>
+        <li><i class="fa-regular fa-clock"></i> <span data-setting="hours" data-setting-format="lines">Monday – Friday<br>08:00 – 18:00</span></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <hr>
+
+  <div class="footer-bottom">
+    <p>© 2026 Andiswa Business Consultation. All Rights Reserved.</p>
+    <p>Crafted with care in South Africa</p>
+  </div>
+
+  <a href="#" class="back-top"><i class="fa-solid fa-arrow-up"></i></a>
+
+</footer>
+
+<!-- ============================= -->
+<!-- Floating "Back to Top" button: scrolls the page back up when clicked -->
+<!-- ============================= -->
+<button
+class="back-to-top"
+onclick="window.scrollTo({top:0,behavior:'smooth'})">
+
+  <svg width="16"
+  height="16"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2">
+
+    <path d="M12 19V5M5 12l7-7 7 7"/>
+
+  </svg>
+
+</button>
+<script src="about.js"></script>
+<script src="Projects_Js/nav.js"></script>
+
+<script src="Projects_Js/site-settings.js"></script>
+</body>
+</html>

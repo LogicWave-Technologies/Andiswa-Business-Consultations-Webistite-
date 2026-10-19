@@ -6,6 +6,12 @@ const filterButtons = document.querySelectorAll(".filter-btn");
 const projects = document.querySelectorAll(".project-card");
 const projectCount = document.getElementById("projectCount");
 
+// Keep the "Showing X Projects" counter accurate to however many
+// project cards actually exist, instead of a hardcoded number.
+if (projectCount) {
+    projectCount.textContent = projects.length;
+}
+
 filterButtons.forEach(button => {
 
     button.addEventListener("click", () => {
