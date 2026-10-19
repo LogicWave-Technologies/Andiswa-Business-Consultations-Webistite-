@@ -166,11 +166,11 @@
       </p>
 
       <div class="social-links">
-        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-        <a href="#" aria-label="X (Twitter)"><i class="fab fa-x-twitter"></i></a>
-        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+        <a href="#" data-setting-href="facebook_url" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" data-setting-href="instagram_url" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" data-setting-href="twitter_url" aria-label="X (Twitter)"><i class="fab fa-x-twitter"></i></a>
+        <a href="#" data-setting-href="linkedin_url" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#" data-setting-href="youtube_url" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
       </div>
     </div>
 
@@ -192,10 +192,10 @@
     <div class="footer-box">
       <h3>Contact</h3>
       <ul class="contact-info">
-        <li><i class="fa-solid fa-phone"></i> +27 67 790 4428</li>
-        <li><i class="fa-regular fa-envelope"></i> andiswasbusinessconsultations@outlook.com</li>
-        <li><i class="fa-solid fa-location-dot"></i> 2 Belmont Terrace,<br>Port Elizabeth, 6001</li>
-        <li><i class="fa-regular fa-clock"></i> Monday – Friday<br>08:00 – 18:00</li>
+        <li><i class="fa-solid fa-phone"></i> <span data-setting="phone">+27 67 790 4428</span></li>
+        <li><i class="fa-regular fa-envelope"></i> <span data-setting="email">andiswasbusinessconsultations@outlook.com</span></li>
+        <li><i class="fa-solid fa-location-dot"></i> <span data-setting="address" data-setting-format="lines">2 Belmont Terrace,<br>Port Elizabeth, 6001</span></li>
+        <li><i class="fa-regular fa-clock"></i> <span data-setting="hours" data-setting-format="lines">Monday – Friday<br>08:00 – 18:00</span></li>
       </ul>
     </div>
   </div>
@@ -264,5 +264,6 @@ loadTeam();
 <script src="Projects_Js/chatbot.js"></script>
 <script src="Projects_Js/nav.js"></script>
 
+<script src="Projects_Js/site-settings.js"></script>
 </body>
 </html>

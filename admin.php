@@ -1,11 +1,52 @@
 <?php
 require_once 'config.php'; require_login('admin');
 $pdo=db(); $u=current_user();
+
+// ---------------------------------------------------------------
+// WEBSITE & APP SETTINGS
+// These rows live in the shared "settings" table. The website pages
+// (contact.php, site_settings.php) AND the mobile app's API
+// (GET /api/studio) read them, so one save updates both.
+// key => [label, type]   type: text | long | email | url
+// ---------------------------------------------------------------
+$settingGroups = [
+  'Contact details' => [
+    'studio'   => ['Business name', 'text'],
+    'email'    => ['Email address', 'email'],
+    'phone'    => ['Phone number', 'text'],
+    'whatsapp' => ['WhatsApp number (digits only, e.g. 27677904428)', 'text'],
+    'address'  => ['Address', 'text'],
+    'hours'    => ['Business hours', 'text'],
+  ],
+  'Home page text' => [
+    'tagline'     => ['Tagline (small text above the headline)', 'text'],
+    'hero_text'   => ['Hero paragraph', 'long'],
+    'about_text1' => ['"Who we are" paragraph 1 (app)', 'long'],
+    'about_text2' => ['"Who we are" paragraph 2 (app)', 'long'],
+    'owner_name'  => ['Owner name', 'text'],
+    'owner_title' => ['Owner title', 'text'],
+  ],
+  'Numbers on the app Home page' => [
+    'stat1_value' => ['Number 1', 'text'], 'stat1_label' => ['Label 1', 'text'],
+    'stat2_value' => ['Number 2', 'text'], 'stat2_label' => ['Label 2', 'text'],
+    'stat3_value' => ['Number 3', 'text'], 'stat3_label' => ['Label 3', 'text'],
+    'stat4_value' => ['Number 4', 'text'], 'stat4_label' => ['Label 4', 'text'],
+  ],
+  'Social media links (leave empty to hide in the app)' => [
+    'facebook_url'  => ['Facebook', 'url'],
+    'instagram_url' => ['Instagram', 'url'],
+    'twitter_url'   => ['X (Twitter)', 'url'],
+    'linkedin_url'  => ['LinkedIn', 'url'],
+    'youtube_url'   => ['YouTube', 'url'],
+  ],
+];
+$quoteStatuses   = ['New','Under Review','Accepted','Rejected','Cancelled','Completed'];
+$projectStatuses = ['Not Started','In Progress','On Hold','Completed','Cancelled'];
 if($_SERVER['REQUEST_METHOD']==='POST'){
  check_csrf(); $action=$_POST['action']??'';
  try {
   if($action==='quote_status'){
-   $id=(int)$_POST['quote_id']; $status=$_POST['status']; $allowed=['New','Under Review','Accepted','Rejected','Completed']; if(!in_array($status,$allowed,true)) throw new Exception('Invalid status.');
+   $id=(int)$_POST['quote_id']; $status=$_POST['status']??''; if(!in_array($status,$quoteStatuses,true)) throw new Exception('Invalid status.');
    $st=$pdo->prepare('SELECT * FROM quotes WHERE id=?');$st->execute([$id]);$quote=$st->fetch(); if(!$quote) throw new Exception('Quote not found.');
    if($status==='Accepted' && empty($quote['client_id'])){
     $pdo->beginTransaction();
@@ -21,31 +62,55 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
     flash('success',$sent?'Quote accepted and credentials emailed to the client.':'Quote accepted and credentials generated. Email was not sent; use the credentials shown below to contact the client.');
    } else {$s=$pdo->prepare('UPDATE quotes SET status=?,admin_note=? WHERE id=?');$s->execute([$status,trim($_POST['admin_note']??''),$id]);flash('success','Quote status updated.');}
   } elseif($action==='create_project'){
-   $client=(int)$_POST['client_id'];$title=trim($_POST['title']);$desc=trim($_POST['description']??'');$status=$_POST['project_status'];$progress=max(0,min(100,(int)$_POST['progress']));$start=$_POST['start_date']?:null;$due=$_POST['due_date']?:null;
+   $client=(int)$_POST['client_id'];$title=trim($_POST['title']??'');$desc=trim($_POST['description']??'');$status=$_POST['project_status']??''; if($title==='') throw new Exception('Please enter a project title.'); if(!in_array($status,$projectStatuses,true)) throw new Exception('Invalid project status.');$progress=max(0,min(100,(int)$_POST['progress']));$start=$_POST['start_date']?:null;$due=$_POST['due_date']?:null;
    $s=$pdo->prepare('INSERT INTO projects(client_id,title,description,status,progress,start_date,due_date) VALUES(?,?,?,?,?,?,?)');$s->execute([$client,$title,$desc,$status,$progress,$start,$due]);flash('success','Project created.');
   } elseif($action==='update_project'){
-   $id=(int)$_POST['project_id'];$status=$_POST['project_status'];$progress=max(0,min(100,(int)$_POST['progress']));$text=trim($_POST['update_text']??'');
+   $id=(int)$_POST['project_id'];$status=$_POST['project_status']??''; if(!in_array($status,$projectStatuses,true)) throw new Exception('Invalid project status.');$progress=max(0,min(100,(int)$_POST['progress']));$text=trim($_POST['update_text']??'');
    $s=$pdo->prepare('UPDATE projects SET status=?,progress=? WHERE id=?');$s->execute([$status,$progress,$id]); if($text!==''){ $s=$pdo->prepare('INSERT INTO project_updates(project_id,update_text) VALUES(?,?)');$s->execute([$id,$text]); } flash('success','Project progress updated.');
+  } elseif($action==='save_settings'){
+   // Check everything first, then save everything in one go.
+   $values=[];
+   foreach($settingGroups as $fields){ foreach($fields as $key=>[$label,$type]){
+     $v=trim((string)($_POST['settings'][$key]??''));
+     if(!mb_check_encoding($v,'UTF-8')) throw new Exception($label.' contains characters that could not be read. Please retype it.');
+     if(mb_strlen($v)>($type==='long'?2000:255)) throw new Exception($label.' is too long.');
+     if($type==='email' && $v!=='' && !filter_var($v,FILTER_VALIDATE_EMAIL)) throw new Exception($label.' is not a valid email address.');
+     if($type==='url' && $v!=='' && !preg_match('#^https?://#i',$v)) throw new Exception($label.' must start with https:// (or leave it empty).');
+     if($type==='url' && $v!=='' && !filter_var($v,FILTER_VALIDATE_URL)) throw new Exception($label.' is not a valid link.');
+     $values[$key]=$v;
+   }}
+   $pdo->beginTransaction();
+   foreach($values as $key=>$v) save_setting($key,$v);
+   $pdo->commit();
+   flash('success','Saved. The website and the mobile app now show the new details (the app updates the next time it loads or is pulled down to refresh).');
   }
  } catch(Throwable $e){ if($pdo->inTransaction())$pdo->rollBack(); flash('error',$e->getMessage()); }
  // Send the admin back to whichever tab the action belongs to, instead of always
  // dropping them back at the Dashboard tab.
- $returnTab = $action==='quote_status' ? 'quotes' : (in_array($action,['create_project','update_project'],true) ? 'projects' : 'dashboard');
+ $returnTab = $action==='quote_status' ? 'quotes' : (in_array($action,['create_project','update_project'],true) ? 'projects' : ($action==='save_settings' ? 'settings' : 'dashboard'));
  redirect('admin.php?tab='.$returnTab);
 }
 $quotes=$pdo->query('SELECT q.*,u.username FROM quotes q LEFT JOIN users u ON u.id=q.client_id ORDER BY q.created_at DESC')->fetchAll();
 $clients=$pdo->query("SELECT * FROM users WHERE role='client' ORDER BY created_at DESC")->fetchAll();
 $projects=$pdo->query('SELECT p.*,u.name client_name,u.email FROM projects p JOIN users u ON u.id=p.client_id ORDER BY p.updated_at DESC')->fetchAll();
-$stats=['quotes'=>count($quotes),'new'=>count(array_filter($quotes,fn($q)=>$q['status']==='New')),'clients'=>count($clients),'projects'=>count($projects)];
+$stats=['quotes'=>count($quotes),'new'=>count(array_filter($quotes,fn($q)=>$q['status']==='New')),'clients'=>count($clients),'projects'=>count($projects),'app'=>count(array_filter($quotes,fn($q)=>($q['source']??'website')==='app'))];
+$currentSettings=settings_all();
 $f=get_flash();$credentials=$_SESSION['credentials']??null;unset($_SESSION['credentials']);
 
 // ---------------------------------------------------------------
 // Which tab is active. Plain query param, so it works with or
 // without JS and survives a full page reload after a form submit.
 // ---------------------------------------------------------------
-$tabTitles = ['dashboard'=>'Dashboard','quotes'=>'Quote Requests','clients'=>'Clients','projects'=>'Projects'];
+$tabTitles = ['dashboard'=>'Dashboard','quotes'=>'Quote Requests','clients'=>'Clients','projects'=>'Projects','settings'=>'Website & App'];
 $tab = $_GET['tab'] ?? 'dashboard';
 if(!array_key_exists($tab,$tabTitles)) $tab='dashboard';
+
+// Small label that shows where a quote came from (website form or mobile app)
+function source_pill(array $q): string {
+  return ($q['source'] ?? 'website') === 'app'
+    ? '<span class="pill src-app"><i class="fa-solid fa-mobile-screen-button" style="margin-right:5px"></i>Mobile app</span>'
+    : '<span class="pill src-web"><i class="fa-solid fa-globe" style="margin-right:5px"></i>Website</span>';
+}
 
 function status_class(string $status): string {
   return match($status){
@@ -54,6 +119,7 @@ function status_class(string $status): string {
     'Accepted' => 'st-good',
     'Completed' => 'st-good',
     'Rejected' => 'st-bad',
+    'Cancelled' => 'st-bad',
     'On Hold' => 'st-review',
     'In Progress' => 'st-review',
     'Not Started' => 'st-new',
@@ -206,6 +272,12 @@ button{font-family:inherit;}
 .pill.st-review{background:var(--review-bg);color:var(--review);}
 .pill.st-good{background:var(--good-bg);color:var(--good);}
 .pill.st-bad{background:var(--bad-bg);color:var(--bad);}
+.pill.src-app{background:#e8f4fd;color:#1e5a8a;}
+.pill.src-web{background:var(--cream-dim);color:var(--stone);}
+.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 18px;}
+.settings-grid .wide{grid-column:1 / -1;}
+.save-bar{position:sticky;bottom:0;background:var(--cream-dim);padding:14px 0;display:flex;gap:14px;align-items:center;flex-wrap:wrap;}
+@media(max-width:640px){.settings-grid{grid-template-columns:1fr;}}
 
 /* forms */
 .field{margin:0 0 12px;}
@@ -287,6 +359,9 @@ th{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--ston
         <i class="fa-solid fa-diagram-project"></i> Projects
         <span class="count"><?=e($stats['projects'])?></span>
       </a>
+      <a href="?tab=settings" class="nav-link<?= $tab==='settings'?' active':'' ?>" data-tab="settings">
+        <i class="fa-solid fa-mobile-screen-button"></i> Website &amp; App
+      </a>
     </nav>
     <div class="sidebar-foot">
       <a href="index.html"><i class="fa-solid fa-arrow-left"></i> Back to website</a>
@@ -325,7 +400,7 @@ th{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--ston
       <!-- ============ DASHBOARD ============ -->
       <section class="panel-view<?= $tab==='dashboard'?' active':'' ?>" data-panel="dashboard">
         <div class="cards">
-          <div class="stat"><span class="icon"><i class="fa-solid fa-file-invoice"></i></span><strong><?=e($stats['quotes'])?></strong><span>Total Quotes</span></div>
+          <div class="stat"><span class="icon"><i class="fa-solid fa-file-invoice"></i></span><strong><?=e($stats['quotes'])?></strong><span>Total Quotes · <?=e($stats['app'])?> from the app</span></div>
           <div class="stat"><span class="icon"><i class="fa-solid fa-sparkles"></i></span><strong><?=e($stats['new'])?></strong><span>New Requests</span></div>
           <div class="stat"><span class="icon"><i class="fa-solid fa-users"></i></span><strong><?=e($stats['clients'])?></strong><span>Clients</span></div>
           <div class="stat"><span class="icon"><i class="fa-solid fa-diagram-project"></i></span><strong><?=e($stats['projects'])?></strong><span>Active Projects</span></div>
@@ -339,7 +414,7 @@ th{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--ston
             </div>
             <?php if(!$quotes):?><p class="empty">No quote requests yet.</p><?php else: foreach(array_slice($quotes,0,5) as $q):?>
               <div class="mini-row">
-                <div><span class="who"><?=e($q['name'])?></span><br><span class="svc"><?=e($q['service'])?></span></div>
+                <div><span class="who"><?=e($q['name'])?></span> <?=source_pill($q)?><br><span class="svc"><?=e($q['service'])?></span></div>
                 <span class="pill <?=status_class($q['status'])?>"><?=e($q['status'])?></span>
               </div>
             <?php endforeach; endif;?>
@@ -374,6 +449,7 @@ th{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--ston
                 <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
                   <strong><?=e($q['name'])?></strong>
                   <span class="pill <?=status_class($q['status'])?>"><?=e($q['status'])?></span>
+                  <?=source_pill($q)?>
                 </div>
                 <span class="small"><?=e($q['email'])?> · <?=e($q['created_at'])?></span>
                 <h3><?=e($q['service'])?></h3>
@@ -387,11 +463,7 @@ th{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--ston
                 <div class="field">
                   <label>Status</label>
                   <select name="status">
-                    <option <?= $q['status']==='New'?'selected':''?>>New</option>
-                    <option <?= $q['status']==='Under Review'?'selected':''?>>Under Review</option>
-                    <option <?= $q['status']==='Accepted'?'selected':''?>>Accepted</option>
-                    <option <?= $q['status']==='Rejected'?'selected':''?>>Rejected</option>
-                    <option <?= $q['status']==='Completed'?'selected':''?>>Completed</option>
+                    <?php foreach($quoteStatuses as $opt):?><option <?= $q['status']===$opt?'selected':''?>><?=e($opt)?></option><?php endforeach;?>
                   </select>
                 </div>
                 <div class="field"><textarea name="admin_note" placeholder="Admin note"><?=e($q['admin_note'])?></textarea></div>
@@ -446,7 +518,7 @@ th{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--ston
               <div class="field">
                 <label>Status</label>
                 <select name="project_status">
-                  <option>Not Started</option><option>In Progress</option><option>On Hold</option><option>Completed</option>
+                  <?php foreach($projectStatuses as $opt):?><option><?=e($opt)?></option><?php endforeach;?>
                 </select>
               </div>
               <div class="field"><label>Progress %</label><input type="number" name="progress" min="0" max="100" value="0"></div>
@@ -474,10 +546,7 @@ th{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--ston
                 <div class="field">
                   <label>Status</label>
                   <select name="project_status">
-                    <option <?= $p['status']==='Not Started'?'selected':''?>>Not Started</option>
-                    <option <?= $p['status']==='In Progress'?'selected':''?>>In Progress</option>
-                    <option <?= $p['status']==='On Hold'?'selected':''?>>On Hold</option>
-                    <option <?= $p['status']==='Completed'?'selected':''?>>Completed</option>
+                    <?php foreach($projectStatuses as $opt):?><option <?= $p['status']===$opt?'selected':''?>><?=e($opt)?></option><?php endforeach;?>
                   </select>
                 </div>
                 <div class="field"><label>Progress %</label><input type="number" name="progress" min="0" max="100" value="<?=e($p['progress'])?>"></div>
@@ -488,6 +557,43 @@ th{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--ston
             <?php endforeach; endif;?>
           </div>
         </div>
+      </section>
+
+      <!-- ============ WEBSITE & APP ============ -->
+      <section class="panel-view<?= $tab==='settings'?' active':'' ?>" data-panel="settings">
+        <div class="panel" style="background:#e8f4fd;border-color:#bcdcf3;">
+          <p style="margin:0;font-size:14px;line-height:1.6;"><strong>One database, two front doors.</strong>
+          The website and the mobile app read these details from the same <code>settings</code> table
+          (the app through its API at <code>/api/studio</code>). Change something here and both show it.
+          Quote requests from both also land in <a href="?tab=quotes" data-tab="quotes" class="nav-link" style="display:inline;color:var(--tan);padding:0;">Quote Requests</a>.</p>
+          <p class="small" style="margin:8px 0 0;">Database server: <strong><?=e(DB_HOST)?></strong> · database <strong><?=e(DB_NAME)?></strong><?= DB_SSL ? ' · encrypted connection' : '' ?></p>
+        </div>
+        <form method="post">
+          <input type="hidden" name="csrf" value="<?=e(csrf_token())?>">
+          <input type="hidden" name="action" value="save_settings">
+          <?php foreach($settingGroups as $groupTitle=>$fields):?>
+          <div class="panel">
+            <h2><?=e($groupTitle)?></h2>
+            <div class="settings-grid">
+              <?php foreach($fields as $key=>[$label,$type]): $val=$currentSettings[$key]??''; ?>
+              <div class="field<?= $type==='long'?' wide':'' ?>">
+                <label for="set_<?=e($key)?>"><?=e($label)?></label>
+                <?php if($type==='long'):?>
+                  <textarea id="set_<?=e($key)?>" name="settings[<?=e($key)?>]" maxlength="2000" rows="3"><?=e($val)?></textarea>
+                <?php else:?>
+                  <input id="set_<?=e($key)?>" name="settings[<?=e($key)?>]" value="<?=e($val)?>" maxlength="255"
+                    type="<?= $type==='email'?'email':($type==='url'?'url':'text') ?>"<?= $type==='url'?' placeholder="https://"':'' ?>>
+                <?php endif;?>
+              </div>
+              <?php endforeach;?>
+            </div>
+          </div>
+          <?php endforeach;?>
+          <div class="save-bar">
+            <button class="btn">Save for website and app</button>
+            <span class="small">Changes show on the website straight away and in the app the next time it loads.</span>
+          </div>
+        </form>
       </section>
 
     </main>

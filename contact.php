@@ -164,19 +164,19 @@
     <div class="contact-info">
       <div class="contact-detail">
         <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7l9 6 9-6M5 5h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"/></svg></span>
-        <div><div class="lbl">Email</div><div class="val" id="contactEmailVal">hello@andiswaconsultation.co.za</div></div>
+        <div><div class="lbl">Email</div><div class="val" id="contactEmailVal" data-setting="email"><?=e(setting('email'))?></div></div>
       </div>
       <div class="contact-detail">
         <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.4 2.1L8 9.9a16 16 0 0 0 6 6l1.4-1.4a2 2 0 0 1 2.1-.4c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.8 2Z"/></svg></span>
-        <div><div class="lbl">Phone</div><div class="val" id="contactPhoneVal">+27 11 234 5678</div></div>
+        <div><div class="lbl">Phone</div><div class="val" id="contactPhoneVal" data-setting="phone"><?=e(setting('phone'))?></div></div>
       </div>
       <div class="contact-detail">
         <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 6-9 12-9 12S3 16 3 10a9 9 0 0 1 18 0Z"/><circle cx="12" cy="10" r="3"/></svg></span>
-        <div><div class="lbl">Studio</div><div class="val" id="contactAddressVal">44 Fox Street, Johannesburg CBD</div></div>
+        <div><div class="lbl">Studio</div><div class="val" id="contactAddressVal" data-setting="address"><?=e(setting('address'))?></div></div>
       </div>
       <div class="contact-detail">
         <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></span>
-        <div><div class="lbl">Business Hours</div><div class="val" id="contactHoursVal">Mon – Fri, 08:00 – 17:00 SAST</div></div>
+        <div><div class="lbl">Business Hours</div><div class="val" id="contactHoursVal" data-setting="hours"><?=e(setting('hours'))?></div></div>
       </div>
     </div>
 
@@ -195,7 +195,7 @@
         <div class="field"><label for="msg">Tell us about the project</label><textarea id="msg" name="message" placeholder="What are you looking to grow?" required></textarea></div>
       </div>
       <input type="hidden" name="name" id="quoteName"><input type="hidden" name="csrf" value="<?=e(csrf_token())?>"><button type="submit" class="btn btn-primary">Send Message →</button>
-      <p class="form-note">We typically reply within one business day.</p><?php if($flash): ?><div class="form-note" style="margin-top:12px;font-weight:700;"> <?=e($flash['message'])?> </div><?php endif; ?>
+      <p class="form-note">We typically reply within one business day.</p><?php if($flash): ?><div class="form-note" role="status" style="margin-top:12px;font-weight:700;<?= $flash['type']==='error' ? 'color:#b3261e;' : '' ?>"> <?=e($flash['message'])?> </div><?php endif; ?>
     </form>
   </div>
 </section>
@@ -214,11 +214,11 @@
       </p>
 
       <div class="social-links">
-        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-        <a href="#" aria-label="X (Twitter)"><i class="fab fa-x-twitter"></i></a>
-        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+        <a href="<?=e(setting('facebook_url') ?: '#')?>" data-setting-href="facebook_url" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="<?=e(setting('instagram_url') ?: '#')?>" data-setting-href="instagram_url" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="<?=e(setting('twitter_url') ?: '#')?>" data-setting-href="twitter_url" aria-label="X (Twitter)"><i class="fab fa-x-twitter"></i></a>
+        <a href="<?=e(setting('linkedin_url') ?: '#')?>" data-setting-href="linkedin_url" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        <a href="<?=e(setting('youtube_url') ?: '#')?>" data-setting-href="youtube_url" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
       </div>
     </div>
 
@@ -240,10 +240,10 @@
     <div class="footer-box">
       <h3>Contact</h3>
       <ul class="contact-info">
-        <li><i class="fa-solid fa-phone"></i> +27 67 790 4428</li>
-        <li><i class="fa-regular fa-envelope"></i> andiswasbusinessconsultations@outlook.com</li>
-        <li><i class="fa-solid fa-location-dot"></i> 2 Belmont Terrace,<br>Port Elizabeth, 6001</li>
-        <li><i class="fa-regular fa-clock"></i> Monday – Friday<br>08:00 – 18:00</li>
+        <li><i class="fa-solid fa-phone"></i> <span data-setting="phone"><?=e(setting('phone'))?></span></li>
+        <li><i class="fa-regular fa-envelope"></i> <span data-setting="email"><?=e(setting('email'))?></span></li>
+        <li><i class="fa-solid fa-location-dot"></i> <span data-setting="address" data-setting-format="lines"><?=e(setting('address'))?></span></li>
+        <li><i class="fa-regular fa-clock"></i> <span data-setting="hours" data-setting-format="lines"><?=e(setting('hours'))?></span></li>
       </ul>
     </div>
   </div>
@@ -302,5 +302,6 @@ document.getElementById('quoteForm').addEventListener('submit', function(){
 <script src="Projects_Js/chatbot.js"></script>
 <script src="Projects_Js/nav.js"></script>
 
+<script src="Projects_Js/site-settings.js"></script>
 </body>
 </html>

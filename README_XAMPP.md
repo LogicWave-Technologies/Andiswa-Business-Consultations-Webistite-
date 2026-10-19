@@ -1,59 +1,72 @@
-# Andiswa Business Consultation — XAMPP + MySQL version
+# Andiswa Business Consultation website (XAMPP + MySQL, Azure-ready)
 
-## What was changed
-- Removed the website light/dark mode toggle and theme switching code.
-- Replaced the browser-only admin login with a PHP session-based login.
-- Added one login page for both administrators and clients.
-- Added MySQL database tables for users, quotes, projects, project updates and settings.
-- Quote requests are saved to MySQL through PHP/PDO.
-- The client receives an on-screen confirmation after submitting a quote.
-- When an admin accepts a quote, a client account is automatically created and temporary login credentials are generated.
-- The system attempts to email the credentials using PHP `mail()`. If XAMPP mail is not configured, the admin dashboard shows the generated credentials once so they can be provided to the client.
-- Clients can log in, view quote status, view project progress, and read project updates.
-- Admins can review quotes, accept/reject/update them, create projects and update progress.
+## What is new in this version – one shared database for the website and the app
 
-## XAMPP installation
-1. Install XAMPP and start **Apache** and **MySQL** in the XAMPP Control Panel.
-2. Copy this entire project folder into `C:\xampp\htdocs\`.
-3. Open `http://localhost/phpmyadmin`.
-4. Import `database.sql` into phpMyAdmin. It creates the `andiswa_business` database and all required tables.
-5. Open `http://localhost/Andiswa-Business-Consultations-Website-v8/setup.php` (change the folder name in the URL if you renamed the folder).
-6. The setup page creates the first admin account:
-   - Username: `admin`
-   - Password: `Admin@2026`
-7. Delete `setup.php` after the first successful setup.
-8. Open the website at `http://localhost/Andiswa-Business-Consultations-Website-v8/index.html`.
+The website and the mobile app (through its API) now use **one** MySQL database, `andiswa_business`, on XAMPP or on Azure.
 
-## Important database settings
-The default XAMPP MySQL settings are already configured in `config.php`:
-- Host: `127.0.0.1`
-- Database: `andiswa_business`
-- Username: `root`
-- Password: blank
+- **Admin → Website & App (new tab).** Edit the phone, email, address, hours, tagline, Home page text, the four numbers and the social links. The website and the app both read these from the `settings` table, so one save updates both.
+- **Quotes show where they came from.** A new `quotes.source` column holds `website` or `app`. The admin shows a **Website** or **Mobile app** label on each quote, and the dashboard counts app quotes.
+- **The Contact page shows the real details.** It used to show placeholder text (44 Fox Street, Johannesburg). Now it reads them from the database. The footers and the Home page tagline do the same, through `site_settings.php` + `Projects_Js/site-settings.js`.
+- **The chatbot log works.** `chat_log.php` saves chatbot messages in the `chat_messages` table. Before this, it tried to post to an API address that did not exist.
+- **`database.sql` matches the real database.** It now has all 10 tables (it was missing `invoices`, `notifications`, `services`, `chat_messages` and `cancellation_requests`) and the "Cancelled" statuses. Keys are written inside each table, so it works on Azure.
+- **`setup.php` can upgrade an existing database** (with `db_upgrade.php`) without deleting data. Running it twice is safe.
+- **Azure-ready.** `andiswa_business_azure.sql` is your current data, ready to import into Azure. `config.php` switches on encryption for Azure servers by itself, and it can read its settings from environment variables when the site itself is hosted on Azure.
+- **Full instructions:** `AZURE_SETUP_GUIDE.md`.
 
-If you configured a MySQL password, change `DB_PASS` in `config.php`.
+| File | Status |
+|---|---|
+| `admin.php` | Updated: Website & App tab, Website/Mobile app labels, "Cancelled" status, status checks |
+| `config.php` | Updated: environment variables, automatic Azure encryption, `setting()` helpers |
+| `contact.php` | Updated: real contact details and social links from the database |
+| `submit_quote.php` | Updated: saves `source = website`, same checks as the app's API |
+| `database.sql` | Updated: full schema (10 tables), Azure-safe |
+| `setup.php` | Updated: also upgrades older databases |
+| `db_upgrade.php` | New: adds missing columns to an older database |
+| `site_settings.php` | New: studio details as JSON for the .html pages |
+| `Projects_Js/site-settings.js` | New: fills the details into the .html pages |
+| `chat_log.php` | New: saves chatbot messages |
+| `Projects_Js/api.js` | Updated: uses `site_settings.php` and `chat_log.php`; uses `localStorage` as the fallback |
+| `contact.html` | Now just forwards to `contact.php` |
+| `andiswa_business_azure.sql` | New: your data, ready for Azure |
+| `AZURE_SETUP_GUIDE.md` | New: step by step guide for Azure |
+| all .html pages | Footer details and social links come from the database (the old text stays as a fallback) |
 
-## Quote → account workflow
-1. Visitor opens **Get a Quote**.
-2. Visitor submits their name, email, service and project description.
-3. PHP validates the request and inserts it into the `quotes` table.
-4. Visitor is redirected back to the contact page and sees a confirmation message.
-5. Admin logs into `admin.php`.
-6. Admin changes the quote status to **Accepted**.
-7. PHP creates the client account, hashes the password, links the account to the quote, and generates a temporary password.
-8. The system attempts to email the username and temporary password.
-9. Client logs in at `login.php`, changes the temporary password, and reaches `dashboard.php`.
-10. Admin creates a project for the client and updates progress. The client sees those updates in the portal.
+**The API changed a little too** (in the app project): `QuoteEntity` has a `Source` property and `StudioDto` sends `FacebookUrl` and `YouTubeUrl`.
+Upgrade the database (run `setup.php` once, or import `andiswa_business_azure.sql`) **before** you run the new API. Otherwise saving a quote from the app fails with "Unknown column 'source'".
 
-## Email on XAMPP
-PHP's `mail()` function is not normally configured by a fresh XAMPP installation. The account creation itself works without mail, but automatic email delivery requires SMTP configuration. For a local demo, the admin dashboard displays the generated credentials once when email delivery is unavailable.
+## Run it on your PC (XAMPP)
 
-For production, replace the `mail()` implementation in `config.php` with an authenticated SMTP provider (for example, PHPMailer + your business mailbox).
+1. Start **Apache** and **MySQL** in the XAMPP Control Panel.
+2. Copy this whole folder into `C:\xampp\htdocs\`.
+3. Open `http://localhost/Andiswa-Business-Consultations-Website/setup.php`.
+4. Choose an admin password (at least 10 characters) and click **Create tables and admin account**.
+   This creates the `andiswa_business` database, all tables, the app settings and the admin account.
+   If the database already exists, it only adds what is missing (for example the new `source` column). Your data and the admin password stay as they are.
+5. **Delete `setup.php`** afterwards.
+6. Open the website: `http://localhost/Andiswa-Business-Consultations-Website/index.html`
+7. Admin login: `http://localhost/Andiswa-Business-Consultations-Website/login.php` with username `admin` and the password you chose.
+
+No `config.local.php` file = the website uses the normal XAMPP database (`root`, no password).
+
+## Run it with Azure
+
+1. Follow `AZURE_SETUP_GUIDE.md` (in this folder). Parts 1–3 create the database and copy your data.
+2. Copy `config.local.example.php`, rename the copy to `config.local.php`, and fill in your Azure server name, username and password.
+3. Save the certificate `DigiCertGlobalRootG2.crt.pem` in this folder (download link in the Azure guide).
+4. Log in with your usual admin password. Your data, including the admin account, was copied in Part 3.
+
+## Quote → account workflow (unchanged)
+
+1. A visitor sends a quote request from the website **or the mobile app**.
+2. It is saved in the `quotes` table with status **New**.
+3. The admin logs in to `admin.php` and changes the status to **Accepted**.
+4. PHP creates the client account and a temporary password, and tries to email it. If XAMPP email is not set up, the admin page shows the details once.
+5. The client logs in at `login.php`, changes the temporary password and sees their projects in `dashboard.php`.
+6. The admin creates a project and updates its progress. The client sees the updates.
 
 ## Security notes
-- Passwords are stored with `password_hash()` and verified with `password_verify()`.
-- PHP sessions are used for authentication.
-- POST forms use CSRF tokens.
-- Database queries use PDO prepared statements.
-- Temporary client passwords are required to be changed after first login.
-- Delete `setup.php` after initial installation.
+
+- Passwords are stored with `password_hash()` and checked with `password_verify()`.
+- Forms use CSRF tokens. Database queries use prepared statements.
+- **Never upload `config.local.php` to GitHub.** It holds your database password.
+- Delete `setup.php` after the first setup.
