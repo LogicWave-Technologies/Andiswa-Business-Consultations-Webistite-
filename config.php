@@ -48,6 +48,57 @@ function current_user(): ?array { return $_SESSION['user'] ?? null; }
 function send_credentials_email(string $email, string $name, string $username, string $password): bool {
     $subject = 'Your Andiswa Business Consultation login details';
     $body = "Hello {$name},\n\nYour quote has been accepted. Your client account has been created.\n\nLogin: " . (defined('BASE_URL') ? BASE_URL : 'http://localhost/Andiswa-Business-Consultations-Website-v8') . "/login.php\nUsername: {$username}\nTemporary password: {$password}\n\nPlease change your password after logging in.\n\nRegards,\nAndiswa Business Consultation";
+    $smtpHost = getenv('SMTP_HOST') ?: '';
+
+    if ($smtpHost !== '') {
+        $autoload = __DIR__ . '/vendor/autoload.php';
+        if (!is_file($autoload)) {
+            error_log('SMTP email could not be sent: Composer dependencies are missing. Run composer install.');
+            return false;
+        }
+
+        require_once $autoload;
+
+        $smtpUsername = getenv('SMTP_USERNAME') ?: '';
+        $smtpPassword = getenv('SMTP_PASSWORD') ?: '';
+        if (($smtpUsername === '') !== ($smtpPassword === '')) {
+            error_log('SMTP email could not be sent: SMTP_USERNAME and SMTP_PASSWORD must both be set or both be empty.');
+            return false;
+        }
+
+        $encryption = strtolower(getenv('SMTP_ENCRYPTION') ?: 'tls');
+        if (!in_array($encryption, ['tls', 'ssl'], true)) {
+            error_log('SMTP email could not be sent: SMTP_ENCRYPTION must be tls or ssl.');
+            return false;
+        }
+
+        try {
+            $mailer = new PHPMailer\PHPMailer\PHPMailer(true);
+            $mailer->isSMTP();
+            $mailer->Host = $smtpHost;
+            $mailer->Port = (int) (getenv('SMTP_PORT') ?: 587);
+            $mailer->SMTPAuth = $smtpUsername !== '';
+            $mailer->Username = $smtpUsername;
+            $mailer->Password = $smtpPassword;
+            $mailer->SMTPSecure = $encryption === 'ssl'
+                ? PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_SMTPS
+                : PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
+            $mailer->CharSet = PHPMailer\PHPMailer\PHPMailer::CHARSET_UTF8;
+            $mailer->setFrom(
+                getenv('SMTP_FROM_EMAIL') ?: 'no-reply@andiswa.local',
+                getenv('SMTP_FROM_NAME') ?: 'Andiswa Business Consultation'
+            );
+            $mailer->addAddress($email, $name);
+            $mailer->Subject = $subject;
+            $mailer->Body = $body;
+            $mailer->send();
+            return true;
+        } catch (PHPMailer\PHPMailer\Exception $exception) {
+            error_log('SMTP email could not be sent: ' . $exception->getMessage());
+            return false;
+        }
+    }
+
     $headers = "From: no-reply@andiswa.local\r\nContent-Type: text/plain; charset=UTF-8\r\n";
     return @mail($email, $subject, $body, $headers);
 }

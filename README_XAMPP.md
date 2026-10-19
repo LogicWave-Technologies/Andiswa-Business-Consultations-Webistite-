@@ -8,21 +8,22 @@
 - Quote requests are saved to MySQL through PHP/PDO.
 - The client receives an on-screen confirmation after submitting a quote.
 - When an admin accepts a quote, a client account is automatically created and temporary login credentials are generated.
-- The system attempts to email the credentials using PHP `mail()`. If XAMPP mail is not configured, the admin dashboard shows the generated credentials once so they can be provided to the client.
+- The system emails credentials through configured SMTP, or PHP `mail()` when SMTP is not configured. If email delivery fails, the admin dashboard shows the generated credentials once so they can be provided to the client.
 - Clients can log in, view quote status, view project progress, and read project updates.
 - Admins can review quotes, accept/reject/update them, create projects and update progress.
 
 ## XAMPP installation
 1. Install XAMPP and start **Apache** and **MySQL** in the XAMPP Control Panel.
 2. Copy this entire project folder into `C:\xampp\htdocs\`.
-3. Open `http://localhost/phpmyadmin`.
-4. Import `database.sql` into phpMyAdmin. It creates the `andiswa_business` database and all required tables.
-5. Open `http://localhost/Andiswa-Business-Consultations-Website-v8/setup.php` (change the folder name in the URL if you renamed the folder).
-6. The setup page creates the first admin account:
+3. Install Composer, open a terminal in the project folder, and run `composer install` to install PHPMailer from `composer.lock`.
+4. Open `http://localhost/phpmyadmin`.
+5. Import `database.sql` into phpMyAdmin. It creates the `andiswa_business` database and all required tables.
+6. Open `http://localhost/Andiswa-Business-Consultations-Website-v8/setup.php` (change the folder name in the URL if you renamed the folder).
+7. The setup page creates the first admin account:
    - Username: `admin`
    - Password: `Admin@2026`
-7. Delete `setup.php` after the first successful setup.
-8. Open the website at `http://localhost/Andiswa-Business-Consultations-Website-v8/index.html`.
+8. Delete `setup.php` after the first successful setup.
+9. Open the website at `http://localhost/Andiswa-Business-Consultations-Website-v8/index.html`.
 
 ## Important database settings
 The default XAMPP MySQL settings are already configured in `config.php`:
@@ -45,10 +46,15 @@ If you configured a MySQL password, change `DB_PASS` in `config.php`.
 9. Client logs in at `login.php`, changes the temporary password, and reaches `dashboard.php`.
 10. Admin creates a project for the client and updates progress. The client sees those updates in the portal.
 
-## Email on XAMPP
-PHP's `mail()` function is not normally configured by a fresh XAMPP installation. The account creation itself works without mail, but automatic email delivery requires SMTP configuration. For a local demo, the admin dashboard displays the generated credentials once when email delivery is unavailable.
+## Email configuration
+When `SMTP_HOST` is set in the Apache/PHP environment, the app sends account credentials through PHPMailer. Configure these environment variables for Apache:
+- `SMTP_HOST`: SMTP server hostname.
+- `SMTP_PORT`: SMTP port (defaults to `587`).
+- `SMTP_USERNAME` and `SMTP_PASSWORD`: both set for authenticated SMTP, or both left empty.
+- `SMTP_ENCRYPTION`: `tls` (default) or `ssl`.
+- `SMTP_FROM_EMAIL` and `SMTP_FROM_NAME`: sender address and display name (optional).
 
-For production, replace the `mail()` implementation in `config.php` with an authenticated SMTP provider (for example, PHPMailer + your business mailbox).
+Restart Apache after changing its environment. If `SMTP_HOST` is not set, the app uses PHP `mail()` as before. If email delivery fails, the admin dashboard displays the generated credentials once so they can be provided to the client.
 
 ## Security notes
 - Passwords are stored with `password_hash()` and verified with `password_verify()`.
