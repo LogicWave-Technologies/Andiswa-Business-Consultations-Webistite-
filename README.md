@@ -29,6 +29,53 @@ The workflow automatically checks PHP 8.1 and PHP 8.4. This screenshot shows a s
 - Chatbot message logging and an upgrade-safe database setup.
 - Contact enquiries and client login credentials are sent through PHPMailer over SMTP.
 
+## Project structure
+
+```text
+.
+|-- .github/
+|   `-- workflows/
+|       `-- php.yml                 # GitHub Actions PHP checks
+|-- assets/
+|   |-- screenshots/                # Website and workflow screenshots
+|   `-- andiswa-branding.jpg
+|-- Projects_Images/
+|   |-- AB_Logo/
+|   |-- branding/
+|   |-- flyers/
+|   |-- posters/
+|   `-- social-media/
+|-- Projects_Js/                     # JavaScript for portfolio and shared UI
+|-- Project_Styles/                  # Portfolio stylesheets
+|-- about.html
+|-- about.css
+|-- about.js
+|-- admin.php                        # Admin dashboard and quote acceptance
+|-- contact.html
+|-- contact.php                      # Contact page backend
+|-- config.php                       # Database and SMTP helpers
+|-- config.local.example.php         # Example local database settings
+|-- config.smtp.local.example.php    # Example SMTP settings
+|-- dashboard.php                    # Client dashboard
+|-- database.sql                     # Base MySQL schema
+|-- db_upgrade.php                   # Database upgrade helper
+|-- index.html                       # Website home page
+|-- login.php
+|-- logout.php
+|-- composer.json                    # PHP dependency requirements
+|-- composer.lock                    # Locked dependency versions
+|-- README.md
+|-- README_XAMPP.md
+|-- setup.php                        # Initial database/admin setup
+|-- site_settings.php                # Shared website settings endpoint
+|-- submit_quote.php                 # Quote/contact form handler
+|-- andiswa_business_azure.sql       # Azure database schema
+|-- azure_additions.sql              # Azure database updates
+`-- AZURE_SETUP_GUIDE.md
+```
+
+Composer creates the ignored `vendor/` directory when you run `composer install`. Local secret files such as `config.local.php` and `config.smtp.local.php` are intentionally not tracked; create them from their corresponding `.example.php` templates when needed. The `Projects_Images/`, `Projects_Js/`, and `Project_Styles/` directories contain the portfolio project media, scripts, and styles.
+
 ## Run locally with XAMPP
 
 1. Install XAMPP and Composer. Start Apache and MySQL.
