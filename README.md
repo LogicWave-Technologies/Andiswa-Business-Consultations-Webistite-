@@ -213,5 +213,8 @@ For production, store SMTP credentials in the hosting platform's secret/environm
 
 - Passwords are stored with `password_hash()` and checked with `password_verify()`.
 - Forms use CSRF tokens and database queries use prepared statements.
-- Never upload `config.local.php` or database credentials to GitHub.
+  
+## Azure link
+andiswa-business-api-buc0hwgybmhnabhs.southafricanorth-01.azurewebsites.net
+Never upload `config.local.php` or database credentials to GitHub.
 - Delete `setup.php` after initial setup.
