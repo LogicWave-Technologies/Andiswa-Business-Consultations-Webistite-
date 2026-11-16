@@ -1,26 +1,23 @@
-# Putting the Andiswa database on Azure (website + app share it)
+# Optional MySQL setup for legacy website features
 
-LogicWave Technologies · server `logicwave-andiswa-business-consultation` · resource group `logicwave-rg`
+This guide covers the website's **optional** MySQL-backed settings editor and chatbot log. The website's quote, account, admin project, and client-portal flows use the separately published ASP.NET API and do not require this MySQL database.
 
-This guide moves your `andiswa_business` database from XAMPP to **Azure Database for MySQL – Flexible Server**.
-After that, the website and the mobile app both use that one database.
+The current API has its own database configuration. Do not use this guide's old API connection-string steps for it; follow the API project's README and deploy API code changes separately.
 
 ```
- Website (PHP)  ──────────────┐
- XAMPP or Azure App Service   │
-                              ▼
-                 Azure Database for MySQL   ← one database: andiswa_business
-                              ▲
- Mobile app ──► API (ASP.NET Core on Azure App Service)
+Website PHP ── optional settings/chat ──► Azure Database for MySQL
+Website PHP ── quotes/accounts/projects ─► Published Andiswa API ─► API database
+Mobile app ──────────────────────────────► Published Andiswa API
 ```
 
 **What is shared:**
 
-| Table | Website | App (through the API) |
+| Table/data | Website | API/mobile app |
 |---|---|---|
-| `settings` | Contact page, footers, **Admin → Website & App** | `GET /api/studio` (Home and Contact pages) |
-| `quotes` | Contact form | `POST /api/quotes` (Contact page) |
-| everything else | admin, client portal, chatbot log | not used yet |
+| `settings` | Contact page, footers, **Admin → Website & App** (MySQL) | API studio settings are stored separately |
+| quotes | `POST /api/quotes` through the published API | Same API |
+| accounts/projects | Published API | Same API |
+| chatbot log | MySQL | Not currently supported by the API |
 
 Time needed: about 45 minutes. Do the parts in order.
 
@@ -99,7 +96,7 @@ Run the file only once. If it stops halfway, delete the database (`DROP DATABASE
 
 ---
 
-## Part 4 – Connect the website to Azure
+## Part 4 – Connect optional PHP features to Azure MySQL
 
 1. In the website folder, copy `config.local.example.php` and name the copy **`config.local.php`**.
 2. Fill in your server name, admin username and password (see the example inside).
@@ -112,9 +109,11 @@ Every teammate who runs the website needs their own `config.local.php` and the `
 
 ---
 
-## Part 5 – Connect the API (and the app) to Azure
+## Part 5 – Legacy API instructions (do not use with the current API)
 
-### 5a. Test on your PC first
+The following section is retained for historical reference only. The current `AndiswaBusinessAPI` uses its own SQL Server configuration, not the MySQL connection string shown here. Use that project's README and redeploy it after API code changes.
+
+### 5a. Historical local test steps
 
 In Visual Studio, right-click the **AndiswaConsultationApp.Api** project → **Manage User Secrets** and paste this (with your details):
 

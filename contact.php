@@ -118,9 +118,7 @@
   @keyframes toastOut{to{opacity:0;transform:translateY(-6px);}}
 </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-  <!-- Shared data-access layer (Backend/API abstraction) — loaded early
-       so its functions (submitInquiry, getStudioSettings, etc.) are
-       ready before this page's own script uses them below. -->
+  <!-- Loaded for the chatbot's same-origin PHP logging endpoint. -->
   <script src="Projects_Js/api.js"></script>
 </head>
 <body>
@@ -262,26 +260,8 @@
 <div id="toastStack" aria-live="polite"></div>
 
 <script>
-/* =====================================================================
-   CONTACT PAGE — form submission and settings display
-   -----------------------------------------------------------------------
-   This page no longer talks to storage directly. Both actions below go
-   through Projects_Js/api.js, the shared data-access layer that stands
-   in for a real ASP.NET Core Web API backed by Azure SQL Database:
-
-     HTML + CSS + JavaScript  →  Backend / API  →  Azure SQL Database
-     (this form, this file)      (api.js's           (Inquiries,
-                                   submitInquiry() /   Settings tables)
-                                   getStudioSettings())
-
-   See api.js for the full explanation of that layer, including why
-   there's a local-storage fallback (no backend is currently deployed).
-   Routing through api.js — rather than calling window.storage here
-   directly — is what keeps this page's submissions landing in exactly
-   the same place the admin dashboard's Inquiries list reads from, and
-   is also what would make swapping in a real backend later a one-file
-   change instead of a rewrite of every page.
-===================================================================== */
+/* Contact submissions post to submit_quote.php, which saves them through
+   the published API. Contact details remain loaded from site_settings.php. */
 
 function showToast(message){
   const stack = document.getElementById('toastStack');

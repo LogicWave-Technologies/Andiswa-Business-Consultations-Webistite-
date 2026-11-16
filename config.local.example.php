@@ -19,4 +19,4 @@ define('DB_PASS', 'YOUR-ADMIN-PASSWORD');
 define('DB_SSL_CA', __DIR__ . '/DigiCertGlobalRootG2.crt.pem');
 
 // The address people use to open the website (used in the "your login details" email).
-define('BASE_URL', 'http://localhost/Andiswa-Business-Consultations-Website');
+define('BASE_URL', '');

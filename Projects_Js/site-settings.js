@@ -68,7 +68,7 @@
       return res.json();
     })
     .then(apply)
-    .catch(function () {
-      /* No PHP / database: keep the text written in the HTML. */
+    .catch(function (error) {
+      console.warn("Studio settings could not be loaded from the business API:", error);
     });
 })();

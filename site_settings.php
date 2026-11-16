@@ -2,10 +2,8 @@
 // =====================================================================
 // site_settings.php  -  GET  ->  the public studio details as JSON
 // ---------------------------------------------------------------------
-// The plain .html pages cannot run PHP, so Projects_Js/site-settings.js asks
-// this file for the phone, email, address, hours, tagline and social links.
-// They come from the SAME "settings" table the mobile app's API reads
-// (GET /api/studio), so the website and the app always show the same details.
+// The plain .html pages ask this endpoint for public studio details from the
+// existing settings table, which is not yet writable through the API.
 //
 // Only the keys listed below are sent. Nothing private lives in this table,
 // but listing them keeps it that way if someone adds a private setting later.

@@ -146,8 +146,7 @@
 <section class="team-shell">
   <div class="wrap">
     <div class="team-public-grid" id="publicTeamGrid">
-      <!-- Populated by JS below, from the same shared `abc-team` storage
-           key the admin panel's Team page writes to -->
+      <!-- Populated with the built-in roster; the API has no team endpoint. -->
     </div>
   </div>
 </section>
@@ -212,25 +211,9 @@
 </footer>
 
 <script>
-/* =====================================================================
-   TEAM PAGE — displays the current roster
-   -----------------------------------------------------------------------
-   Fetches the team list through Projects_Js/api.js instead of reading
-   storage directly, so this page follows the same 3-tier flow as the
-   rest of the site:
+/* TEAM PAGE — the published API does not expose a team-roster route. */
 
-     HTML + CSS + JavaScript  →  Backend / API  →  Azure SQL Database
-     (this page, this file)      (api.js's            (TeamMembers
-                                   getTeamMembers())     table)
-
-   Whatever the admin panel on the Home page last saved is what shows
-   up here — see api.js for the full explanation of how that call would
-   reach Azure SQL Database through a real backend, and why there's a
-   local-storage fallback while no backend is deployed.
-===================================================================== */
-
-// Sensible fallback roster shown if nothing has been saved yet (e.g.
-// the very first time the site is opened, before any admin edits).
+// Static roster displayed until the API supports team management.
 const defaultTeam = [
   { name:"Andiswa Phewa",      role:"Founder & Creative Director", email:"andiswa@andiswaconsultation.co.za" },
 ];
@@ -254,7 +237,6 @@ async function loadTeam(){
     const team = await getTeamMembers(); // from api.js
     renderTeam(team && team.length ? team : defaultTeam);
   } catch (err) {
-    // No saved roster yet, or the data layer is unreachable on this view
     renderTeam(defaultTeam);
   }
 }

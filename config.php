@@ -1,7 +1,6 @@
 <?php
-// XAMPP / MySQL configuration
-// Works with BOTH: the local XAMPP MySQL (default) and Azure Database for MySQL.
-// To use Azure, create the file config.local.php next to this one (see config.local.example.php).
+// PHP site configuration. Quote, account, admin and client data use the published API.
+// MySQL remains only for the existing settings editor and chatbot log.
 session_start();
 
 // ---------------------------------------------------------------------
@@ -17,7 +16,7 @@ header('Pragma: no-cache');
 header('Expires: 0');
 
 // ---------------------------------------------------------------------
-// Database details - the SAME database the mobile app's API uses.
+// Optional MySQL configuration for the settings editor and chatbot log.
 //
 // Where the details come from (first one found wins):
 //   1. config.local.php next to this file (your PC, NOT uploaded to GitHub)
@@ -33,6 +32,129 @@ function env_or(string $name, $default) {
     $value = getenv($name);
     return ($value === false || $value === '') ? $default : $value;
 }
+
+defined('API_BASE_URL') || define('API_BASE_URL', rtrim(env_or(
+    'API_BASE_URL',
+    'https://andiswa-business-api-buc0hwgybmhnabhs.southafricanorth-01.azurewebsites.net/api'
+), '/'));
+
+final class ApiException extends RuntimeException {
+    public int $status;
+
+    public function __construct(int $status, string $message) {
+        parent::__construct($message);
+        $this->status = $status;
+    }
+}
+
+function api_request(string $method, string $path, ?array $payload = null, ?string $token = null): array {
+    $headers = ['Accept: application/json'];
+    if ($payload !== null) {
+        $headers[] = 'Content-Type: application/json';
+    }
+    if ($token !== null) {
+        $headers[] = 'Authorization: Bearer ' . $token;
+    }
+
+    $url = API_BASE_URL . '/' . ltrim($path, '/');
+    $body = $payload !== null ? json_encode($payload, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE) : null;
+    if (function_exists('curl_init')) {
+        $curl = curl_init($url);
+        if ($curl === false) {
+            throw new RuntimeException('Could not initialize the business API request.');
+        }
+
+        $options = [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST => strtoupper($method),
+            CURLOPT_CONNECTTIMEOUT => 5,
+            CURLOPT_TIMEOUT => 20,
+            CURLOPT_HTTPHEADER => $headers,
+        ];
+        if ($body !== null) {
+            $options[CURLOPT_POSTFIELDS] = $body;
+        }
+        curl_setopt_array($curl, $options);
+        $responseBody = curl_exec($curl);
+        $requestError = curl_error($curl);
+        $status = (int)curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
+        curl_close($curl);
+    } else {
+        if (!ini_get('allow_url_fopen') || !extension_loaded('openssl')) {
+            throw new RuntimeException('Enable PHP cURL or HTTPS streams to connect to the business API.');
+        }
+
+        $httpOptions = [
+            'method' => strtoupper($method),
+            'header' => implode("\r\n", $headers),
+            'timeout' => 20,
+            'ignore_errors' => true,
+            'follow_location' => 0,
+        ];
+        if ($body !== null) {
+            $httpOptions['content'] = $body;
+        }
+        $context = stream_context_create([
+            'http' => $httpOptions,
+            'ssl' => ['verify_peer' => true, 'verify_peer_name' => true],
+        ]);
+        $requestError = '';
+        set_error_handler(static function (int $severity, string $message) use (&$requestError): bool {
+            $requestError = $message;
+            return true;
+        }, E_WARNING);
+        try {
+            $responseBody = file_get_contents($url, false, $context);
+        } finally {
+            restore_error_handler();
+        }
+        $status = 0;
+        if (isset($http_response_header[0]) && preg_match('/^HTTP\/\S+ (\d{3})/', $http_response_header[0], $matches)) {
+            $status = (int)$matches[1];
+        }
+    }
+
+    if ($responseBody === false) {
+        error_log('Business API request failed: ' . $requestError);
+        throw new RuntimeException('The business API could not be reached. Please try again later.');
+    }
+
+    try {
+        $response = json_decode($responseBody, true, 512, JSON_THROW_ON_ERROR);
+    } catch (JsonException $exception) {
+        if ($status >= 200 && $status < 300) {
+            error_log('Business API returned invalid JSON: ' . $exception->getMessage());
+            throw new RuntimeException('The business API returned an invalid response.');
+        }
+        $response = [];
+    }
+
+    if ($status < 200 || $status >= 300) {
+        if ($status === 401 && $token !== null) {
+            unset($_SESSION['user'], $_SESSION['api_token']);
+            flash('error', 'Your session expired. Please sign in again.');
+            redirect('login.php');
+        }
+        $message = is_array($response)
+            ? (string)($response['error'] ?? $response['detail'] ?? $response['title'] ?? '')
+            : '';
+        throw new ApiException($status, $message !== '' ? $message : 'The business API request failed (HTTP ' . $status . ').');
+    }
+
+    if (!is_array($response)) {
+        throw new RuntimeException('The business API returned an unexpected response.');
+    }
+    return $response;
+}
+
+function public_base_url(): string {
+    $environmentUrl = getenv('BASE_URL');
+    if ($environmentUrl !== false && trim($environmentUrl) !== '') {
+        return rtrim(trim($environmentUrl), '/');
+    }
+    return defined('BASE_URL') ? rtrim(BASE_URL, '/') : '';
+}
+
 defined('DB_HOST')   || define('DB_HOST', env_or('DB_HOST', '127.0.0.1'));
 defined('DB_PORT')   || define('DB_PORT', (int)env_or('DB_PORT', 3306));
 defined('DB_NAME')   || define('DB_NAME', env_or('DB_NAME', 'andiswa_business'));
@@ -42,7 +164,7 @@ defined('DB_SSL_CA') || define('DB_SSL_CA', env_or('DB_SSL_CA', ''));   // path 
 // Azure servers always end in ".mysql.database.azure.com" and always need encryption,
 // so we switch it on automatically for them (DB_SSL can still force it on/off).
 defined('DB_SSL')    || define('DB_SSL', filter_var(env_or('DB_SSL', str_ends_with(strtolower(DB_HOST), '.mysql.database.azure.com') ? '1' : (DB_SSL_CA !== '' ? '1' : '0')), FILTER_VALIDATE_BOOLEAN));
-defined('BASE_URL')  || define('BASE_URL', env_or('BASE_URL', 'http://localhost/Andiswa-Business-Consultations-Website'));
+defined('BASE_URL')  || define('BASE_URL', rtrim(env_or('BASE_URL', ''), '/'));
 
 function db_options(): array {
     $options = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC];
@@ -89,6 +211,11 @@ function check_csrf(): void { if (!hash_equals($_SESSION['csrf'] ?? '', $_POST['
 function logged_in(): bool { return !empty($_SESSION['user']); }
 function require_login(?string $role = null): void {
     if (!logged_in()) redirect('login.php');
+    if (empty($_SESSION['api_token'])) {
+        unset($_SESSION['user']);
+        flash('error', 'Please sign in again to continue.');
+        redirect('login.php');
+    }
     if ($role !== null && ($_SESSION['user']['role'] ?? '') !== $role) redirect('dashboard.php');
 }
 function current_user(): ?array { return $_SESSION['user'] ?? null; }
@@ -207,7 +334,6 @@ function send_contact_email(string $name, string $email, string $service, string
         . "Email: {$email}\n"
         . "Service: {$service}\n\n"
         . "Project details:\n{$message}\n";
-
     return send_smtp_email(
         setting('email'),
         setting('owner_name'),
@@ -219,15 +345,19 @@ function send_contact_email(string $name, string $email, string $service, string
 }
 
 function send_credentials_email(string $email, string $name, string $username, string $password): bool {
+    $siteUrl = public_base_url();
+    if ($siteUrl === '') {
+        error_log('Client credentials email could not be sent: configure BASE_URL with the public website URL.');
+        return false;
+    }
     $subject = 'Your Andiswa Business Consultation login details';
-    $body = "Hello {$name},\n\nYour quote has been accepted. Your client account has been created.\n\nLogin: " . BASE_URL . "/login.php\nUsername: {$username}\nTemporary password: {$password}\n\nPlease change your password after logging in.\n\nRegards,\nAndiswa Business Consultation";
+    $body = "Hello {$name},\n\nYour quote has been accepted. Your client account has been created.\n\nLogin: " . $siteUrl . "/login.php\nUsername: {$username}\nTemporary password: {$password}\n\nPlease change your password after logging in.\n\nRegards,\nAndiswa Business Consultation";
     return send_smtp_email($email, $name, $subject, $body);
 }
 
 // ---------------------------------------------------------------------
-// SHARED SETTINGS (the "settings" table)
-// The website, the admin page and the mobile app's API (GET /api/studio) all read
-// the same rows, so a change in Admin > Website & App shows up everywhere.
+// Shared settings remain on the existing settings table; the API currently
+// exposes reads only and does not support the website's settings editor.
 // ---------------------------------------------------------------------
 
 // Default text, used only when a row is missing or empty (same fallbacks as the API).

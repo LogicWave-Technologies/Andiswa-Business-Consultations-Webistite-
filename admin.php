@@ -1,12 +1,11 @@
 <?php
 require_once 'config.php'; require_login('admin');
-$pdo=db(); $u=current_user();
+$u=current_user();
 
 // ---------------------------------------------------------------
 // WEBSITE & APP SETTINGS
-// These rows live in the shared "settings" table. The website pages
-// (contact.php, site_settings.php) AND the mobile app's API
-// (GET /api/studio) read them, so one save updates both.
+// These rows remain in the website's MySQL settings table. The API has
+// no settings-write route, so this editor is outside the API migration.
 // key => [label, type]   type: text | long | email | url
 // ---------------------------------------------------------------
 $settingGroups = [
@@ -42,31 +41,44 @@ $settingGroups = [
 ];
 $quoteStatuses   = ['New','Under Review','Accepted','Rejected','Cancelled','Completed'];
 $projectStatuses = ['Not Started','In Progress','On Hold','Completed','Cancelled'];
+$tabTitles = ['dashboard'=>'Dashboard','quotes'=>'Quote Requests','clients'=>'Clients','projects'=>'Projects','settings'=>'Website & App'];
+$tab = $_GET['tab'] ?? 'dashboard';
+if(!array_key_exists($tab,$tabTitles)) $tab='dashboard';
 if($_SERVER['REQUEST_METHOD']==='POST'){
- check_csrf(); $action=$_POST['action']??'';
+ check_csrf(); $action=$_POST['action']??''; $pdo=null;
  try {
   if($action==='quote_status'){
    $id=(int)$_POST['quote_id']; $status=$_POST['status']??''; if(!in_array($status,$quoteStatuses,true)) throw new Exception('Invalid status.');
-   $st=$pdo->prepare('SELECT * FROM quotes WHERE id=?');$st->execute([$id]);$quote=$st->fetch(); if(!$quote) throw new Exception('Quote not found.');
-   if($status==='Accepted'){
-    $pdo->beginTransaction();
-    $st=$pdo->prepare('SELECT * FROM users WHERE email=? LIMIT 1');$st->execute([$quote['email']]);$client=$st->fetch();
-    $plain='AB!'.strtoupper(bin2hex(random_bytes(4))).'#'.random_int(10,99);
-    if(!$client){$base=preg_replace('/[^a-z0-9]+/i','.',strtolower($quote['name']));$base=trim($base,'.')?:'client';$username=$base; $n=1; while(true){$s=$pdo->prepare('SELECT id FROM users WHERE username=?');$s->execute([$username]);if(!$s->fetch())break;$username=$base.$n++;}
-      $s=$pdo->prepare('INSERT INTO users(name,email,username,password_hash,role,must_change_password) VALUES(?,?,?,?,"client",1)');$s->execute([$quote['name'],$quote['email'],$username,password_hash($plain,PASSWORD_DEFAULT)]);$clientId=(int)$pdo->lastInsertId();
-    } else {$clientId=(int)$client['id'];$username=$client['username'];$s=$pdo->prepare('UPDATE users SET password_hash=?,must_change_password=1 WHERE id=?');$s->execute([password_hash($plain,PASSWORD_DEFAULT),$clientId]);}
-    $s=$pdo->prepare('UPDATE quotes SET status=?,client_id=? WHERE id=?');$s->execute([$status,$clientId,$id]);
-    $pdo->commit();
-    $sent=send_credentials_email($quote['email'],$quote['name'],$username,$plain);
-    $_SESSION['credentials']=['name'=>$quote['name'],'email'=>$quote['email'],'username'=>$username,'password'=>$plain,'email_sent'=>$sent];
+   $result=api_request('POST','admin/quotes/'.$id.'/status',[
+    'status'=>$status,
+    'adminNote'=>trim($_POST['admin_note']??''),
+   ],$_SESSION['api_token']);
+   $credentials=$result['credentials']??null;
+   if($status==='Accepted' && is_array($credentials)){
+    $sent=send_credentials_email($credentials['email'],$credentials['name'],$credentials['username'],$credentials['password']);
+    $_SESSION['credentials']=[
+     'name'=>$credentials['name'],'email'=>$credentials['email'],
+     'username'=>$credentials['username'],'password'=>$credentials['password'],'email_sent'=>$sent,
+    ];
     flash('success',$sent?'Quote accepted and credentials emailed to the client.':'Quote accepted and credentials generated, but email was not sent. Configure SMTP and use the credentials shown below to contact the client.');
-   } else {$s=$pdo->prepare('UPDATE quotes SET status=?,admin_note=? WHERE id=?');$s->execute([$status,trim($_POST['admin_note']??''),$id]);flash('success','Quote status updated.');}
+   } elseif($status==='Accepted'){
+    flash('success','Quote accepted. No new credentials were returned because the client account already exists.');
+   } else {
+    flash('success','Quote status updated.');
+   }
   } elseif($action==='create_project'){
    $client=(int)$_POST['client_id'];$title=trim($_POST['title']??'');$desc=trim($_POST['description']??'');$status=$_POST['project_status']??''; if($title==='') throw new Exception('Please enter a project title.'); if(!in_array($status,$projectStatuses,true)) throw new Exception('Invalid project status.');$progress=max(0,min(100,(int)$_POST['progress']));$start=$_POST['start_date']?:null;$due=$_POST['due_date']?:null;
-   $s=$pdo->prepare('INSERT INTO projects(client_id,title,description,status,progress,start_date,due_date) VALUES(?,?,?,?,?,?,?)');$s->execute([$client,$title,$desc,$status,$progress,$start,$due]);flash('success','Project created.');
+   api_request('POST','admin/projects',[
+    'clientId'=>$client,'title'=>$title,'description'=>$desc,'status'=>$status,
+    'progress'=>$progress,'startDate'=>$start,'dueDate'=>$due,
+   ],$_SESSION['api_token']);
+   flash('success','Project created.');
   } elseif($action==='update_project'){
    $id=(int)$_POST['project_id'];$status=$_POST['project_status']??''; if(!in_array($status,$projectStatuses,true)) throw new Exception('Invalid project status.');$progress=max(0,min(100,(int)$_POST['progress']));$text=trim($_POST['update_text']??'');
-   $s=$pdo->prepare('UPDATE projects SET status=?,progress=? WHERE id=?');$s->execute([$status,$progress,$id]); if($text!==''){ $s=$pdo->prepare('INSERT INTO project_updates(project_id,update_text) VALUES(?,?)');$s->execute([$id,$text]); } flash('success','Project progress updated.');
+   api_request('POST','admin/projects/'.$id.'/progress',[
+    'status'=>$status,'progress'=>$progress,'updateText'=>$text,
+   ],$_SESSION['api_token']);
+   flash('success','Project progress updated.');
   } elseif($action==='save_settings'){
    // Check everything first, then save everything in one go.
    $values=[];
@@ -79,31 +91,51 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
      if($type==='url' && $v!=='' && !filter_var($v,FILTER_VALIDATE_URL)) throw new Exception($label.' is not a valid link.');
      $values[$key]=$v;
    }}
+   $pdo=db();
    $pdo->beginTransaction();
    foreach($values as $key=>$v) save_setting($key,$v);
    $pdo->commit();
-   flash('success','Saved. The website and the mobile app now show the new details (the app updates the next time it loads or is pulled down to refresh).');
+   flash('success','Saved to the existing settings database.');
   }
- } catch(Throwable $e){ if($pdo->inTransaction())$pdo->rollBack(); flash('error',$e->getMessage()); }
+ } catch(Throwable $e){ if($pdo instanceof PDO && $pdo->inTransaction())$pdo->rollBack(); flash('error',$e->getMessage()); }
  // Send the admin back to whichever tab the action belongs to, instead of always
  // dropping them back at the Dashboard tab.
  $returnTab = $action==='quote_status' ? 'quotes' : (in_array($action,['create_project','update_project'],true) ? 'projects' : ($action==='save_settings' ? 'settings' : 'dashboard'));
  redirect('admin.php?tab='.$returnTab);
 }
-$quotes=$pdo->query('SELECT q.*,u.username FROM quotes q LEFT JOIN users u ON u.id=q.client_id ORDER BY q.created_at DESC')->fetchAll();
-$clients=$pdo->query("SELECT * FROM users WHERE role='client' ORDER BY created_at DESC")->fetchAll();
-$projects=$pdo->query('SELECT p.*,u.name client_name,u.email FROM projects p JOIN users u ON u.id=p.client_id ORDER BY p.updated_at DESC')->fetchAll();
-$stats=['quotes'=>count($quotes),'new'=>count(array_filter($quotes,fn($q)=>$q['status']==='New')),'clients'=>count($clients),'projects'=>count($projects),'app'=>count(array_filter($quotes,fn($q)=>($q['source']??'website')==='app'))];
-$currentSettings=settings_all();
+try {
+ $dashboard=api_request('GET','admin/dashboard',null,$_SESSION['api_token']);
+} catch (RuntimeException $exception) {
+ http_response_code(502);
+ exit('Unable to load admin data: '.e($exception->getMessage()));
+}
+$quotes=array_map(static function($quote){
+ $message=(string)$quote['message'];
+ return [
+  'id'=>$quote['id'],'client_id'=>$quote['clientId']??null,'name'=>$quote['name'],'email'=>$quote['email'],
+  'service'=>$quote['service'],'message'=>$message,'status'=>$quote['status'],'admin_note'=>$quote['adminNote']??'',
+  'created_at'=>$quote['createdAt']??'','username'=>$quote['username']??null,
+  'source'=>str_contains($message,'(Sent from the mobile app)')?'app':'website',
+ ];
+},$dashboard['quotes']??[]);
+$clients=array_map(static fn($client)=>[
+ 'id'=>$client['id'],'name'=>$client['name'],'email'=>$client['email'],'username'=>$client['username'],
+ 'created_at'=>$client['createdAt']??'',
+],$dashboard['clients']??[]);
+$projects=array_map(static fn($project)=>[
+ 'id'=>$project['id'],'client_id'=>$project['clientId'],'title'=>$project['title'],
+ 'description'=>$project['description']??'','status'=>$project['status'],'progress'=>$project['progress'],
+ 'start_date'=>$project['startDate']??null,'due_date'=>$project['dueDate']??null,
+ 'updated_at'=>$project['updatedAt']??'','client_name'=>$project['clientName'],'email'=>$project['email'],
+],$dashboard['projects']??[]);
+$stats=['quotes'=>count($quotes),'new'=>count(array_filter($quotes,fn($q)=>$q['status']==='New')),'clients'=>count($clients),'projects'=>count($projects),'app'=>count(array_filter($quotes,fn($q)=>$q['source']==='app'))];
+$currentSettings=$tab==='settings'?settings_all():[];
 $f=get_flash();$credentials=$_SESSION['credentials']??null;unset($_SESSION['credentials']);
 
 // ---------------------------------------------------------------
 // Which tab is active. Plain query param, so it works with or
 // without JS and survives a full page reload after a form submit.
 // ---------------------------------------------------------------
-$tabTitles = ['dashboard'=>'Dashboard','quotes'=>'Quote Requests','clients'=>'Clients','projects'=>'Projects','settings'=>'Website & App'];
-$tab = $_GET['tab'] ?? 'dashboard';
-if(!array_key_exists($tab,$tabTitles)) $tab='dashboard';
 
 // Small label that shows where a quote came from (website form or mobile app)
 function source_pill(array $q): string {
@@ -562,10 +594,9 @@ th{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--ston
       <!-- ============ WEBSITE & APP ============ -->
       <section class="panel-view<?= $tab==='settings'?' active':'' ?>" data-panel="settings">
         <div class="panel" style="background:#e8f4fd;border-color:#bcdcf3;">
-          <p style="margin:0;font-size:14px;line-height:1.6;"><strong>One database, two front doors.</strong>
-          The website and the mobile app read these details from the same <code>settings</code> table
-          (the app through its API at <code>/api/studio</code>). Change something here and both show it.
-          Quote requests from both also land in <a href="?tab=quotes" data-tab="quotes" class="nav-link" style="display:inline;color:var(--tan);padding:0;">Quote Requests</a>.</p>
+          <p style="margin:0;font-size:14px;line-height:1.6;"><strong>Website settings are still stored separately.</strong>
+          This editor writes to the website's MySQL <code>settings</code> table; it does not update the API's studio settings.
+          Quotes, accounts, and projects are managed through the published API.</p>
           <p class="small" style="margin:8px 0 0;">Database server: <strong><?=e(DB_HOST)?></strong> · database <strong><?=e(DB_NAME)?></strong><?= DB_SSL ? ' · encrypted connection' : '' ?></p>
         </div>
         <form method="post">

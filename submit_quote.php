@@ -1,7 +1,6 @@
 <?php
-// Saves a quote request from the website's Contact page into the shared "quotes" table.
-// The mobile app saves into the SAME table through its API (POST /api/quotes),
-// so the checks below match the API's checks and both end up in Admin > Quote Requests.
+// Saves a quote request through the published API so it appears in the shared
+// Admin > Quote Requests list.
 require_once 'config.php';
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') redirect('contact.php');
 check_csrf();
@@ -23,10 +22,27 @@ if ($error !== '') { flash('error', $error); redirect('contact.php'); }
 if ($service === '') $service = 'General Enquiry';
 $service = mb_substr($service, 0, 150);
 
-$st = db()->prepare("INSERT INTO quotes(name, email, service, message, source) VALUES(?, ?, ?, ?, 'website')");
-$st->execute([$name, $email, $service, $message]);
+try {
+    api_request('POST', 'quotes', [
+        'name' => $name,
+        'email' => $email,
+        'service' => $service,
+        'message' => $message,
+        'source' => 'website',
+    ]);
+} catch (RuntimeException $exception) {
+    flash('error', 'Your quote request could not be saved: ' . $exception->getMessage());
+    redirect('contact.php');
+}
 
-if (send_contact_email($name, $email, $service, $message)) {
+try {
+    $emailSent = send_contact_email($name, $email, $service, $message);
+} catch (RuntimeException $exception) {
+    error_log('The quote was saved through the business API, but the notification email could not be prepared: ' . $exception->getMessage());
+    $emailSent = false;
+}
+
+if ($emailSent) {
     flash('success', 'Your quote request was sent successfully. Thank you! Our team will review it and contact you with the next steps.');
 } else {
     flash('error', 'Your quote request was saved, but we could not email the team. Please contact us directly at ' . setting('email') . '.');
